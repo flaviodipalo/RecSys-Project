@@ -1,0 +1,2 @@
+You may find an implementation of some algorithms we have shown during practice sessions here:
+https://github.com/MaurizioFD/RecSys_Course_2017
