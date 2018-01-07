@@ -68,11 +68,6 @@ class SLIM_BPR_Python(BPR_Sampling, Similarity_Matrix_Recommender, Recommender):
         else:
             self.S = np.zeros((self.n_items, self.n_items)).astype('float32')
 
-
-
-
-
-
     def updateSimilarityMatrix(self):
 
         if self.topK != False:
@@ -86,8 +81,6 @@ class SLIM_BPR_Python(BPR_Sampling, Similarity_Matrix_Recommender, Recommender):
                 self.W_sparse = sps.csr_matrix(self.S.T)
             else:
                 self.W = self.S.T
-
-
 
     def updateWeightsLoop(self, u, i, j):
         """
