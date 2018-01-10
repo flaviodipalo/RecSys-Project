@@ -1,4 +1,5 @@
 import scipy.sparse as sps
+import numpy as np
 cimport numpy as np
 
 class SLIM_RMSE():
@@ -9,13 +10,13 @@ class SLIM_RMSE():
         self.URM_mask = self.URM_train.copy()
         #S = sps.csr_matrix((self.n_items, self.n_items), dtype=np.float32)
 
-    def SLIM_RMSE_epoch(self,URM_train):
+    def SLIM_RMSE_epoch(self,matrix):
         cdef double[:,:] S = np.random.rand(self.n_items,1)
         cdef float beta = 0.1
         cdef int gamma = 10
         cdef int j = 0
         cdef int i = 0
-        #cdef int[:,:] URM_train = matrix
+        cdef int[:,:] URM_train = matrix
         print(S.size)
         print(S)
 
