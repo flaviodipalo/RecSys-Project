@@ -11,19 +11,25 @@ class Movielens1MReader(object):
         dir = os.path.dirname(__file__)
         filename = dir+"/ratings.dat"
 
-        data = np.loadtxt(filename, delimiter="::")
-        users = np.array(data[:,0])
-        movies = np.array(data[:,1])
-        ratings = np.array(data[:,2])
+        print("Loading data...")
 
-        self.URM_all = sps.csr_matrix((ratings, (users, movies)), dtype=np.float32)
+        data = np.loadtxt(filename, delimiter="::")
+        self.users = np.array(data[:,0])
+        self.movies = np.array(data[:,1])
+        self.ratings = np.array(data[:,2])
+
+        # gli id degli users partono da 1 e sono tutti consecutivi, quindi l'unica
+        # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo
+
+        URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
+        self.URM_all = URM_all_partial[1:, :]
 
         numInteractions = self.URM_all.nnz
         train_mask = np.random.choice([True,False], numInteractions, p=[train_test_split, 1-train_test_split])
         test_mask = np.logical_not(train_mask)
 
-        URM_train = sps.coo_matrix((ratings[train_mask], (users[train_mask], movies[train_mask])))
-        URM_test = sps.coo_matrix((ratings[test_mask], (users[test_mask], movies[test_mask])))
+        URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
+        URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
-        self.URM_train = URM_train.tocsr()
-        self.URM_test = URM_test.tocsr()
+        self.URM_train = URM_train[1:, :]
+        self.URM_test = URM_test[1:, :]
