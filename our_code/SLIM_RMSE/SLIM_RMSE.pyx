@@ -63,7 +63,9 @@ class SLIM_RMSE():
         cdef int j = 0
         cdef int i = 0
         #Quella qua sotto è una prova con solo una colonna di S
-        function = 1/2*(np.linalg.norm(URM_train- self.scalar_product(np.min(users), self.n_users, S),2))**2 + (beta/2)*(np.linalg.norm(S[:,j]))**2 + gamma
+        product = self.scalar_product(np.min(users), self.n_users, S)
+        
+        function = 1/2*(np.linalg.norm(URM_train- product,2))**2 + (beta/2)*(np.linalg.norm(S[:,j]))**2 + gamma
         gradient_w_i_j = (URM_train[i,j] - self.scalar_product(users[i], users[i], S))*(-URM_train[i,i]) + beta*S[i,j] + gamma
         print(function, gradient_w_i_j)
 
