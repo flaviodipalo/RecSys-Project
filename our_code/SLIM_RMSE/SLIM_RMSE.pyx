@@ -62,7 +62,6 @@ cdef class SLIM_RMSE:
         return URM_prova
 
     def SLIM_RMSE_epoch(self, URM_train, users, movies, ratings, users_by_item, items_by_item, ratings_by_item):
-        #cdef  des = np.zeros([n-m+1,m]) per prova per Cython, non funziona
         self.users = users
         self.items = movies
         self.ratings = ratings
@@ -88,3 +87,5 @@ cdef class SLIM_RMSE:
                 gradient[x] = partial * (-URM_prova[x])# + beta*S[x,0] #gradient[x] = prova*(-URM_train[x, 0])# + beta*S[x,0]
             URM_prova = URM_prova - 0.2*gradient #URM_train[:, 0] = URM_train[:, 0] - 0.2*gradient
             print(function)
+
+
