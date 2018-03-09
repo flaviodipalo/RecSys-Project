@@ -10,13 +10,22 @@ class Movielens1MReader(object):
 
         dir = os.path.dirname(__file__)
         filename = dir+"/ratings.dat"
+        filename2 = dir+"/ratings_ordered_by_item.dat"
 
         print("Loading data...")
 
         data = np.loadtxt(filename, delimiter="::")
+        data2 = np.loadtxt(filename2, delimiter="::")
+
+        #These arrays are sorted by user
         self.users = np.array(data[:,0])
         self.movies = np.array(data[:,1])
         self.ratings = np.array(data[:,2])
+
+        #These arrays are sorted by item
+        self.users_by_item = np.array(data2[:,0])
+        self.items_by_item = np.array(data2[:,1])
+        self.ratings_by_item = np.array(data2[:,2])
 
         # gli id degli users partono da 1 e sono tutti consecutivi, quindi l'unica
         # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo

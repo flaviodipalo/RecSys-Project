@@ -17,34 +17,38 @@ if __name__ == '__main__':
     movies = data_reader.movies
     ratings = data_reader.ratings
 
+    users_by_item = data_reader.users_by_item
+    items_by_item = data_reader.items_by_item
+    ratings_by_item = data_reader.ratings_by_item
+
 
     # || A - AW || per una sola riga
     # la 1 esima colonna della matrice A è data da.
     A = URM_train[:, 1]
 
     #passiamo a calcolare la prediction ora.
-    print(URM_train[:,:].shape[1])
-    n_movies = URM_train[:,:].shape[1]
+    #print(URM_train[:,:].shape[1])
+    #n_movies = URM_train[:,:].shape[1]
     # we initialize the first colum of the S matrix (also called W matrix)
-    S = np.random.rand(n_movies, 1)
-    S[0] = 0
-    print(S)
+    #S = np.random.rand(n_movies, 1)
+    #S[0] = 0
+    #print(S)
 
-    print(len(S))
+    #print(len(S))
 
-    prediction = URM_train.dot(S)
+    #prediction = URM_train.dot(S)
     #frobenius norm between the prediction and the value.
     #for the first step let's immagine we want to minimize this:
-    print (np.linalg.norm(A-prediction,'fro'))
+    #print (np.linalg.norm(A-prediction,'fro'))
 
     #la stima della stessa colonna imparata è
 #    recommender_list = []
     #recommender_list.append(SLIM_BPR_Cython(URM_train, sparse_weights=False))
 #    recommender_list.append(SLIM_RMSE(URM_train))
-    #rec_object = SLIM_RMSE(URM_train)
+    rec_object = SLIM_RMSE(URM_train)
     #add cython compiling
     #rec_object.SLIM_RMSE_epoch(URM_train)
-    #rec_object.SLIM_RMSE_epoch(URM_train, users, movies, ratings) #prova
+    rec_object.SLIM_RMSE_epoch(URM_train, users, movies, ratings, users_by_item, items_by_item, ratings_by_item) #prova
 
 #inizializziamo la W random con la diagonale a 0.
 
