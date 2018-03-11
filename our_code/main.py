@@ -17,6 +17,10 @@ if __name__ == '__main__':
     movies = data_reader.movies
     ratings = data_reader.ratings
 
+    users_by_item = data_reader.users_by_item
+    items_by_item = data_reader.items_by_item
+    ratings_by_item = data_reader.ratings_by_item
+
     n_movies = URM_train[:,:].shape[1]
     #S = np.random.rand(n_movies, 1)
     i = 0
@@ -131,10 +135,10 @@ gradient_update = np.zeros((n_movies,1))
 #    recommender_list = []
     #recommender_list.append(SLIM_BPR_Cython(URM_train, sparse_weights=False))
 #    recommender_list.append(SLIM_RMSE(URM_train))
-    #rec_object = SLIM_RMSE(URM_train)
+    rec_object = SLIM_RMSE(URM_train)
     #add cython compiling
     #rec_object.SLIM_RMSE_epoch(URM_train)
-    #rec_object.SLIM_RMSE_epoch(URM_train, users, movies, ratings) #prova
+    rec_object.SLIM_RMSE_epoch(URM_train, users, movies, ratings, users_by_item, items_by_item, ratings_by_item) #prova
 
 #inizializziamo la W random con la diagonale a 0.
 '''
