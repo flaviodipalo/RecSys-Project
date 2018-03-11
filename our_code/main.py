@@ -19,41 +19,62 @@ if __name__ == '__main__':
 
     n_movies = URM_train[:,:].shape[1]
     #S = np.random.rand(n_movies, 1)
-    S = np.zeros((n_movies,1))
     i = 0
     j = 1
-    print()
-    alpha = 10^-12
+    alpha = 10^-4
+    gamma = 0.1
+    beta = 0.1
+
 
     print('nonzero element on the selcted column:', URM_train[:,j].nnz)
-    prediction = (URM_train).dot(S)
-    print('prediction:',prediction)
-    previous_evalutation = np.linalg.norm(URM_train[:,j]-URM_train.dot(S),2)
 
-    gradient_update = np.zeros((n_movies,1))
+    S = np.random.rand(n_movies,1)
+
+    #prediction = (URM_train).dot(S)
+    t_column = URM_train[:,j]
+
+    URM_without = URM_train
+    URM_without[:,j] = np.zeros((URM_train.shape[0],1))
+    prediction = np.zeros((t_column.shape[0],1))
+    error = np.zeros((t_column.shape[0],1))
+
+
+    error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
+    print(error_function)
+
+    while True:
+        for i, e in enumerate(t_column):
+            if e != 0:
+                prediction[i] = URM_without[i, :].dot(S)
+        print('the sum of the element is: ',prediction.sum())
+
+        for i,j in enumerate(t_column):
+            error[i] = prediction[i] - t_column[i]
+        print('the sum of the errors is: ',error.sum())
+
+        j = 1
+        for i in range(n_movies):
+            S[i] -= (alpha*error[i]*URM_without[j,i] -gamma -beta*S[i])
+        #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
+        error_function = np.linalg.norm(URM_without.dot(S) - t_column, 2) + gamma * np.linalg.norm(S,2) + beta * np.linalg.norm(
+        S) ** 2
+        print(error_function)
+
+
+
+#restart
+'''
+gradient_update = np.zeros((n_movies,1))
     while True:
         start = timeit.default_timer()
         for t in range (0,S.shape[0]):
-            gradient_update[t] = np.linalg.norm(URM_train[t,j]-URM_train[t,:].dot(S),2)*-URM_train[j,t]
+            gradient_update[t] = (URM_train[:,:].dot(S) - URM_train[:,j])*URM_train[j,t]
         stop = timeit.default_timer()
         print('gradient update took: ', stop-start)
         S = S + alpha*gradient_update
         new_evaluation = np.linalg.norm(URM_train[:, j] - URM_train.dot(S), 2)
         print('previous eval:',previous_evalutation,'new eval: ',new_evaluation)
 
-
-
-
-
-
-
-
-
-
-
-
-#restart    
-'''
     print(URM_train[:,1])
     #passiamo a calcolare la prediction ora.
     print(URM_train[:,:].shape[1])
