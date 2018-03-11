@@ -46,7 +46,8 @@ if __name__ == '__main__':
     error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     print(error_function)
 
-    G = np.zeros(np.size(S))  # Adagrad
+    # Needed for Adagrad
+    G = np.zeros(np.size(S))
     eps = 1e-5
 
     while True:
