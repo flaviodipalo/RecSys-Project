@@ -25,7 +25,7 @@ if __name__ == '__main__':
     #S = np.random.rand(n_movies, 1)
     i = 0
     j = 1
-    alpha = 10^-4
+    alpha = 0.000001
     gamma = 0.1
     beta = 0.1
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
         j = 1
         for i in range(n_movies):
-            S[i] -= (alpha*error[i]*URM_without[j,i] -gamma -beta*S[i])
+            S[i] -= (alpha*error[i]*URM_without[j,i] + gamma + beta*S[i])
         #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
         error_function = np.linalg.norm(URM_without.dot(S) - t_column, 2) + gamma * np.linalg.norm(S,2) + beta * np.linalg.norm(
         S) ** 2

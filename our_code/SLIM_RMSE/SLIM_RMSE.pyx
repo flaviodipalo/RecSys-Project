@@ -87,5 +87,3 @@ cdef class SLIM_RMSE:
                 gradient[x] = partial * (-URM_prova[x])# + beta*S[x,0] #gradient[x] = prova*(-URM_train[x, 0])# + beta*S[x,0]
             URM_prova = URM_prova - 0.2*gradient #URM_train[:, 0] = URM_train[:, 0] - 0.2*gradient
             print(function)
-
-
