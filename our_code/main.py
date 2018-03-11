@@ -1,8 +1,7 @@
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from SLIM_RMSE.SLIM_RMSE import SLIM_RMSE
 import numpy as np
-from subprocess import call
-import shlex
+import math
 #call(shlex.split('python3 /home/alessio/PycharmProjects/RecSys_Project/our_code/SLIM_RMSE/setup.py build_ext --inplace'))
 import timeit
 
@@ -17,17 +16,18 @@ if __name__ == '__main__':
     movies = data_reader.movies
     ratings = data_reader.ratings
 
+    '''
     users_by_item = data_reader.users_by_item
     items_by_item = data_reader.items_by_item
     ratings_by_item = data_reader.ratings_by_item
-
+    '''
     n_movies = URM_train[:,:].shape[1]
     #S = np.random.rand(n_movies, 1)
     i = 0
     j = 1
-    alpha = 0.000001
-    gamma = 0.1
-    beta = 0.1
+    alpha = 1e-1
+    gamma = 1
+    beta = 1e-2
 
 
     print('nonzero element on the selcted column:', URM_train[:,j].nnz)
@@ -46,6 +46,9 @@ if __name__ == '__main__':
     error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     print(error_function)
 
+    G = np.zeros(np.size(S))  # Adagrad
+    eps = 1e-5
+
     while True:
         for i, e in enumerate(t_column):
             if e != 0:
@@ -58,7 +61,10 @@ if __name__ == '__main__':
 
         j = 1
         for i in range(n_movies):
-            S[i] -= (alpha*error[i]*URM_without[j,i] + gamma + beta*S[i])
+            gradient = (error[i]*URM_without[j,i] + gamma + beta*S[i])
+            G[i] += gradient**2
+            S[i] -= (alpha/math.sqrt(G[i] + eps))*gradient
+
         #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
         error_function = np.linalg.norm(URM_without.dot(S) - t_column, 2) + gamma * np.linalg.norm(S,2) + beta * np.linalg.norm(
         S) ** 2

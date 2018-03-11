@@ -15,13 +15,13 @@ class Movielens1MReader(object):
         print("Loading data...")
 
         data = np.loadtxt(filename, delimiter="::")
-        data2 = np.loadtxt(filename2, delimiter="::")
+        #data2 = np.loadtxt(filename2, delimiter="::")
 
         #These arrays are sorted by user
         self.users = np.array(data[:,0])
         self.movies = np.array(data[:,1])
         self.ratings = np.array(data[:,2])
-
+        '''
         #These arrays are sorted by item
         self.users_by_item = np.array(data2[:,0])
         self.items_by_item = np.array(data2[:,1])
@@ -29,7 +29,7 @@ class Movielens1MReader(object):
 
         # gli id degli users partono da 1 e sono tutti consecutivi, quindi l'unica
         # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo
-
+        '''
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial[1:, :]
 
