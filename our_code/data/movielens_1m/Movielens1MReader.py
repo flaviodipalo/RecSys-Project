@@ -31,7 +31,7 @@ class Movielens1MReader(object):
         # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo
         '''
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
-        self.URM_all = URM_all_partial[1:, :]
+        self.URM_all = URM_all_partial
 
         numInteractions = self.URM_all.nnz
         train_mask = np.random.choice([True,False], numInteractions, p=[train_test_split, 1-train_test_split])
@@ -40,5 +40,5 @@ class Movielens1MReader(object):
         URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
         URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
-        self.URM_train = URM_train[1:, :]
-        self.URM_test = URM_test[1:, :]
+        self.URM_train = URM_train[0:, :]
+        self.URM_test = URM_test[0:, :]

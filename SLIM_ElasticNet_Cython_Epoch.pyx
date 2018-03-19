@@ -90,6 +90,147 @@ cdef class SLIM_ElasticNet_Cython:
     cdef int[:] getSeenItems(self, long index):
         return self.URM_mask_indices[self.URM_mask_indptr[index]:self.URM_mask_indptr[index + 1]]
 
+    #starting from MFD code we rewrite the function
+    def SLIM_epochIteration_Cython(self):
+
+        cdef long start_time_epoch = time.time()
+        cdef long start_time_batch = time.time()
+
+        cdef SGD_sample sample
+        cdef long index, seenItem, numCurrentSample, itemId
+        cdef float gradient
+
+        cdef int numSeenItems
+        cdef int printStep
+
+        if self.sparse_weights:
+            printStep = 500000
+        else:
+            printStep = 5000000
+
+        # Variables for AdaGrad and RMSprop
+        cdef double [:] sgd_cache
+        cdef double cacheUpdate
+        cdef float gamma
+
+        if self.useAdaGrad:
+            sgd_cache = np.zeros((self.n_items), dtype=float)
+
+        elif self.rmsprop:
+            sgd_cache = np.zeros((self.n_items), dtype=float)
+            gamma = 0.001
+
+        #TODO: write code from this point on.
+
+        # Uniform user sampling without replacement
+        for numCurrentSample in range(self.numPositiveIteractions):
+
+            #seleziona un random utente e per quell'utente un random film.
+            sample = self.sampleBatch_Cython()
+
+            x_uij = 0.0
+
+            # The difference is computed on the user_seen items
+
+            index = 0
+            ##numero di item visti dall'utente.
+            while index<self.numSeenItemsSampledUser:
+                #array di indici degli elementi visti dall'utente.
+                seenItem = self.seenItemsSampledUser[index]
+                index +=1
+
+                #print("Get: i {}, j {}, seenItem {}".format(i, j, seenItem))
+
+                if self.sparse_weights:
+
+                   x_uij += self.S_sparse.get_value(i, seenItem) - self.S_sparse.get_value(j, seenItem)
+                else:
+                    x_uij += self.S_dense[i, seenItem] - self.S_dense[j, seenItem]
+
+            #TODO: non è questo il gradient che vogliamo
+            gradient = 1 / (1 + exp(x_uij))
+
+            if self.useAdaGrad:
+                cacheUpdate = gradient ** 2
+
+                sgd_cache[i] += cacheUpdate
+                sgd_cache[j] += cacheUpdate
+                #TODO: da sostituire il nuovo gradient
+                gradient = gradient / (sqrt(sgd_cache[i]) + 1e-8)
+
+            index = 0
+            while index < self.numSeenItemsSampledUser:
+                seenItem = self.seenItemsSampledUser[index]
+                index +=1
+                #TODO: come è fatto questo update del gradient ???
+                if self.sparse_weights:
+
+                    if seenItem != i:
+                        self.S_sparse.add_value(i, seenItem, self.learning_rate * gradient)
+
+                    if seenItem != j:
+                        self.S_sparse.add_value(j, seenItem, -self.learning_rate * gradient)
+
+                else:
+
+                    if seenItem != i:
+                        self.S_dense[i, seenItem] += self.learning_rate * gradient
+
+                    if seenItem != j:
+                        self.S_dense[j, seenItem] -= self.learning_rate * gradient
+
+            #TODO: queste funzioni sono utili ma dopo
+            '''
+            # If I have reached at least 20% of the total number of batches or samples
+            if numCurrentBatch % (totalNumberOfBatch/5) == 0 and numCurrentBatch!=0:
+                self.S_sparse.rebalance_tree(TopK=self.topK)
+                #print("Num batch is {}, rebalancing matrix".format(numCurrentBatch))
+
+
+            if((numCurrentBatch%printStep==0 and not numCurrentBatch==0) or numCurrentBatch==totalNumberOfBatch-1):
+                print("Processed {} ( {:.2f}% ) in {:.2f} seconds. Sample per second: {:.0f}".format(
+                    numCurrentBatch*self.batch_size,
+                    100.0* float(numCurrentBatch*self.batch_size)/self.numPositiveIteractions,
+                    time.time() - start_time_batch,
+                    float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
+
+                sys.stdout.flush()
+                sys.stderr.flush()
+
+                start_time_batch = time.time()
+            '''
+
+        # FIll diagonal with zeros
+
+        index = 0
+        while index < self.n_items:
+
+            if self.sparse_weights:
+                self.S_sparse.add_value(index, index, -self.S_sparse.get_value(index, index))
+            else:
+                self.S_dense[index, index] = 0.0
+
+            index+=1
+
+
+
+        if self.topK == False:
+            print("Return S matrix to python caller")
+
+            if self.sparse_weights:
+                return self.S_sparse.get_scipy_csr(TopK = False)
+            else:
+                return np.array(self.S_dense)
+
+
+        else :
+            print("Return S matrix to python caller")
+
+            if self.sparse_weights:
+                return self.S_sparse.get_scipy_csr(TopK=self.topK)
+            else:
+                return similarityMatrixTopK(np.array(self.S_dense.T), k=self.topK, forceSparseOutput=True, inplace=True).T
+
     def epochIteration_Cython(self):
 
         cdef long start_time_epoch = time.time()

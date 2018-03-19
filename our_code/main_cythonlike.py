@@ -83,14 +83,12 @@ if __name__ == '__main__':
 
     t_column = URM_train[:,j]
 
-    #URM_without = URM_train
-    #URM_without[:,j] = np.zeros((URM_train.shape[0],1))
-
     prediction = np.zeros((t_column.shape[0],1))
     error = np.zeros((t_column.shape[0],1))
+    #from not cython implementation
+    # error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
 
     error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*
-    #error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     print(error_function)
 
     # Needed for Adagrad
