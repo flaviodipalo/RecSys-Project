@@ -83,16 +83,12 @@ cdef class SLIM_ElasticNet_Cython:
                 "SGD_mode not valid. Acceptable values are: 'sgd', 'adagrad', 'rmsprop'. Provided value was '{}'".format(
                     sgd_mode))
 
-
-
         self.learning_rate = learning_rate
 
-
     # Using memoryview instead of the sparse matrix itself allows for much faster access
+    ## questo tipo di indirizzamento viene usato per evitare le matrici sparse in cython
     cdef int[:] getSeenItems(self, long index):
         return self.URM_mask_indices[self.URM_mask_indptr[index]:self.URM_mask_indptr[index + 1]]
-
-
 
     def epochIteration_Cython(self):
 
@@ -123,21 +119,20 @@ cdef class SLIM_ElasticNet_Cython:
             sgd_cache = np.zeros((self.n_items), dtype=float)
             gamma = 0.001
 
-
-
         # Uniform user sampling without replacement
         for numCurrentSample in range(self.numPositiveIteractions):
 
+            #seleziona un random utente e per quell'utente un random film.
             sample = self.sampleBatch_Cython()
-
 
             x_uij = 0.0
 
             # The difference is computed on the user_seen items
 
             index = 0
+            ##numero di item visti dall'utente.
             while index<self.numSeenItemsSampledUser:
-
+                #array di indici degli elementi visti dall'utente.
                 seenItem = self.seenItemsSampledUser[index]
                 index +=1
 
@@ -149,7 +144,7 @@ cdef class SLIM_ElasticNet_Cython:
                 else:
                     x_uij += self.S_dense[i, seenItem] - self.S_dense[j, seenItem]
 
-
+            #TODO: non è questo il gradient che vogliamo
             gradient = 1 / (1 + exp(x_uij))
 
             if self.useAdaGrad:
@@ -157,27 +152,14 @@ cdef class SLIM_ElasticNet_Cython:
 
                 sgd_cache[i] += cacheUpdate
                 sgd_cache[j] += cacheUpdate
-
+                #TODO: da sostituire il nuovo gradient
                 gradient = gradient / (sqrt(sgd_cache[i]) + 1e-8)
-
-            elif self.rmsprop:
-                cacheUpdate = sgd_cache[i] * gamma + (1 - gamma) * gradient ** 2
-
-                sgd_cache[i] += cacheUpdate
-                sgd_cache[j] += cacheUpdate
-
-                gradient = gradient / (sqrt(sgd_cache[i]) + 1e-8)
-
-
-
-
 
             index = 0
             while index < self.numSeenItemsSampledUser:
-
                 seenItem = self.seenItemsSampledUser[index]
                 index +=1
-
+                #TODO: come è fatto questo update del gradient ???
                 if self.sparse_weights:
 
                     if seenItem != i:
@@ -194,7 +176,8 @@ cdef class SLIM_ElasticNet_Cython:
                     if seenItem != j:
                         self.S_dense[j, seenItem] -= self.learning_rate * gradient
 
-
+            #TODO: queste funzioni sono utili ma dopo
+            '''
             # If I have reached at least 20% of the total number of batches or samples
             if numCurrentBatch % (totalNumberOfBatch/5) == 0 and numCurrentBatch!=0:
                 self.S_sparse.rebalance_tree(TopK=self.topK)
@@ -212,7 +195,7 @@ cdef class SLIM_ElasticNet_Cython:
                 sys.stderr.flush()
 
                 start_time_batch = time.time()
-
+            '''
 
         # FIll diagonal with zeros
 
@@ -254,10 +237,13 @@ cdef class SLIM_ElasticNet_Cython:
         cdef long index
         cdef int numSeenItems
 
+        #utente random preso fra tutti gli users esistenti.
         sample.user = rand() % self.n_users
 
+        #inizializziamo il numero di item visti da quello specifico utente
         numSeenItems = self.URM_train_indptr[sample.user+1] - self.URM_train_indptr[sample.user]
 
+        #indice random preso fra il numero di elementi visti dall'utente.
         index = rand() % numSeenItems
 
         sample.item = self.URM_train_indices[self.URM_train_indptr[sample.user] + index]

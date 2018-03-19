@@ -29,7 +29,6 @@ if __name__ == '__main__':
     gamma = 1
     beta = 1e-2
 
-
     print('nonzero element on the selcted column:', URM_train[:,j].nnz)
 
     S = np.random.rand(n_movies,1)
@@ -41,7 +40,6 @@ if __name__ == '__main__':
     URM_without[:,j] = np.zeros((URM_train.shape[0],1))
     prediction = np.zeros((t_column.shape[0],1))
     error = np.zeros((t_column.shape[0],1))
-
 
     error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     print(error_function)
@@ -71,9 +69,6 @@ if __name__ == '__main__':
         S) ** 2
         print(error_function)
 
-
-
-#restart
 '''
 gradient_update = np.zeros((n_movies,1))
     while True:
