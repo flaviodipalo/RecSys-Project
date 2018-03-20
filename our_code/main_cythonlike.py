@@ -86,10 +86,10 @@ if __name__ == '__main__':
     prediction = np.zeros((t_column.shape[0],1))
     error = np.zeros((t_column.shape[0],1))
     #from not cython implementation
-    # error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
 
-    error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*
-    print(error_function)
+    #previous_error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
+    error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*np.linalg.norm(S,2)+beta*np.linalg.norm(S)**2
+    #print(previous_error_function,error_function)
 
     # Needed for Adagrad
     G = np.zeros(np.size(S))
@@ -112,8 +112,7 @@ if __name__ == '__main__':
             S[i] -= (alpha/math.sqrt(G[i] + eps))*gradient
 
         #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
-        error_function = np.linalg.norm(URM_without.dot(S) - t_column, 2) + gamma * np.linalg.norm(S,2) + beta * np.linalg.norm(
-        S) ** 2
+        error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2) + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
         print(error_function)
 
 '''
