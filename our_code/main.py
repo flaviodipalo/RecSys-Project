@@ -15,7 +15,7 @@ if __name__ == '__main__':
     users = data_reader.users
     movies = data_reader.movies
     ratings = data_reader.ratings
-
+    rec_object = SLIM_RMSE(URM_train)
     '''
     users_by_item = data_reader.users_by_item
     items_by_item = data_reader.items_by_item
@@ -89,13 +89,14 @@ if __name__ == '__main__':
     prediction = np.zeros((t_column.shape[0],1))
     error = np.zeros((t_column.shape[0],1))
 
-    error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*
+    error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma
     #error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     print(error_function)
 
     # Needed for Adagrad
     G = np.zeros(np.size(S))
     eps = 1e-5
+    prediction[i] - t_column[i]
 
     while True:
         for i, e in enumerate(t_column):

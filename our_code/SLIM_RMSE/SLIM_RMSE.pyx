@@ -27,7 +27,7 @@ cdef class SLIM_RMSE:
         return prod
 
     def random_matrix_S(self, rows, cols):
-        cdef double[:, :] S = np.zeros((rows, cols))
+        cdef double[:,:] S = np.zeros((rows, cols))
         cdef i
         cdef j
         for i in range(0, rows, 1):

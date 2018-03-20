@@ -3,7 +3,7 @@ from SLIM_RMSE.SLIM_RMSE import SLIM_RMSE
 import numpy as np
 import math
 #call(shlex.split('python3 /home/alessio/PycharmProjects/RecSys_Project/our_code/SLIM_RMSE/setup.py build_ext --inplace'))
-import timeit
+import time
 
 
 if __name__ == '__main__':
@@ -46,7 +46,6 @@ if __name__ == '__main__':
     URM_without = URM_train.copy()
     #TODO: questo qui potrebbe essere lento
     URM_without[:,j] = np.zeros((URM_train.shape[0],1))
-    print("DOPO: ", URM_train[:, 1])
 
     def cython_product(URM_without,S):
         prediction = np.zeros((URM_without.shape[0], 1))
@@ -75,7 +74,6 @@ if __name__ == '__main__':
                 adder = adder + URM_without_data[x]*S[URM_without_indices[x]]
             prediction[i] = adder
         return prediction
-
     #t_column = URM_train[:,j]
     #pred = cython_product_t_column(URM_without, S, t_column_indices)
     #prova = t_column - pred
@@ -94,8 +92,8 @@ if __name__ == '__main__':
     # Needed for Adagrad
     G = np.zeros(np.size(S))
     eps = 1e-5
-
-    while True:
+    start_time = time.time()
+    for cd in range(10):
         for i, e in enumerate(t_column):
             if e != 0:
                 prediction[i] = URM_without[i, :].dot(S)
@@ -114,6 +112,7 @@ if __name__ == '__main__':
         #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
         error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2) + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
         print(error_function)
+    print("%s seconds" % (time.time() - start_time))
 
 '''
 gradient_update = np.zeros((n_movies,1))
