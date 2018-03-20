@@ -24,18 +24,31 @@ cdef class CythonEpoch:
             return adder
 
 
-    cdef double cython_product_number(self, URM_without, S):
+    cdef double cython_product_dense(self, vector, vector1):
 
-            cdef double prediction = 0
+        cdef double result = 0
+        cdef int i
+
+        for i in range(len(vector)):
+            result += vector[i]*vector1[i]
+
+        return result
+
+
+
+    cdef double cython_product_sparse(self, URM_without, vector):
+
+            cdef double result = 0
             cdef int i = 0
             cdef int x
             cdef int j = 0
-            URM_without_indices = URM_without.indices
-            URM_without_data = URM_without.data
-            #print (URM_without_indptr.shape, URM_without_indices, URM_without_data)
+            cdef int[:] URM_without_indices = URM_without.indices
+            cdef double[:] URM_without_data = URM_without.data
+
             for x in range(len(URM_without_data)):
-                prediction += URM_without_data[x]*S[URM_without_indices[x], 0]
-            return prediction
+                result += URM_without_data[x]*vector[URM_without_indices[x], 0]
+
+            return result
 
 
     cdef double[:, :] cython_product_t_column(self, URM_without, S, t_column_indices):
@@ -78,7 +91,7 @@ cdef class CythonEpoch:
 
         cdef int i = 0
         cdef int j = 1
-        cdef double alpha = 1e-1
+        cdef double alpha = 1e-2
         cdef int gamma = 1
         cdef double beta = 1e-2
         cdef double[:,:] S = np.random.rand(self.n_movies,1)
@@ -111,8 +124,8 @@ cdef class CythonEpoch:
 
         #prediction = np.zeros((t_column.shape[0], 1))
         #error = np.zeros((t_column.shape[0], 1))
-        prediction = np.zeros((t_column_data.shape[0], 1))
-        error = np.zeros((t_column_data.shape[0], 1))
+        prediction = np.zeros((self.n_users, 1))
+        error = np.zeros((self.n_users, 1))
         #from not cython implementation
 
         #previous_error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
@@ -121,26 +134,28 @@ cdef class CythonEpoch:
 
         # Needed for Adagrad
         G = np.zeros((self.n_movies, 1))
-        eps = 1e-5
+        eps = 1e-8
 
         start_time = time.time()
-        for l in range(10):
+        #for l in range(10):
+        while True:
             for i, e in enumerate(t_column_data):
                 if e != 0:
                     #prediction[i, 0] = URM_without[i, :].dot(S)
-                    prediction[i, 0] = self.cython_product_number(URM_without[i, :], S)
-            print('the sum of the element is: ', self.vector_sum(prediction[:, 0]))
+                    prediction[i, 0] = self.cython_product_sparse(URM_without[i, :], S)
+            print("the sum of the element is: ", self.vector_sum(prediction[:, 0]))
 
             for i in range(t_column_data.shape[0]):
                 #error[i, 0] = prediction[i, 0] - t_column[i]
                 error[i, 0] = prediction[i, 0] - t_column_data[i]
-            print('the sum of the errors is: ', self.vector_sum(error[:, 0]))
+            print("the sum of the errors is: ", self.vector_sum(error[:, 0]))
 
             j = 1
 
             for i in range(self.n_movies):
                 #gradient = (error[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
-                gradient = (prova_vector[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
+                #gradient = (prova_vector[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
+                gradient = -self.cython_product_sparse(URM_without[:, j], error) + gamma + beta*S[i, 0]
                 G[i, 0] += gradient**2
                 S[i, 0] -= (alpha/math.sqrt(G[i, 0] + eps))*gradient
 
@@ -148,7 +163,7 @@ cdef class CythonEpoch:
             error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices)) + gamma * self.linalg_cython(S) + beta * self.linalg_cython(S) ** 2
             #error_function1 = np.linalg.norm(self.cython_product_t_column(URM_without, S, t_column_indices),2) + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
             print(error_function)
-        print("The total time for %s iterations is %s seconds" %(l+1, time.time()-start_time))
+        #print("The total time for %s iterations is %s seconds" %(l+1, time.time()-start_time))
 
 
     '''
