@@ -21,13 +21,15 @@ if __name__ == '__main__':
     items_by_item = data_reader.items_by_item
     ratings_by_item = data_reader.ratings_by_item
     '''
+    n_users = URM_train[:,:].shape[0]
     n_movies = URM_train[:,:].shape[1]
     #S = np.random.rand(n_movies, 1)
     i = 0
     j = 1
     alpha = 1e-1
-    gamma = 1
+    gamma = 20
     beta = 1e-2
+    stop_when_increase = False
 
     print('nonzero element on the selcted column:', URM_train[:,j].nnz)
 
@@ -37,6 +39,8 @@ if __name__ == '__main__':
     j = 1
 
     S = np.random.rand(n_movies,1)
+    S[0] = 0
+    S_temp = S.copy()
     csc_URM_train = URM_train.tocsc()
     csc_URM_train_indptr = csc_URM_train.indptr
     t_column_indices = csc_URM_train.indices[csc_URM_train_indptr[j]:csc_URM_train_indptr[j+1]]
@@ -81,19 +85,23 @@ if __name__ == '__main__':
 
     t_column = URM_train[:,j]
 
-    prediction = np.zeros((t_column.shape[0],1))
-    error = np.zeros((t_column.shape[0],1))
+    prediction = np.zeros((n_users,1))
+    error = np.zeros((n_users,1))
     #from not cython implementation
 
     #previous_error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
     error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*np.linalg.norm(S,2)+beta*np.linalg.norm(S)**2
     #print(previous_error_function,error_function)
 
+    max_arg_s = np.zeros((100, 1))
     # Needed for Adagrad
     G = np.zeros(np.size(S))
-    eps = 1e-5
+    eps = 1e-8
     start_time = time.time()
-    for cd in range(10):
+    for n_iter in range(100):
+        error_function = 0.5 * (np.linalg.norm(URM_without.dot(S) - t_column, 2) ** 2) + beta / 2 * np.linalg.norm(S,
+                                                                                                                   2) ** 2 + gamma * np.linalg.norm(
+            S, 1)
         for i, e in enumerate(t_column):
             if e != 0:
                 prediction[i] = URM_without[i, :].dot(S)
@@ -105,16 +113,40 @@ if __name__ == '__main__':
 
         j = 1
         for i in range(n_movies):
-            gradient = (error[i]*URM_without[j,i] + gamma + beta*S[i])
+            gradient = ((URM_without[n_iter, :].dot(S) - URM_train[n_iter, i]) * URM_train[n_iter, i] + beta * S[i] + gamma)
             G[i] += gradient**2
-            S[i] -= (alpha/math.sqrt(G[i] + eps))*gradient
-
+            S_temp[i] = S[i] - (alpha/math.sqrt(G[i] + eps))*gradient
+            if S_temp[i] < 0:
+                S_temp[i] = 0
+        S_temp[0] = 0
         #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((n_movies,1)) - beta * S)
-        error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2) + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
-        print(error_function)
-    print("%s seconds" % (time.time() - start_time))
+        new_error_function = 0.5*(np.linalg.norm(URM_without.dot(S_temp) - t_column,2)**2) + beta/2 * np.linalg.norm(S_temp, 2)**2 + gamma* np.linalg.norm(S_temp, 1)
+        if stop_when_increase:
+            if new_error_function < error_function:
+                S = S_temp.copy()
+                max_arg_s[n_iter] = np.max(S)
+                print("The max weight of S is %s" % (max_arg_s[n_iter]))
+            else:
+                break
+        else:
+            S = S_temp.copy()
+            max_arg_s[n_iter] = np.max(S)
+            print("The max weight of S is %s" %(max_arg_s[n_iter]))
+        print("The total error is %s " %(new_error_function))
+    print("%s seconds for %s iterations" % (time.time() - start_time, n_iter + 1))
+    print(S)
+    for i in range(n_users):
+        if (URM_train[i, 1] != 0):
+            print("Real: %s    predicted: %s" % (URM_train[i, 1], URM_train[i, :].dot(S)))
+
 
 '''
+    for i in range(max_arg_s.shape[0]):
+        if max_arg_s[i] != 0.0:
+            print(max_arg_s[i])
+        else:
+            break
+
 gradient_update = np.zeros((n_movies,1))
     while True:
         start = timeit.default_timer()
