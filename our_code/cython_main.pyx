@@ -34,8 +34,6 @@ cdef class CythonEpoch:
 
         return result
 
-
-
     cdef double cython_product_sparse(self, URM_without, vector):
 
             cdef double result = 0
@@ -49,7 +47,6 @@ cdef class CythonEpoch:
                 result += URM_without_data[x]*vector[URM_without_indices[x], 0]
 
             return result
-
 
     cdef double[:, :] cython_product_t_column(self, URM_without, S, t_column_indices):
 
@@ -79,7 +76,6 @@ cdef class CythonEpoch:
                     counter += matrix[i, j]
 
         return math.sqrt(counter)
-
 
     def __init__(self):
 
@@ -185,6 +181,3 @@ cdef class CythonEpoch:
         for i in range(self.n_users):
             if (URM_train[i, 1] != 0):
                 print("Real: %s    predicted: %s" %(URM_train[i, 1], self.cython_product_sparse(URM_train[i, :], S)))
-
-
-
