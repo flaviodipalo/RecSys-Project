@@ -97,19 +97,18 @@ cdef class CythonEpoch:
         cdef int i = 0
         cdef int j = 1
         cdef double alpha = 1e-1
-        cdef int gamma = 10
+        cdef int gamma = 1
         cdef double beta = 1e-2
+        cdef int iterations = 1000
+        cdef int threshold = 5
         cdef double[:,:] S = np.random.rand(self.n_movies,1)
-        cdef double[:, :] S_temp = S.copy()
         cdef int[:] URM_without_indptr, URM_without_indices, URM_without_data, t_column_indices
         cdef double[:] t_column_data
         cdef double [:, :] prediction, error
         cdef double[:, :] G
         cdef double gradient
         cdef double[:, :] prova_vector = np.zeros((self.n_movies, 1))
-        cdef double error_function, new_error_function
-        stop_when_increase = False
-        cdef int iterations = 450
+        cdef double error_function
         cdef double [:, :] max_arg_s = np.zeros((iterations, 1))
 
 
@@ -150,7 +149,6 @@ cdef class CythonEpoch:
         start_time = time.time()
         for n_iter in range(iterations):
             print("Iteration #%s" %(n_iter))
-            error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + gamma * self.linalg_cython(S, 1) + beta * self.linalg_cython(S, 2) ** 2
             for i, e in enumerate(t_column_data):
                 if e != 0:
                     #prediction[i, 0] = URM_without[i, :].dot(S)
@@ -169,24 +167,17 @@ cdef class CythonEpoch:
                 #gradient = (prova_vector[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
                 gradient = (self.cython_product_sparse(URM_without[n_iter, :], S) - URM_train[n_iter, i])*URM_train[n_iter, i] + gamma + beta*S[i, 0]
                 G[i, 0] += gradient**2
-                S_temp[i, 0] -= (alpha/math.sqrt(G[i, 0] + eps))*gradient
-                if S_temp[i, 0] < 0:
-                    S_temp[i, 0] = 0
-            S_temp[0, 0] = 0
+                S[i, 0] -= (alpha/math.sqrt(G[i, 0] + eps))*gradient
+                if S[i, 0] < 0:
+                    S[i, 0] = 0
+            S[0, 0] = 0
             #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((self.n_movies,1)) - beta * S_temp)
-            new_error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S_temp, t_column_indices), 2)**2 + gamma * self.linalg_cython(S_temp, 1) + beta * self.linalg_cython(S_temp, 2) ** 2
-            print(new_error_function)
-            if stop_when_increase:
-                if new_error_function < error_function:
-                    S = S_temp.copy()
-                    max_arg_s[n_iter, 0] = np.max(S)
-                    print("The max weight of S is %s" % (max_arg_s[n_iter, 0]))
-                else:
-                    break
-            else:
-                S = S_temp.copy()
-                max_arg_s[n_iter, 0] = np.max(S)
-                print("The max weight of S is %s" %(max_arg_s[n_iter, 0]))
+            error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + beta*self.linalg_cython(S, 2)**2  + gamma*self.linalg_cython(S, 1)
+            if error_function < threshold:
+                break
+            print(error_function)
+            max_arg_s[n_iter, 0] = np.max(S)
+            print("The max weight of S is %s" %(max_arg_s[n_iter, 0]))
             #error_function1 = np.linalg.norm(self.cython_product_t_column(URM_without, S, t_column_indices),2)**2 + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
         print("The total time for %s iterations is %s seconds" %(n_iter+1, time.time()-start_time))
 
