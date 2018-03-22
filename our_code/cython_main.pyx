@@ -65,7 +65,7 @@ cdef class CythonEpoch:
                     prediction[i, j] += URM_without_data[x]*S[URM_without_indices[x], 0]
             return prediction
 
-    cdef double linalg_cython(self, matrix, option):
+    cdef double cython_norm(self, matrix, option):
         cdef int i, j
         cdef double counter = 0
 
@@ -149,7 +149,7 @@ cdef class CythonEpoch:
         start_time = time.time()
         for n_iter in range(iterations):
             print("Iteration #%s" %(n_iter))
-            error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + gamma * self.linalg_cython(S, 1) + beta * self.linalg_cython(S, 2) ** 2
+            error_function = self.cython_norm(self.cython_product_t_column(URM_without, S, t_column_indices), 2) ** 2 + gamma * self.cython_norm(S, 1) + beta * self.cython_norm(S, 2) ** 2
             for i, e in enumerate(t_column_data):
                 if e != 0:
                     #prediction[i, 0] = URM_without[i, :].dot(S)
@@ -173,7 +173,7 @@ cdef class CythonEpoch:
                     S[i, 0] = 0
             S[0, 0] = 0
             #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((self.n_movies,1)) - beta * S_temp)
-            error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + beta*self.linalg_cython(S, 2)**2  + gamma*self.linalg_cython(S, 1)
+            error_function = self.cython_norm(self.cython_product_t_column(URM_without, S, t_column_indices), 2) ** 2 + beta * self.cython_norm(S, 2) ** 2 + gamma * self.cython_norm(S, 1)
             if error_function < threshold:
                 break
             print(error_function)
