@@ -125,7 +125,6 @@ cdef class CythonEpoch:
         #TODO: è lento perché stiamo cambiando i valori di una matrice sparsa
         URM_without[:,j] = np.zeros((self.n_users,1))
 
-
         t_column = URM_train[:, j]
         prediction = np.zeros((self.n_users, 1))
         error = np.zeros((self.n_users, 1))
@@ -151,7 +150,6 @@ cdef class CythonEpoch:
             print("the sum of the errors is: ", self.vector_sum(error[:, 0]))
 
             j = 1
-
             for i in range(self.n_movies):
                 gradient = (self.cython_product_sparse(URM_without[n_iter, :], S) - URM_train[n_iter, i])*URM_train[n_iter, i] + gamma + beta*S[i, 0]
                 G[i, 0] += gradient**2
