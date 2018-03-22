@@ -65,7 +65,7 @@ cdef class CythonEpoch:
                     prediction[i, j] += URM_without_data[x]*S[URM_without_indices[x], 0]
             return prediction
 
-    cdef double linalg_cython(self, matrix, option):
+    cdef double cython_norm(self, matrix, option):
         cdef int i, j
         cdef double counter = 0
 
