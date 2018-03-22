@@ -111,7 +111,6 @@ cdef class CythonEpoch:
         cdef double error_function
         cdef double [:, :] max_arg_s = np.zeros((iterations, 1))
 
-
         for i in range(prova_vector.shape[0]):
             prova_vector[i, 0] = 5.0
 
@@ -126,17 +125,10 @@ cdef class CythonEpoch:
         #TODO: è lento perché stiamo cambiando i valori di una matrice sparsa
         URM_without[:,j] = np.zeros((self.n_users,1))
 
-        #these print are used for testing purposes.
-        #print('prediction vector is:', cython_product(URM_without,S))
-        #print('other vector is:', URM_without.dot(S))
 
         t_column = URM_train[:, j]
-
-        #prediction = np.zeros((t_column.shape[0], 1))
-        #error = np.zeros((t_column.shape[0], 1))
         prediction = np.zeros((self.n_users, 1))
         error = np.zeros((self.n_users, 1))
-        #from not cython implementation
 
         #previous_error_function = np.linalg.norm(URM_without.dot(S)-t_column,2) +gamma*np.linalg.norm(S,2) +beta*np.linalg.norm(S)**2
         #current_error_function = np.linalg.norm(cython_product_t_column(URM_without, S, t_column_indices),2)+ gamma*np.linalg.norm(S,2)+beta*np.linalg.norm(S)**2
@@ -149,37 +141,30 @@ cdef class CythonEpoch:
         start_time = time.time()
         for n_iter in range(iterations):
             print("Iteration #%s" %(n_iter))
-            error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + gamma * self.linalg_cython(S, 1) + beta * self.linalg_cython(S, 2) ** 2
             for i, e in enumerate(t_column_data):
                 if e != 0:
-                    #prediction[i, 0] = URM_without[i, :].dot(S)
                     prediction[i, 0] = self.cython_product_sparse(URM_without[i, :], S)
             print("the sum of the element is: ", self.vector_sum(prediction[:, 0]))
 
             for i in range(t_column_data.shape[0]):
-                #error[i, 0] = prediction[i, 0] - t_column[i]
                 error[i, 0] = prediction[i, 0] - t_column_data[i]
             print("the sum of the errors is: ", self.vector_sum(error[:, 0]))
 
             j = 1
 
             for i in range(self.n_movies):
-                #gradient = (error[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
-                #gradient = (prova_vector[i, 0]*URM_without[j,i] + gamma + beta*S[i, 0])
                 gradient = (self.cython_product_sparse(URM_without[n_iter, :], S) - URM_train[n_iter, i])*URM_train[n_iter, i] + gamma + beta*S[i, 0]
                 G[i, 0] += gradient**2
                 S[i, 0] -= (alpha/math.sqrt(G[i, 0] + eps))*gradient
                 if S[i, 0] < 0:
                     S[i, 0] = 0
             S[0, 0] = 0
-            #S -= (alpha * error * URM_without[j, :] - gamma*np.ones((self.n_movies,1)) - beta * S_temp)
             error_function = self.linalg_cython(self.cython_product_t_column(URM_without, S, t_column_indices), 2)**2 + beta*self.linalg_cython(S, 2)**2  + gamma*self.linalg_cython(S, 1)
             if error_function < threshold:
                 break
             print(error_function)
             max_arg_s[n_iter, 0] = np.max(S)
             print("The max weight of S is %s" %(max_arg_s[n_iter, 0]))
-            #error_function1 = np.linalg.norm(self.cython_product_t_column(URM_without, S, t_column_indices),2)**2 + gamma * np.linalg.norm(S, 2) + beta * np.linalg.norm(S) ** 2
         print("The total time for %s iterations is %s seconds" %(n_iter+1, time.time()-start_time))
 
         for i in range(self.n_users):
