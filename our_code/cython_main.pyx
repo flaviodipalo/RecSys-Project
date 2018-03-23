@@ -119,7 +119,6 @@ cdef class CythonEpoch:
 
         #python passa le cose per riferimento, noi siamo interessati a copiarne i valori.
         URM_without = URM_train.copy()
-
         #TODO: è lento perché stiamo cambiando i valori di una matrice sparsa
         URM_without[:,j] = np.zeros((self.n_users,1))
 
