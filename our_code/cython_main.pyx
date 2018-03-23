@@ -165,6 +165,7 @@ cdef class CythonEpoch:
                     print("Time for 1000 iterations: ", time_counter/(time.time() - start_time))
                 ##no sgd
                 #print('sono arrivato a:',i)
+                #
 
                 '''
                 for gradient_index in range (self.n_movies):
