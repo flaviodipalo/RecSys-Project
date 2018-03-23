@@ -92,7 +92,7 @@ cdef class CythonEpoch:
         cdef double alpha = 1e-1
         cdef int gamma = 5
         cdef double beta = 1e-2
-        cdef int iterations = 1000
+        cdef int iterations = 500
         cdef int threshold = 5
         cdef double[:] S = np.random.rand(self.n_movies)
         cdef int[:] URM_without_indptr, t_column_indices
@@ -160,12 +160,9 @@ cdef class CythonEpoch:
             start_time = time.time()
             #TODO: change indices.
             for user in t_column_indices:
-                time_counter += 1
-                if time_counter % 1000 == 0:
-                    print("Time for 1000 iterations: ", time_counter/(time.time() - start_time))
-                ##no sgd
-                #print('sono arrivato a:',i)
-                #
+                #time_counter += 1
+                #if time_counter % 10000 == 0:
+                    #print("Time for 1000 iterations: ", time_counter/(time.time() - start_time))
 
                 '''
                 for gradient_index in range (self.n_movies):
@@ -179,11 +176,9 @@ cdef class CythonEpoch:
                 URM_vector_indices = URM_indices[URM_indptr[user]:URM_indptr[user+1]]
                 URM_vector_data = URM_data[URM_indptr[user]:URM_indptr[user+1]]
                 partial_error = (self.cython_product_sparse(URM_vector_indices, URM_vector_data, S) - t_column_data[counter])
-                #for gradient_index in range (self.n_movies):
+
                 for index in range(len(URM_vector_indices)):
 
-                    #gradient_index = random.randrange(0, self.n_movies-1, 1)
-                    #print('i, gradient:',i,gradient)
                     gradient = partial_error*URM_vector_data[index] + gamma + beta*S[URM_vector_indices[index]]
                     G[URM_vector_indices[index]] += gradient**2
                     S[URM_vector_indices[index]] -= (alpha/sqrt(G[URM_vector_indices[index]] + eps))*gradient
@@ -197,11 +192,8 @@ cdef class CythonEpoch:
                 break
             print('error function is: ',error_function)
 
-        print("The total time for %s iterations is %s seconds" %(n_iter+1, time.time()-start_time))
-
         #print prediction for all the values different from zero.
-        '''
+
         for i in range(self.n_users):
             if (URM_train[i, j] != 0):
-                print("Real: %s    predicted: %s" %(URM_train[i, 1], self.cython_product_sparse(URM_without[i, :], S)))
-        '''
+                print("Real: %s    predicted: %s" %(URM_train[i, 1], self.cython_product_sparse(URM_indices[URM_indptr[i]:URM_indptr[i+1]],URM_data[URM_indptr[i]:URM_indptr[i+1]], S)))
