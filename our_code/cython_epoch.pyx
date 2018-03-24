@@ -166,4 +166,4 @@ cdef class CythonEpoch:
             for i in range(self.n_users):
                 if (URM_train[i, j] != 0):
                     print("Real: %s    predicted: %s" %(URM_train[i, j], self.cython_product_sparse(URM_indices[URM_indptr[i]:URM_indptr[i+1]],URM_data[URM_indptr[i]:URM_indptr[i+1]], S[:, j])))
-
+            URM_without[:,j] = t_column
