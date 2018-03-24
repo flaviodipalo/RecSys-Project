@@ -17,8 +17,6 @@ cdef class CythonEpoch:
     cdef int n_users
     cdef int n_movies
 
-    #TODO: meglio così o numpy ?
-
     cdef double vector_sum(self, double[:] vector):
 
             cdef double adder = 0
@@ -28,8 +26,6 @@ cdef class CythonEpoch:
                 adder += vector[i]
             return adder
 
-    #TODO: dichiarare i tipi dei parametri
-    #cdef double cython_product_sparse(self, URM_without, double[:] vector):
     cdef double cython_product_sparse(self, int[:] URM_without_indices, double[:] URM_without_data, double[:] vector):
 
             cdef double result = 0
@@ -46,7 +42,6 @@ cdef class CythonEpoch:
     cdef double[:] cython_product_t_column(self, URM_without, double[:] S, t_column_indices):
 
             cdef double[:] prediction = np.zeros((self.n_users))
-            #TODO: questo è impostato per essere solo su una colonna
             cdef int x, user, index, i
             cdef int[:] URM_without_indptr, URM_without_indices
             cdef double[:] URM_without_data
@@ -89,7 +84,6 @@ cdef class CythonEpoch:
         self.n_movies = URM_train.shape[1]
 
         cdef int user
-        #TODO: j è fisso per ora siccome abbiamo considerato una sola colonna
         cdef int j
         cdef int i
         cdef int index
@@ -125,10 +119,6 @@ cdef class CythonEpoch:
         URM_without = URM_train.copy()
         #TODO: è lento perché stiamo cambiando i valori di una matrice sparsa
 
-
-        #prediction = np.zeros((self.n_users, 1))
-        #error = np.zeros((self.n_users, 1))
-
         # Needed for Adagrad
         G = np.zeros((self.n_movies, self.n_movies))
         eps = 1e-8
@@ -146,38 +136,12 @@ cdef class CythonEpoch:
             for n_iter in range(iterations):
                 if n_iter % 100 == 0:
                     print("Iteration #%s" %(n_iter))
-                '''
-                if n_iter%100 == 0:
-                    for i, e in enumerate(t_column_data):
-                        if e != 0:
-                            URM_vector_indices = URM_without[i, :].indices
-                            URM_vector_data = URM_without[i, :].data
-                            prediction[i, 0] = self.cython_product_sparse(URM_vector_indices, URM_vector_data, S[:, j])
 
-                    print("the sum of the element is: ", self.vector_sum(prediction[:, 0]))
-
-                    for i in range(t_column_data.shape[0]):
-                        error[i, 0] = prediction[i, 0] - t_column_data[i]
-                    print("the sum of the errors is: ", self.vector_sum(error[:, 0]))
-                '''
                 counter = 0
                 start_time = time.time()
-                #TODO: change indices.
                 for t_index in range(len(t_column_indices)):
                     user = t_column_indices[t_index]
-                    #time_counter += 1
-                    #if time_counter % 10000 == 0:
-                        #print("Time for 1000 iterations: ", time_counter/(time.time() - start_time))
 
-                    '''
-                    for gradient_index in range (self.n_movies):
-                        print('i, gradient:',i,gradient)
-                        gradient = (self.cython_product_sparse(URM_without[i, :], S) - t_column[i, 0])*URM_without[i, gradient_index] + gamma + beta*S[gradient_index, 0]
-                        G[gradient_index, 0] += gradient**2
-                        S[gradient_index, 0] -= (alpha/math.sqrt(G[i, 0] + eps))*gradient
-                        if S[gradient_index, 0] < 0:
-                            S[gradient_index, 0] = 0
-                    '''
                     URM_vector_indices = URM_indices[URM_indptr[user]:URM_indptr[user+1]]
                     URM_vector_data = URM_data[URM_indptr[user]:URM_indptr[user+1]]
                     partial_error = (self.cython_product_sparse(URM_vector_indices, URM_vector_data, S[:, j]) - t_column_data[counter])
@@ -199,7 +163,6 @@ cdef class CythonEpoch:
                     print("error function is: ", error_function)
 
             #print prediction for all the values different from zero.
-
             for i in range(self.n_users):
                 if (URM_train[i, j] != 0):
                     print("Real: %s    predicted: %s" %(URM_train[i, j], self.cython_product_sparse(URM_indices[URM_indptr[i]:URM_indptr[i+1]],URM_data[URM_indptr[i]:URM_indptr[i+1]], S[:, j])))

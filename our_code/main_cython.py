@@ -1,3 +1,3 @@
-from cython_main import CythonEpoch
+from cython_epoch import CythonEpoch
 
 c = CythonEpoch()
