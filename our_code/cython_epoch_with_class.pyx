@@ -1,5 +1,9 @@
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from SLIM_RMSE.SLIM_RMSE import SLIM_RMSE
+from cython.parallel import parallel,  prange
+cimport cython
+from libc.stdio cimport printf
+
 
 import numpy as np
 
@@ -16,71 +20,76 @@ import timeit
 
 #TODO: cambiare il gradient e provare con la nostra alternativa
 
-
-cdef double vector_sum( double[:] vector):
-
-        cdef double adder = 0
-        cdef int i
-
-        for i in range(len(vector)):
-            adder += vector[i]
-        return adder
-
-cdef double cython_product_sparse( int[:] URM_without_indices, double[:] URM_without_data, double[:] vector):
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.initializedcheck(False)
+cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero) nogil:
 
         cdef double result = 0
-        cdef int i = 0
         cdef int x
-        cdef int j = 0
 
-
-        for x in range(len(URM_without_data)):
-            result += URM_without_data[x]*vector[URM_without_indices[x]]
+        for x in range(len(URM_data)):
+            if URM_indices[x] != column_index_with_zero:
+                result += URM_data[x]*S_column[URM_indices[x]]
 
         return result
 
 
-cdef double[:] cython_product_t_column( URM_without, double[:] S, t_column_indices):
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.initializedcheck(False)
+cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:] URM_data, double[:] S, int[:] t_column_indices, double[:] t_column_data, int column_index_with_zero, double[:] prediction) nogil:
 
-        cdef double[:] prediction = np.zeros(URM_without.shape[0])
+        #cdef double[:] prediction = np.zeros(len(t_column_indices))
         cdef int x, user, index, i
-        cdef int[:] URM_without_indptr, URM_without_indices
-        cdef double[:] URM_without_data
+        cdef int[:] user_indices
+        cdef double[:] user_data
 
         for index in range(len(t_column_indices)):
             user = t_column_indices[index]
-            URM_without_indptr = URM_without.indptr
-            URM_without_indices = URM_without.indices[URM_without_indptr[user]:URM_without_indptr[user+1]]
-            URM_without_data = URM_without.data[URM_without_indptr[user]:URM_without_indptr[user + 1]]
-            for x in range(len(URM_without_data)):
-                prediction[user] += URM_without_data[x]*S[URM_without_indices[x]]
+            user_indices = URM_indices[URM_indptr[user]:URM_indptr[user + 1]]
+            user_data = URM_data[URM_indptr[user]:URM_indptr[user + 1]]
+
+            prediction[index] = 0
+            for x in range(len(user_data)):
+                if user_indices[x] != column_index_with_zero:
+                    prediction[index] += user_data[x]*S[user_indices[x]]
+            prediction[index] = t_column_data[index] - prediction[index]
+
         return prediction
 
-cdef double cython_norm( matrix, option):
-    cdef int i, j
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.initializedcheck(False)
+cdef double cython_norm(double[:] vector, int option) nogil:
+
+    cdef int i
     cdef double counter = 0
 
     if option == 2:
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                counter += matrix[i, j]**2
+        for i in range(len(vector)):
+            counter += vector[i]**2
+        counter = sqrt(counter)
     elif option == 1:
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                counter += matrix[i, j]
+        for i in range(len(vector)):
+            counter += vector[i]
 
-    return sqrt(counter)
-
+    return counter
 
 
 cdef class CythonEpoch:
 
     cdef double[:] users
     cdef double[:] movies
+
     cdef double[:] ratings
     cdef int n_users
     cdef int n_movies
 
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
     def __init__(self):
         data_reader = Movielens1MReader(0.8)
         URM_train = data_reader.URM_train
@@ -91,7 +100,7 @@ cdef class CythonEpoch:
         self.n_users = URM_train.shape[0]
         self.n_movies = URM_train.shape[1]
 
-        cdef int user
+        cdef int user_index
         cdef int j
         cdef int i
         cdef int index
@@ -103,15 +112,16 @@ cdef class CythonEpoch:
         cdef int iterations = 500
         cdef int threshold = 5
         cdef double[:, :] S = np.random.rand(self.n_movies, self.n_movies)
-        cdef int[:] URM_without_indptr, t_column_indices
+        cdef int[:] URM_without_indptr, t_column_indices, item_indptr, item_indices
         cdef int[:, :] URM_without_indices, URM_without_data
         cdef double[:] t_column_data
-        cdef double [:, :] prediction, error
+        cdef double [:] prediction = np.zeros(self.n_users)
         cdef double[:, :] G
         cdef double gradient
+
         cdef double error_function
         cdef double partial_error
-        cdef double[:] URM_data
+        cdef double[:] URM_data, item_data
         cdef int[:] URM_indices
         cdef int[:] URM_indptr
         cdef int counter
@@ -119,8 +129,6 @@ cdef class CythonEpoch:
         cdef int[:] URM_vector_indices
         cdef double[:] URM_vector_data
 
-        csc_URM_train = URM_train.tocsc()
-        csc_URM_train_indptr = csc_URM_train.indptr
 
 
         #python passa le cose per riferimento, noi siamo interessati a copiarne i valori.
@@ -133,44 +141,48 @@ cdef class CythonEpoch:
         URM_indices = URM_train.indices
         URM_data = URM_train.data
         URM_indptr = URM_train.indptr
-        for j in range(1, self.n_movies):
-            print("Column %s of %s" %(j, self.n_movies))
-            URM_without = URM_train.copy()
-            URM_without[:,j] = np.zeros((self.n_users,1))
-            t_column_indices = csc_URM_train.indices[csc_URM_train_indptr[j]:csc_URM_train_indptr[j+1]]
-            t_column_data = csc_URM_train.data[csc_URM_train_indptr[j]:csc_URM_train_indptr[j+1]]
-            t_column = URM_train[:, j]
-            for n_iter in range(iterations):
-                if n_iter % 100 == 0:
-                    print("Iteration #%s" %(n_iter))
 
-                counter = 0
-                start_time = time.time()
-                for t_index in range(len(t_column_indices)):
-                    user = t_column_indices[t_index]
 
-                    URM_vector_indices = URM_indices[URM_indptr[user]:URM_indptr[user+1]]
-                    URM_vector_data = URM_data[URM_indptr[user]:URM_indptr[user+1]]
-                    partial_error = (cython_product_sparse(URM_vector_indices, URM_vector_data, S[:, j]) - t_column_data[counter])
+        csc_URM_train = URM_train.tocsc()
+        item_indptr = csc_URM_train.indptr
+        item_indices = csc_URM_train.indices
+        item_data = csc_URM_train.data
 
-                    for index in range(len(URM_vector_indices)):
+        with nogil, parallel():
+            for j in prange(1, self.n_movies):
+                printf("Column %d\n", j)
+                #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
+                #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
-                        gradient = partial_error*URM_vector_data[index] + gamma + beta*S[URM_vector_indices[index], j]
-                        G[URM_vector_indices[index], j] += gradient**2
-                        S[URM_vector_indices[index], j] -= (alpha/sqrt(G[URM_vector_indices[index], j] + eps))*gradient
-                        if S[URM_vector_indices[index], j] < 0:
-                            S[URM_vector_indices[index], j] = 0
-                    counter = counter + 1
+                for n_iter in range(iterations):
+                    if n_iter % 100 == 0:
+                        printf("Iteration #%d of column #%d\n", n_iter, j)
 
-                error_function = np.linalg.norm(cython_product_t_column(URM_without, S[:, j], t_column_indices), 2)**2 + beta*np.linalg.norm(S[:, j], 2)**2  + gamma*np.linalg.norm(S[:, j], 1)
+                    counter = 0
+                    for t_index in range(len(item_indices[item_indptr[j]:item_indptr[j+1]])):
+                        user_index = item_indices[item_indptr[j]:item_indptr[j+1]][t_index]
+                        #URM_vector_indices = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]]
+                        #URM_vector_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
+                        partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], S[:, j], j) - item_data[item_indptr[j]:item_indptr[j+1]][counter])
 
-                if error_function < threshold:
-                    break
-                if n_iter % 100 == 0:
-                    print("error function is: ", error_function)
+                        for index in range(len(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]])):
+                            if URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index] != j:
+                                gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index]+ beta*S[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] + gamma
+                                G[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] += gradient**2
+                                S[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] -= (alpha/sqrt(G[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] + eps))*gradient
+                            if S[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] < 0:
+                                S[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] = 0
+                        counter = counter + 1
 
-            #print prediction for all the values different from zero.
-            for i in range(self.n_users):
-                if (URM_train[i, j] != 0):
-                    print("Real: %s    predicted: %s" %(URM_train[i, j], cython_product_sparse(URM_indices[URM_indptr[i]:URM_indptr[i+1]],URM_data[URM_indptr[i]:URM_indptr[i+1]], S[:, j])))
+                    error_function = cython_norm(prediction_error(URM_indptr, URM_indices, URM_data, S[:, j], item_indices[item_indptr[j]:item_indptr[j+1]], item_data[item_indptr[j]:item_indptr[j+1]], j, prediction), 2)**2 + beta*cython_norm(S[:, j], 2)**2  + gamma*cython_norm(S[:, j], 1)
+
+                    #if error_function < threshold:
+                     #   break
+                    #if n_iter % 100 == 0:
+                     #   print("error function is: ", error_function)
+
+                #print prediction for all the values different from zero.
+                #for i in range(self.n_users):
+                #    if (URM_train[i, j] != 0):
+                #        print("Real: %s    predicted: %s" %(URM_train[i, j], cython_product_sparse(URM_indices[URM_indptr[i]:URM_indptr[i+1]],URM_data[URM_indptr[i]:URM_indptr[i+1]], S[:, j], j)))
 
