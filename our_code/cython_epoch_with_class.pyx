@@ -142,7 +142,6 @@ cdef class CythonEpoch:
         URM_data = URM_train.data
         URM_indptr = URM_train.indptr
 
-
         csc_URM_train = URM_train.tocsc()
         item_indptr = csc_URM_train.indptr
         item_indices = csc_URM_train.indices
