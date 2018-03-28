@@ -5,6 +5,6 @@ from Cython.Build import cythonize
 
 setup(
   name = 'Hello world app',
-  ext_modules = cythonize("cython_epoch_with_class.pyx"),
+  ext_modules = cythonize("SLIM_RMSE_Cython_Epoch.pyx"),
   include_dirs=[numpy.get_include()]
 )

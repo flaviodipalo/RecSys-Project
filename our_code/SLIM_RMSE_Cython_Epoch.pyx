@@ -1,5 +1,4 @@
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
-from SLIM_RMSE.SLIM_RMSE import SLIM_RMSE
 from cython.parallel import parallel,  prange
 cimport cython
 from libc.stdio cimport printf
@@ -77,7 +76,7 @@ cdef double cython_norm(double[:] vector, int option) nogil:
     return counter
 
 
-cdef class CythonEpoch:
+cdef class SLIM_RMSE_Cython_Epoch:
 
     cdef double[:] users
     cdef double[:] movies
@@ -100,8 +99,8 @@ cdef class CythonEpoch:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    def __init__(self, URM_train):
 
+    def __init__(self,URM_train,learning_rate,gamma,beta,iterations):
         self.n_users = URM_train.shape[0]
         self.n_movies = URM_train.shape[1]
         self.URM_indices = URM_train.indices
@@ -112,9 +111,6 @@ cdef class CythonEpoch:
         self.item_indptr = csc_URM_train.indptr
         self.item_indices = csc_URM_train.indices
         self.item_data = csc_URM_train.data
-
-    def fit(self,learning_rate,gamma,beta,iterations,threshold):
-
         cdef int[:] item_indptr
         cdef int[:] item_indices
         cdef double[:] item_data
@@ -134,7 +130,6 @@ cdef class CythonEpoch:
         cdef int i_gamma = gamma
         cdef double i_beta = beta
         cdef int i_iterations = iterations
-        cdef int i_threshold = threshold
         cdef double eps = 1e-8
 
         cdef double[:, :] S = np.random.rand(self.n_movies, self.n_movies)
@@ -193,5 +188,5 @@ cdef class CythonEpoch:
 
                     error_function = cython_norm(prediction_error(URM_indptr, URM_indices, URM_data, S[:, j], item_indices[item_indptr[j]:item_indptr[j+1]], item_data[item_indptr[j]:item_indptr[j+1]], j, prediction), 2)**2 + i_beta*cython_norm(S[:, j], 2)**2  + i_gamma*cython_norm(S[:, j], 1)
 
-          print('training Completed !')
+        print('training Completed !')
         self.S = S
