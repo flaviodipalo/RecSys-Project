@@ -39,7 +39,7 @@ cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double
 @cython.wraparound(False)
 @cython.initializedcheck(False)
 cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:] URM_data, double[:] S, int[:] t_column_indices, double[:] t_column_data, int column_index_with_zero, double[:] prediction) nogil:
-#
+
         #cdef double[:] prediction = np.zeros(len(t_column_indices))
         cdef int x, user, index, i
         cdef int[:] user_indices
