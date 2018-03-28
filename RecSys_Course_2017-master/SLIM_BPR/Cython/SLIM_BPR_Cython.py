@@ -38,7 +38,6 @@ class SLIM_BPR_Cython(SLIM_BPR_Python):
             batch_size = 1000, validate_every_N_epochs = 1, start_validation_after_N_epochs = 0,
             lambda_i = 0.0025, lambda_j = 0.00025, learning_rate = 0.05, topK = False, sgd_mode='adagrad'):
 
-
         self.eligibleUsers = []
 
         # Select only positive interactions

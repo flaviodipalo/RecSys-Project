@@ -35,7 +35,6 @@ class SLIM_RMSE(Recommender, Similarity_Matrix_Recommender):
 
         self.URM_train = URM_train
 
-
     def __str__(self):
         return "SLIM (l1_penalty={},l2_penalty={},positive_only={})".format(
             self.l1_penalty, self.l2_penalty, self.positive_only
@@ -121,13 +120,9 @@ class SLIM_RMSE(Recommender, Similarity_Matrix_Recommender):
         # generate the sparse weight matrix
         self.W_sparse = sps.csc_matrix((values, (rows, cols)), shape=(n_items, n_items), dtype=np.float32)
 
-
-
-
 import multiprocessing
 from multiprocessing import Pool
 from functools import partial
-
 
 class MultiThreadSLIM_RMSE(SLIM_RMSE, Similarity_Matrix_Recommender):
 
@@ -183,7 +178,6 @@ class MultiThreadSLIM_RMSE(SLIM_RMSE, Similarity_Matrix_Recommender):
                  topK = 100,
                  workers=multiprocessing.cpu_count()):
 
-
         self.l1_penalty = l1_penalty
         self.l2_penalty = l2_penalty
         self.positive_only = positive_only
@@ -191,9 +185,6 @@ class MultiThreadSLIM_RMSE(SLIM_RMSE, Similarity_Matrix_Recommender):
         self.topK = topK
 
         self.workers = workers
-
-
-
 
         self.URM_train = check_matrix(self.URM_train, 'csc', dtype=np.float32)
         n_items = self.URM_train.shape[1]
@@ -218,4 +209,3 @@ class MultiThreadSLIM_RMSE(SLIM_RMSE, Similarity_Matrix_Recommender):
 
         # generate the sparse weight matrix
         self.W_sparse = sps.csc_matrix((values, (rows, cols)), shape=(n_items, n_items), dtype=np.float32)
-

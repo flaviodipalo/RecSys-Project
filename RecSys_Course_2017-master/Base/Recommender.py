@@ -14,7 +14,6 @@ from Base.metrics import roc_auc, precision, recall, map, ndcg, rr
 #from Base.Cython.metrics import roc_auc, precision, recall, map, ndcg, rr
 from Base.Recommender_utils import check_matrix, areURMequals, removeTopPop
 
-
 class Recommender(object):
     """Abstract Recommender"""
 
@@ -50,8 +49,6 @@ class Recommender(object):
 
         scores[seen] = -np.inf
         return scores
-
-
 
 
     def evaluateRecommendations(self, URM_test_new, at=5, minRatingsPerUser=1, exclude_seen=True,
