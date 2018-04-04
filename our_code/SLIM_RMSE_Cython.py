@@ -41,6 +41,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
     def fit(self,learning_rate = 1e-1, gamma=5, beta=1e-2,topK = 100, logFile='SLIM_RMSE_training.log',validation_every_n = 100,validation_function=None,
             stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=300):
 
+        self.batch_size = 1
         # Import compiled module
         from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 
