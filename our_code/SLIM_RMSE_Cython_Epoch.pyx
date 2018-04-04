@@ -19,10 +19,8 @@ import timeit
 
 #TODO: cambiare il gradient e provare con la nostra alternativa
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-@cython.initializedcheck(False)
-cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero) nogil:
+
+cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
 
         cdef double result = 0
         cdef int x
@@ -34,10 +32,7 @@ cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double
         return result
 
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-@cython.initializedcheck(False)
-cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:] URM_data, double[:] S, int[:] t_column_indices, double[:] t_column_data, int column_index_with_zero, double[:] prediction) nogil:
+cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:] URM_data, double[:] S, int[:] t_column_indices, double[:] t_column_data, int column_index_with_zero, double[:] prediction):
 
         #cdef double[:] prediction = np.zeros(len(t_column_indices))
         cdef int x, user, index, i
@@ -57,10 +52,7 @@ cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:]
 
         return prediction
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-@cython.initializedcheck(False)
-cdef double cython_norm(double[:] vector, int option) nogil:
+cdef double cython_norm(double[:] vector, int option):
 
     cdef int i
     cdef double counter = 0
@@ -78,34 +70,27 @@ cdef double cython_norm(double[:] vector, int option) nogil:
 
 cdef class SLIM_RMSE_Cython_Epoch:
 
-    cdef double[:] users
-    cdef double[:] movies
-
-    cdef double[:] ratings
-
-    cdef int[:] item_indptr
-    cdef int[:] item_indices
+    cdef double[:] users, movies, ratings
+    cdef int[:] item_indptr, item_indices
     cdef double[:] item_data
-
-    cdef int[:] URM_indptr
-    cdef int[:] URM_indices
+    cdef int[:] URM_indptr,  URM_indices
     cdef double[:] URM_data
-
     cdef double[:, :] S
-
-    cdef int n_users
-    cdef int n_movies
+    cdef int n_users, n_movies, i_gamma
+    cdef double alpha
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
 
-    def __init__(self,URM_train,learning_rate,gamma,beta,iterations):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations):
         self.n_users = URM_train.shape[0]
         self.n_movies = URM_train.shape[1]
         self.URM_indices = URM_train.indices
         self.URM_data = URM_train.data
         self.URM_indptr = URM_train.indptr
+        self.i_gamma = gamma
+        self.alpha = learning_rate
 
         csc_URM_train = URM_train.tocsc()
         self.item_indptr = csc_URM_train.indptr
@@ -126,13 +111,13 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int n_iter
         cdef int t_index
 
-        cdef double alpha = learning_rate
-        cdef int i_gamma = gamma
+
+
         cdef double i_beta = beta
         cdef int i_iterations = iterations
         cdef double eps = 1e-8
 
-        cdef double[:, :] S = np.random.rand(self.n_movies, self.n_movies)
+        self.S = np.random.rand(self.n_movies, self.n_movies)
         cdef int[:] URM_without_indptr, t_column_indices
         cdef int[:, :] URM_without_indices, URM_without_data
         cdef double[:] t_column_data
@@ -161,16 +146,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
     def epochIteration_Cython(self):
         #TODO: aggiusta questo epochIteration per farlo andare.
-        #with nogil, parallel():
-        for j in prange(1, self.n_movies):
-            printf("Column %d\n", j)
+        for j in range(1, self.n_movies):
+            print("Column %d\n", j)
 
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
             for n_iter in range(self.i_iterations):
                 if n_iter % 100 == 0:
-                    printf("Iteration #%d of column #%d\n", n_iter, j)
+                    print("Iteration #%d of column #%d\n", n_iter, j)
 
                 counter = 0
                 for t_index in range(self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]].shape[0]):
@@ -188,8 +172,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] = 0
                     counter = counter + 1
 
-                error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, self.prediction), 2)**2 + self.i_beta*cython_norm(S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
-        print('Epoch Completed !')
+                error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, self.prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
+
 
     def get_S(self):
         return self.S
