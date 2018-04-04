@@ -84,20 +84,21 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         while currentEpoch < epochs and not convergence:
 
             if self.batch_size > 0:
+                print('Running Epoch Number:',currentEpoch)
                 self.cythonEpoch.epochIteration_Cython()
             else:
                 print("No batch not available")
 
             # Determine whether a validaton step is required
-            if self.URM_validation is not None: #and (currentEpoch + 1) % self.validation_every_n == 0:
+            if self.URM_validation is not None and (currentEpoch + 1) % self.validation_every_n == 0:
 
-                print("SLIM_BPR_Cython: Validation begins...")
+                print("SLIM_RMSE_Cython: Validation begins...")
 
                 self.get_S_incremental_and_set_W()
 
                 results_run = validation_function(self)
 
-                print("SLIM_BPR_Cython: {}".format(results_run))
+                print("SLIM_RMSE_Cython: {}".format(results_run))
 
                 # Update the D_best and V_best
                 # If validation is required, check whether result is better

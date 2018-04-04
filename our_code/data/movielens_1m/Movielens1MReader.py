@@ -12,8 +12,6 @@ class Movielens1MReader(object):
         filename = dir+"/ratings.dat"
         filename2 = dir+"/ratings_ordered_by_item.dat"
 
-        print("Loading data...")
-
         data = np.loadtxt(filename, delimiter="::")
         #data2 = np.loadtxt(filename2, delimiter="::")
 

@@ -5,9 +5,12 @@ from data.movielens_1m.Movielens1MReader import Movielens1MReader
 import numpy as np
 import time
 
+
+print('Loading Data...')
 data_reader = Movielens1MReader(0.8)
 URM_train = data_reader.URM_train
 URM_test = data_reader.URM_test
+print('Data Loaded !')
 
 #cython epoch only version
 #recommender = SLIM_RMSE_Cython_Epoch( URM_train, 1e-1, 5, 1e-2, 500)

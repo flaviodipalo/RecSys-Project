@@ -14,7 +14,6 @@ import time
 import timeit
 #TODO: portare le funzioni di prodotto fra matrici fuori dalla classe, idealmente in un nuovo file.
 
-#TODO: valutare il codice secondo le metriche sfruttando il codice di MFD.
 #TODO: parallelizzare
 
 #TODO: cambiare il gradient e provare con la nostra alternativa
@@ -138,14 +137,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int t_index
 
         for j in range(1, self.n_movies):
-            print("Column %d\n", j)
+            #if j%500 ==0:
+            #    print("Column ", j)
 
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
             for n_iter in range(self.i_iterations):
-                if n_iter % 100 == 0:
-                    print("Iteration %d of column %d\n", n_iter, j)
+                #if n_iter % 100 == 0:
+                    #print("Iteration %d of column %d\n", n_iter, j)
                 counter = 0
                 for t_index in range(self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]].shape[0]):
                     user_index = self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]][t_index]
