@@ -204,3 +204,4 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             else:
                 self.W = self.S_incremental
 
+
