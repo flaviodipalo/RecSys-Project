@@ -38,7 +38,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             self.runCompilationScript()
             print("Compilation Complete")
 
-    def fit(self,learning_rate = 1e-1, gamma=5, beta=1e-2,topK = 100, logFile='SLIM_RMSE_training.log',validation_every_n = 100,validation_function=None,
+    def fit(self,learning_rate = 1e-1, gamma=5, beta=1e-2,topK = 100, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
             stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=1):
         self.sparse_weights = False
         self.train_with_sparse_weights = False
@@ -89,7 +89,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                 print("No batch not available")
 
             # Determine whether a validaton step is required
-            if self.URM_validation is not None and (currentEpoch + 1) % self.validation_every_n == 0:
+            if self.URM_validation is not None: #and (currentEpoch + 1) % self.validation_every_n == 0:
 
                 print("SLIM_BPR_Cython: Validation begins...")
 

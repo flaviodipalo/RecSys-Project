@@ -13,5 +13,5 @@ URM_test = data_reader.URM_test
 #recommender = SLIM_RMSE_Cython_Epoch( URM_train, 1e-1, 5, 1e-2, 500)
 #recommender.evaluate(URM_test)
 
-recommender = SLIM_RMSE_Cython(URM_train = URM_train)
+recommender = SLIM_RMSE_Cython(URM_train = URM_train,URM_validation = URM_test)
 recommender.fit()
