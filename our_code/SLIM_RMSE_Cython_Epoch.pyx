@@ -159,6 +159,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         URM_indptr = self.URM_indptr
         URM_data = self.URM_data
 
+    def epochIteration(self):
+        #TODO: aggiusta questo epochIteration per farlo andare.
         with nogil, parallel():
             for j in prange(1, self.n_movies):
                 printf("Column %d\n", j)
@@ -166,16 +168,16 @@ cdef class SLIM_RMSE_Cython_Epoch:
                 #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
                 #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
-                for n_iter in range(i_iterations):
+                for n_iter in range(self.i_iterations):
                     if n_iter % 100 == 0:
                         printf("Iteration #%d of column #%d\n", n_iter, j)
 
                     counter = 0
-                    for t_index in range(item_indices[item_indptr[j]:item_indptr[j+1]].shape[0]):
-                        user_index = item_indices[item_indptr[j]:item_indptr[j+1]][t_index]
+                    for t_index in range(self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]].shape[0]):
+                        user_index = self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]][t_index]
                         #URM_vector_indices = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]]
                         #URM_vector_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
-                        partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], S[:, j], j) - item_data[item_indptr[j]:item_indptr[j+1]][counter])
+                        partial_error = (cython_product_sparse(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.S[:, j], j) - self.item_data[self.item_indptr[j]:self.item_indptr[j+1]][counter])
 
                         for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                             if URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index] != j:
@@ -186,7 +188,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 S[URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index], j] = 0
                         counter = counter + 1
 
-                    error_function = cython_norm(prediction_error(URM_indptr, URM_indices, URM_data, S[:, j], item_indices[item_indptr[j]:item_indptr[j+1]], item_data[item_indptr[j]:item_indptr[j+1]], j, prediction), 2)**2 + i_beta*cython_norm(S[:, j], 2)**2  + i_gamma*cython_norm(S[:, j], 1)
+                    error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, self.prediction), 2)**2 + self.i_beta*cython_norm(S[:, j], 2)**2  + self.i_gamma*cython_norm(S[:, j], 1)
+        print('Epoch Completed !')
 
-        print('training Completed !')
-        self.S = S
+    def get_S(self):
+        return self.S
+

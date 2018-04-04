@@ -38,7 +38,8 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             self.runCompilationScript()
             print("Compilation Complete")
 
-    def fit(self,learning_rate = 1e-1, gamma=5, beta=1e-2, iterations=500,topK = None, logFile=None,validation_every_n = 100,validation_function=None):
+    def fit(self,learning_rate = 1e-1, gamma=5, beta=1e-2,topK = 100, logFile='SLIM_RMSE_training.log',validation_every_n = 100,validation_function=None,
+            stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=300):
 
         # Import compiled module
         from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
@@ -46,8 +47,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         # Select only positive interactions
         URM_train_positive = self.URM_train.copy()
 
-
-        #self.cythonEpoch = SLIM_RMSE_Cython_Epoch(learning_rate = 1e-1, gamma=5, beta=1e-2, iterations=500)
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=gamma, beta=beta, iterations=1)
 
         if (topK != False and topK < 1):
             raise ValueError(
@@ -78,7 +78,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         self.epochs_best = 0
         currentEpoch = 0
 
-        while currentEpoch < self.epochs and not convergence:
+        while currentEpoch < epochs and not convergence:
 
             if self.batch_size > 0:
                 self.cythonEpoch.epochIteration_Cython()
@@ -131,6 +131,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
         sys.stdout.flush()
 
+    '''
     def writeCurrentConfig(self, currentEpoch, results_run, logFile):
 
         current_config = {'lambda_i': self.lambda_i,
@@ -149,7 +150,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             logFile.write("Test case: {}, Results {}\n".format(current_config, results_run))
             # logFile.write("Weights: {}\n".format(str(list(self.weights))))
             logFile.flush()
-
+ 
     def runCompilationScript(self):
 
         # Run compile script setting the working directory to ensure the compiled file are contained in the
@@ -190,7 +191,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
         # Command to generate html report
         # cython -a SLIM_BPR_Cython_Epoch.pyx
-
+    '''
     def get_S_incremental_and_set_W(self):
 
         self.S_incremental = self.cythonEpoch.get_S()
