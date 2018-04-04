@@ -32,7 +32,7 @@ class Similarity_Matrix_Recommender(object):
             user_profile = self.URM_train.indices[self.URM_train.indptr[user_id]:self.URM_train.indptr[user_id + 1]]
             user_ratings = self.URM_train.data[self.URM_train.indptr[user_id]:self.URM_train.indptr[user_id + 1]]
 
-            relevant_weights = self.W[user_profile]
+            relevant_weights = np.asarray(self.W)[user_profile]
             scores = relevant_weights.T.dot(user_ratings)
 
         if self.normalize:
