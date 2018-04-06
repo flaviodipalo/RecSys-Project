@@ -75,6 +75,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef int[:] URM_indptr,  URM_indices
     cdef double[:] URM_data
     cdef double[:, :] S
+    cdef double[:, :] G
     cdef int n_users, n_movies, i_gamma
     cdef double alpha
     cdef int i_iterations
@@ -96,6 +97,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.item_indptr = csc_URM_train.indptr
         self.item_indices = csc_URM_train.indices
         self.item_data = csc_URM_train.data
+        self.G = np.zeros((self.n_movies, self.n_movies))
+
 
         self.S = np.random.rand(self.n_movies, self.n_movies)
 
@@ -110,8 +113,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
         URM_data = self.URM_data
 
     def epochIteration_Cython(self):
-        #TODO: aggiusta questo epochIteration per farlo andare.
-        cdef double[:, :] G = np.zeros((self.n_movies, self.n_movies))
         cdef double [:] prediction = np.zeros(self.n_users)
         cdef double eps = 1e-8
 
@@ -156,8 +157,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     for index in range(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]].shape[0]):
                         if self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index] != j:
                             gradient = partial_error*self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index]+ self.i_beta*self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + self.i_gamma
-                            G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] += gradient**2
-                            self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] -= (self.alpha/sqrt(G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + eps))*gradient
+                            self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] += gradient**2
+                            self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] -= (self.alpha/sqrt(self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + eps))*gradient
                         if self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] < 0:
                             self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] = 0
                     counter = counter + 1
