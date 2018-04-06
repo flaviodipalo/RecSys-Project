@@ -163,7 +163,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] = 0
                     counter = counter + 1
 
-                error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
+        error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
+        print('Error function is:')
+        print(error_function)
+        print('S is:')
+        print(self.get_S())
 
     def get_S(self):
-        return self.S
+        #print(np.asarray(self.S))
+        return np.asarray(self.S)
