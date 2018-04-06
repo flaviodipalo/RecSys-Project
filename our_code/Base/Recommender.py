@@ -104,7 +104,6 @@ class Recommender(object):
         self.minRatingsPerUser = minRatingsPerUser
         self.exclude_seen = exclude_seen
 
-
         nusers = self.URM_test.shape[0]
 
         # Prune users with an insufficient number of ratings
