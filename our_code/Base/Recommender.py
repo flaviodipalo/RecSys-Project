@@ -164,6 +164,7 @@ class Recommender(object):
             recommended_items = self.recommend(user_id=test_user, exclude_seen=self.exclude_seen,
                                                n=self.at, filterTopPop=self.filterTopPop, filterCustomItems=self.filterCustomItems)
 
+
             is_relevant = np.in1d(recommended_items, relevant_items, assume_unique=True)
             #print(test_user, is_relevant)
             # evaluate the recommendation list with ranking metrics ONLY
