@@ -13,7 +13,7 @@ import random
 import time
 import timeit
 #TODO: portare le funzioni di prodotto fra matrici fuori dalla classe, idealmente in un nuovo file.
-
+#####
 #TODO: parallelizzare
 
 #TODO: cambiare il gradient e provare con la nostra alternativa
