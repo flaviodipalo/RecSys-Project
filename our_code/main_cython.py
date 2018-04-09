@@ -10,11 +10,12 @@ print('Loading Data...')
 data_reader = Movielens1MReader(0.8)
 URM_train = data_reader.URM_train
 URM_test = data_reader.URM_test
+unique_movies = data_reader.unique_movies
 print('Data Loaded !')
 
 #cython epoch only version
 #recommender = SLIM_RMSE_Cython_Epoch( URM_train, 1e-1, 5, 1e-2, 500)
 #recommender.evaluate(URM_test)
 
-recommender = SLIM_RMSE_Cython(URM_train = URM_train,URM_validation = URM_test)
+recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test, movies = unique_movies)
 recommender.fit()

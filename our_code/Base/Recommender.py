@@ -165,7 +165,7 @@ class Recommender(object):
                                                n=self.at, filterTopPop=self.filterTopPop, filterCustomItems=self.filterCustomItems)
 
             is_relevant = np.in1d(recommended_items, relevant_items, assume_unique=True)
-
+            #print(test_user, is_relevant)
             # evaluate the recommendation list with ranking metrics ONLY
             roc_auc_ += roc_auc(is_relevant)
             precision_ += precision(is_relevant)

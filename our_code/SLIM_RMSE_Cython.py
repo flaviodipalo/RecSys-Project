@@ -17,10 +17,11 @@ def default_validation_function(self):
 class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
     RECOMMENDER_NAME = "SLIM_RMSE_Recommender"
 
-    def __init__(self, URM_train, URM_validation=None, recompile_cython=False):
+    def __init__(self, URM_train, movies, URM_validation=None, recompile_cython=False):
 
         super(SLIM_RMSE_Cython, self).__init__()
 
+        self.unique_movies = movies
         self.URM_train = URM_train.copy()
         self.n_users = URM_train.shape[0]
         self.n_items = URM_train.shape[1]
@@ -50,7 +51,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         # Select only positive interactions
         URM_train_positive = self.URM_train.copy()
 
-        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=gamma, beta=beta, iterations=1)
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(unique_movies=self.unique_movies, URM_train=self.URM_train,learning_rate = learning_rate, gamma=gamma, beta=beta, iterations=1)
 
         if (topK != False and topK < 1):
             raise ValueError(

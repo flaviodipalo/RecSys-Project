@@ -69,9 +69,10 @@ cdef double cython_norm(double[:] vector, int option):
 
 cdef class SLIM_RMSE_Cython_Epoch:
 
+    cdef long[:] unique_movies
     cdef double[:] users, movies, ratings
-    cdef int[:] item_indptr, item_indices
-    cdef double[:] item_data
+    cdef int[:] all_items_indptr, all_items_indices
+    cdef double[:] all_items_data
     cdef int[:] URM_indptr,  URM_indices
     cdef double[:] URM_data
     cdef double[:, :] S
@@ -81,8 +82,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef int i_iterations
     cdef double i_beta
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations):
+    def __init__(self, unique_movies, URM_train, learning_rate, gamma, beta, iterations):
 
+        self.unique_movies = unique_movies
         self.i_beta = beta
         self.i_iterations = iterations
         self.n_users = URM_train.shape[0]
@@ -94,9 +96,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.alpha = learning_rate
 
         csc_URM_train = URM_train.tocsc()
-        self.item_indptr = csc_URM_train.indptr
-        self.item_indices = csc_URM_train.indices
-        self.item_data = csc_URM_train.data
+        self.all_items_indptr = csc_URM_train.indptr
+        self.all_items_indices = csc_URM_train.indices
+        self.all_items_data = csc_URM_train.data
         self.G = np.zeros((self.n_movies, self.n_movies))
 
 
@@ -104,19 +106,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         # Needed for Adagrad
 
-        item_indices = self.item_indices
-        item_indptr = self.item_indptr
-        item_data = self.item_data
-
-        URM_indices = self.URM_indices
-        URM_indptr = self.URM_indptr
-        URM_data = self.URM_data
-
     def epochIteration_Cython(self):
         cdef double [:] prediction = np.zeros(self.n_users)
         cdef double eps = 1e-8
 
-        cdef int[:] URM_without_indptr, t_column_indices
+        cdef int[:] URM_without_indptr, t_column_indices, item_indices
         cdef int[:, :] URM_without_indices, URM_without_data
         cdef double[:] t_column_data
 
@@ -127,16 +121,17 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         cdef int counter
         cdef int time_counter = 0
-        cdef int[:] URM_vector_indices
-        cdef double[:] URM_vector_data
+        cdef int[:] user_indices
+        cdef double[:] user_data
 
-        cdef int user_index
+        cdef int user_index, target_user_index
         cdef int j
         cdef int i
         cdef int index
         cdef int n_iter
         cdef int t_index
 
+        #for j in self.unique_movies:
         for j in range(0, self.n_movies):
             #if j%500 ==0:
             #    print("Column ", j)
@@ -144,29 +139,32 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
-
+            item_indices = self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]]
             for n_iter in range(self.i_iterations):
                 #if n_iter % 100 == 0:
                     #print("Iteration %d of column %d\n", n_iter, j)
                 counter = 0
-                for t_index in range(self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]].shape[0]):
-                    user_index = self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]][t_index]
-                    #URM_vector_indices = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]]
-                    #URM_vector_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
-                    partial_error = (cython_product_sparse(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.S[:, j], j) - self.item_data[self.item_indptr[j]:self.item_indptr[j+1]][counter])
+                for t_index in range(item_indices.shape[0]):
+                    user_index = item_indices[t_index]
+                    user_indices = self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
+                    user_data = self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
+                    partial_error = (cython_product_sparse(user_indices, user_data, self.S[:, j], j) - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter])
 
-                    for index in range(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]].shape[0]):
-                        #if self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index] != j:
-                        gradient = partial_error*self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index]+ self.i_beta*self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + self.i_gamma
-                        self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] += gradient**2
-                        self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] -= (self.alpha/sqrt(self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + eps))*gradient
-                        if self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] < 0:
-                            self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] = 0
+                    for index in range(user_indices.shape[0]):
+                        target_user_index = user_indices[index]
+                        if target_user_index != j:
+                            gradient = partial_error*user_data[index]+ self.i_beta*self.S[target_user_index, j] + self.i_gamma
+                            self.G[target_user_index, j] += gradient**2
+                            self.S[target_user_index, j] -= (self.alpha/sqrt(self.G[target_user_index, j] + eps))*gradient
+
+                        if self.S[target_user_index, j] < 0:
+                            self.S[target_user_index, j] = 0
                     counter = counter + 1
             self.S[j, j] = 0
 
-        error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
+        #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
 
 
     def get_S(self):
+        #self.S = np.random.rand(self.n_movies, self.n_movies)
         return np.asarray(self.S)

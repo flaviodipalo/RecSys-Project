@@ -19,6 +19,9 @@ class Movielens1MReader(object):
         self.users = np.array(data[:,0])
         self.movies = np.array(data[:,1])
         self.ratings = np.array(data[:,2])
+
+        self.unique_movies = np.sort(np.unique(self.movies)).astype(int)
+        self.unique_users = np.sort(np.unique(self.users))
         '''
         #These arrays are sorted by item
         self.users_by_item = np.array(data2[:,0])
