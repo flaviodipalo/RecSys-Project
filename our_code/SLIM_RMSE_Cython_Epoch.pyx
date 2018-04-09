@@ -137,12 +137,13 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int n_iter
         cdef int t_index
 
-        for j in range(1, self.n_movies):
+        for j in range(0, self.n_movies):
             #if j%500 ==0:
             #    print("Column ", j)
 
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
+
 
             for n_iter in range(self.i_iterations):
                 #if n_iter % 100 == 0:
@@ -155,20 +156,19 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     partial_error = (cython_product_sparse(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]], self.S[:, j], j) - self.item_data[self.item_indptr[j]:self.item_indptr[j+1]][counter])
 
                     for index in range(self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]].shape[0]):
-                        if self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index] != j:
-                            gradient = partial_error*self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index]+ self.i_beta*self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + self.i_gamma
-                            self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] += gradient**2
-                            self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] -= (self.alpha/sqrt(self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + eps))*gradient
+                        #if self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index] != j:
+                        gradient = partial_error*self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index]+ self.i_beta*self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + self.i_gamma
+                        self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] += gradient**2
+                        self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] -= (self.alpha/sqrt(self.G[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] + eps))*gradient
                         if self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] < 0:
                             self.S[self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]][index], j] = 0
                     counter = counter + 1
+            self.S[j, j] = 0
 
         error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.item_indices[self.item_indptr[j]:self.item_indptr[j+1]], self.item_data[self.item_indptr[j]:self.item_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
-        print('Error function is:')
-        print(error_function)
-        print('S is:')
-        print(self.get_S())
+        #print('Error function is:')
+        #print(error_function)
+
 
     def get_S(self):
-        #print(np.asarray(self.S))
         return np.asarray(self.S)
