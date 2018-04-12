@@ -195,6 +195,5 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     counter = counter + 1
             self.S[j, j] = 0
 
-
     def get_S(self):
         return np.asarray(self.S)
