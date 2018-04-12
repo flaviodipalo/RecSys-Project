@@ -3,7 +3,6 @@ from cython.parallel import parallel,  prange
 cimport cython
 from libc.stdio cimport printf
 
-
 import numpy as np
 
 from libc.math cimport sqrt
@@ -15,9 +14,8 @@ import timeit
 #TODO: portare le funzioni di prodotto fra matrici fuori dalla classe, idealmente in un nuovo file.
 #####
 #TODO: parallelizzare
-
 #TODO: cambiare il gradient e provare con la nostra alternativa
-
+#TODO: Aggiungere altri gradienti.
 
 cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
 
@@ -102,7 +100,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.G = np.zeros((self.n_movies, self.n_movies))
 
 
-        self.S = np.random.rand(self.n_movies, self.n_movies)
+        #self.S = np.random.rand(self.n_movies, self.n_movies)
+        self.S=np.zeros((self.n_movies, self.n_movies))
 
         # Needed for Adagrad
 
@@ -117,7 +116,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double gradient
 
         cdef double error_function
-        cdef double partial_error
+        cdef double partial_error, cum_loss = 0
 
         cdef int counter
         cdef int time_counter = 0
@@ -149,6 +148,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     user_indices = self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
                     user_data = self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
                     partial_error = (cython_product_sparse(user_indices, user_data, self.S[:, j], j) - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter])
+                    cum_loss += partial_error**2
 
                     for index in range(user_indices.shape[0]):
                         target_user_index = user_indices[index]
@@ -162,9 +162,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     counter = counter + 1
             self.S[j, j] = 0
 
+        print("CUM loss: {:.2E}".format(cum_loss))
+
         #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
         #print(error_function)
 
     def get_S(self):
         #self.S = np.random.rand(self.n_movies, self.n_movies)
+
         return np.asarray(self.S)
