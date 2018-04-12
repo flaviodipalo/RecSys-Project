@@ -76,13 +76,22 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef int[:] URM_indptr,  URM_indices
     cdef double[:] URM_data
     cdef double[:, :] S
-    cdef double[:, :] G
     cdef int n_users, n_movies, i_gamma
     cdef double alpha
     cdef int i_iterations
     cdef double i_beta
+    cdef str gradient_option
 
-    def __init__(self, unique_movies, URM_train, learning_rate, gamma, beta, iterations):
+    #Adagrad
+    cdef double[:, :] adagrad_cache
+    cdef double adagrad_eps
+
+    #Adam
+    cdef double beta_1, beta_2, adam_eps, m_adjusted, v_adjusted
+    cdef double[:, :] adam_m, adam_v
+    cdef int time_t
+
+    def __init__(self, unique_movies, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
 
         self.unique_movies = unique_movies
         self.i_beta = beta
@@ -94,21 +103,32 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.URM_indptr = URM_train.indptr
         self.i_gamma = gamma
         self.alpha = learning_rate
+        self.gradient_option = gradient_option
 
         csc_URM_train = URM_train.tocsc()
         self.all_items_indptr = csc_URM_train.indptr
         self.all_items_indices = csc_URM_train.indices
         self.all_items_data = csc_URM_train.data
-        self.G = np.zeros((self.n_movies, self.n_movies))
 
 
-        self.S = np.random.rand(self.n_movies, self.n_movies)
+        self.S = np.zeros((self.n_movies, self.n_movies))
 
-        # Needed for Adagrad
+        #ADAGRAD
+        self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
+        self.adagrad_eps = 1e-8
+
+        #ADAM
+        self.adam_m = np.zeros((self.n_movies, self.n_movies))
+        self.adam_v = np.zeros((self.n_movies, self.n_movies))
+        self.beta_1 = 0.9
+        self.beta_2 = 0.999
+        self.adam_eps = 1e-8
+        self.time_t = 0
+
 
     def epochIteration_Cython(self):
-        cdef double [:] prediction = np.zeros(self.n_users)
-        cdef double eps = 1e-8
+
+        cdef double[:] prediction = np.zeros(self.n_users)
 
         cdef int[:] URM_without_indptr, t_column_indices, item_indices
         cdef int[:, :] URM_without_indices, URM_without_data
@@ -130,6 +150,10 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int index
         cdef int n_iter
         cdef int t_index
+
+
+        if self.gradient_option == "adam":
+            self.time_t += 1
 
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
@@ -153,18 +177,24 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     for index in range(user_indices.shape[0]):
                         target_user_index = user_indices[index]
                         if target_user_index != j:
-                            gradient = partial_error*user_data[index]+ self.i_beta*self.S[target_user_index, j] + self.i_gamma
-                            self.G[target_user_index, j] += gradient**2
-                            self.S[target_user_index, j] -= (self.alpha/sqrt(self.G[target_user_index, j] + eps))*gradient
+                            gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
+
+                            if self.gradient_option == "adagrad":
+                                self.adagrad_cache[target_user_index, j] += gradient**2
+                                self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.adagrad_eps))*gradient
+
+                            elif self.gradient_option == "adam":
+                                self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
+                                self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
+                                self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
+                                self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
+                                self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.adam_eps)
 
                         if self.S[target_user_index, j] < 0:
                             self.S[target_user_index, j] = 0
                     counter = counter + 1
             self.S[j, j] = 0
 
-        #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
-        #print(error_function)
 
     def get_S(self):
-        #self.S = np.random.rand(self.n_movies, self.n_movies)
         return np.asarray(self.S)
