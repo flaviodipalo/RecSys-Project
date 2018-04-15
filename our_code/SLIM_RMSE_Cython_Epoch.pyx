@@ -15,7 +15,6 @@ import timeit
 #####
 #TODO: parallelizzare
 #TODO: cambiare il gradient e provare con la nostra alternativa
-#TODO: Aggiungere altri gradienti.
 
 cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
 
@@ -67,7 +66,6 @@ cdef double cython_norm(double[:] vector, int option):
 
 cdef class SLIM_RMSE_Cython_Epoch:
 
-    cdef long[:] unique_movies
     cdef double[:] users, movies, ratings
     cdef int[:] all_items_indptr, all_items_indices
     cdef double[:] all_items_data
@@ -82,16 +80,20 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
     #Adagrad
     cdef double[:, :] adagrad_cache
-    cdef double adagrad_eps
+
 
     #Adam
-    cdef double beta_1, beta_2, adam_eps, m_adjusted, v_adjusted
+    cdef double beta_1, beta_2, m_adjusted, v_adjusted
     cdef double[:, :] adam_m, adam_v
     cdef int time_t
 
-    def __init__(self, unique_movies, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
+    #RMSprop
+    cdef double[:, :] rms_prop_term
 
-        self.unique_movies = unique_movies
+
+    cdef double eps
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
+
         self.i_beta = beta
         self.i_iterations = iterations
         self.n_users = URM_train.shape[0]
@@ -113,15 +115,20 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         #ADAGRAD
         self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
-        self.adagrad_eps = 1e-8
 
         #ADAM
         self.adam_m = np.zeros((self.n_movies, self.n_movies))
         self.adam_v = np.zeros((self.n_movies, self.n_movies))
         self.beta_1 = 0.9
         self.beta_2 = 0.999
-        self.adam_eps = 1e-8
         self.time_t = 0
+
+        #RMSprop
+        self.rms_prop_term = np.zeros((self.n_movies, self.n_movies))
+
+
+        #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
+        self.eps = 10e-8
 
 
     def epochIteration_Cython(self):
@@ -180,14 +187,18 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                             if self.gradient_option == "adagrad":
                                 self.adagrad_cache[target_user_index, j] += gradient**2
-                                self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.adagrad_eps))*gradient
+                                self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
                             elif self.gradient_option == "adam":
                                 self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
                                 self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
                                 self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
                                 self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
-                                self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.adam_eps)
+                                self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
+
+                            elif self.gradient_option == "rmsprop":
+                                self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
+                                self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
 
                         if self.S[target_user_index, j] < 0:
                             self.S[target_user_index, j] = 0
