@@ -1,8 +1,8 @@
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
-from ParameterTuning.ParameterTuning import BayesianSearch
-from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
+#from ParameterTuning.ParameterTuning import BayesianSearch
+#from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 import numpy as np
 import time
@@ -13,11 +13,13 @@ data_reader = Movielens1MReader(0.8)
 URM_train = data_reader.URM_train
 URM_test = data_reader.URM_test
 print('Data Loaded !')
+
 #cython epoch only version
 #recommender = SLIM_RMSE_Cython_Epoch( URM_train, 1e-1, 5, 1e-2, 500)
 #recommender.evaluate(URM_test)
 
-#recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
+recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
+'''
 recommender_class = SLIM_RMSE_Cython
 parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_test)
 hyperparamethers_range_dictionary = {}
@@ -37,5 +39,5 @@ recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train]
 best_parameters = parameterSearch.search(recommenderDictionary,output_root_path='logs/')
 
 parameterSearch.evaluate_on_test(URM_test)
-
-#recommender.fit()
+'''
+recommender.fit()
