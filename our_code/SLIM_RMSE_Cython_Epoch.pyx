@@ -262,13 +262,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             elif self.gradient_option == "normal":
                                 self.S[target_user_index, j] -= self.alpha*gradient
 
-
-                        #if self.S[target_user_index, j] < 0:
-                            #self.S[target_user_index, j] = 0
+                        if not self.similarity_matrix_normalized:
+                            if self.S[target_user_index, j] < 0:
+                                self.S[target_user_index, j] = 0
                     counter = counter + 1
-            #self.S[j, j] = 0
+
             if self.similarity_matrix_normalized:
                 print("SUM", j, vector_sum(self.S[:, j]))
+            else:
+                self.S[j, j] = 0
         print("CUM loss: {:.2E}".format(cum_loss))
 
         #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
