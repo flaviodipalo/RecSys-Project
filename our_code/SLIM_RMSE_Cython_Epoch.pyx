@@ -123,7 +123,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
+
+        self.similarity_matrix_normalized = False
 
         self.i_beta = beta
         self.i_iterations = iterations
@@ -135,7 +137,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.i_gamma = gamma
         self.alpha = learning_rate
         self.gradient_option = gradient_option
-        self.similarity_matrix_normalized = similarity_matrix_normalized
 
 
         csc_URM_train = URM_train.tocsc()
@@ -147,7 +148,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         if self.similarity_matrix_normalized:
             self.S = np.random.rand(self.n_movies, self.n_movies)
             self.A = np.ones((1, self.n_movies))
-            self.P = np.identity(self.n_movies) - np.dot(self.A.T, np.dot(np.linalg.inv(np.dot(self.A, self.A.T)), self.A))
+            print(self.A)
+            self.P = np.identity(self.n_movies) - 1/self.n_movies*np.dot(self.A.T, self.A)
             self.gradient_vector = np.zeros((self.n_movies, self.n_movies))
 
         else:
