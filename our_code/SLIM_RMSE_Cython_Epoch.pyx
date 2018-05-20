@@ -17,20 +17,16 @@ import timeit
 #TODO: parallelizzare
 #TODO: cambiare il gradient e provare con la nostra alternativa
 
-cdef double vector_product(double[:] A,double * B, int column, int index):
+cdef double vector_product(double* A,double * B, int column, int index, int length):
 
 
     cdef int i
     cdef long double result
 
     result = 0
-    for i in range(A.shape[0]):
-        if column == 2 and index == 5515:
-            print(A[i], B[i], column, index)
+    for i in range(length):
         result += A[i]*B[i]
 
-    if column == 2 and index == 5515:
-        print("RESULT", result)
     return result
 
 cdef double vector_sum(double[:] vector):
@@ -130,7 +126,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double i_beta
     cdef str gradient_option
     cdef bint similarity_matrix_normalized
-    cdef double [:, :] P, A
+    cdef double **P
 
     #Adagrad
     cdef double[:, :] adagrad_cache
@@ -287,8 +283,16 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 support_index += 1
 
                         length = user_indices.shape[0] - 1
-                        self.A = np.ones((1, length))
-                        self.P = np.identity(length) - np.dot(self.A.T, (np.dot(1/<double>length, self.A)))
+                        self.P = <double **>malloc(length * sizeof(double*))
+                        for support_index in range(length):
+                            self.P[support_index] = <double *>malloc(length * sizeof(double))
+
+                        for i in range(length):
+                            for support_index in range(length):
+                                if i == support_index:
+                                    self.P[i][support_index] = 1 - (1/<double>length)
+                                else:
+                                    self.P[i][support_index] = - (1/<double>length)
 
 
                     vector_sum_counter_1 = 0
@@ -302,7 +306,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                         else:
                             if self.similarity_matrix_normalized:
                                 #print(p_index)
-                                gradient = vector_product(self.P[p_index, :], non_zero_gradient, j, user_index)
+                                gradient = vector_product(self.P[p_index], non_zero_gradient, j, user_index, length)
 
                                 vector_sum_counter += gradient
                                 vector_sum_counter_1 += gradient
@@ -327,17 +331,16 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
 
 
-                        #if self.S[target_user_index, j] < 0:
-                         #   self.S[target_user_index, j] = 0
+                        if self.S[target_user_index, j] < 0:
+                            self.S[target_user_index, j] = 0
                         p_index += 1
-                    counter = counter + 1
-                    if j == 2:
-                        print("VECTOR SUM", vector_sum_counter, vector_sum_counter_1, user_index, user_indices.shape[0])
+                    counter += 1
                     free(non_zero_gradient)
+                    free(self.P)
 
 
             if self.similarity_matrix_normalized:
-                print("SUM", j, vector_sum(self.S[:, j]))
+                #print("SUM", j, vector_sum(self.S[:, j]))
                 self.S[j, j] = 0
                 sum_vector = vector_sum(self.S[:, j])
                 for index in range(self.S[:, j].shape[0]):
