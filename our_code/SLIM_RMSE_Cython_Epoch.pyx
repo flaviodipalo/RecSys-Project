@@ -1,8 +1,7 @@
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from cython.parallel import parallel,  prange
 cimport cython
-from libc.stdio cimport printf
-
+from libc.stdlib cimport malloc, free
 import numpy as np
 
 from libc.math cimport sqrt
@@ -16,6 +15,58 @@ import timeit
 #TODO: parallelizzare
 #TODO: cambiare il gradient e provare con la nostra alternativa
 
+cdef double vector_product(double[:] A, double* B, int column, int index):
+
+
+    cdef int i, j
+    cdef double result
+
+    result = 0
+    for i in range(A.shape[0]):
+        if column == 2 and index == 5515:
+            print(A[i], B[i], column, index)
+        result += A[i]*B[i]
+
+    if column == 2 and index == 5515:
+        print("RESULT", result)
+    return result
+
+cdef double vector_sum(double[:] vector):
+
+    cdef int i
+    cdef double counter = 0
+
+    for i in range(vector.shape[0]):
+        counter += vector[i]
+
+    return counter
+
+
+cdef double[:, :] scalar_with_matrix(double scalar, double[:, :] A):
+
+    cdef int i, j
+    cdef double [:, :] result
+
+    for i in range(A.shape[0]):
+        for j in range(A.shape[1]):
+            A[i, j] = A[i, j]*scalar
+
+    return A
+
+
+cdef matrix_product(double[:, :] A, double[:, :] B, double[:, :] C):
+
+    cdef int i, j, x
+    cdef double result
+
+    for i in range(A.shape[0]):
+        for x in range(B.shape[1]):
+            result = 0
+            for j in range(A.shape[1]):
+                result += A[i, j]*B[j, x]
+            C[i, x] = result
+
+
 cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
 
         cdef double result = 0
@@ -24,7 +75,6 @@ cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double
         for x in range(URM_data.shape[0]):
             if URM_indices[x] != column_index_with_zero:
                 result += URM_data[x]*S_column[URM_indices[x]]
-
         return result
 
 
@@ -63,15 +113,6 @@ cdef double cython_norm(double[:] vector, int option):
 
     return counter
 
-cdef double vector_sum(double[:] vector):
-
-    cdef int i
-    cdef double counter = 0
-
-    for i in range(vector.shape[0]):
-        counter += vector[i]
-
-    return counter
 
 cdef class SLIM_RMSE_Cython_Epoch:
 
@@ -87,8 +128,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double i_beta
     cdef str gradient_option
     cdef bint similarity_matrix_normalized
-    cdef double [:, :] P, A, gradient_vector
-
+    cdef double [:, :] P, A
 
     #Adagrad
     cdef double[:, :] adagrad_cache
@@ -101,12 +141,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
     #RMSprop
     cdef double[:, :] rms_prop_term
-
-
     cdef double eps
+
+
     def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized):
 
-        self.similarity_matrix_normalized = similarity_matrix_normalized
         self.i_beta = beta
         self.i_iterations = iterations
         self.n_users = URM_train.shape[0]
@@ -117,16 +156,23 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.i_gamma = gamma
         self.alpha = learning_rate
         self.gradient_option = gradient_option
+        self.similarity_matrix_normalized = similarity_matrix_normalized
+
+
+        #for i in range(URM_train.shape[0]):
+         #   for j in range(URM_train.shape[1]):
+          #      if URM_train[i, j] != 0:
+           #         print(URM_train[i, j], i, j)
 
         csc_URM_train = URM_train.tocsc()
         self.all_items_indptr = csc_URM_train.indptr
         self.all_items_indices = csc_URM_train.indices
         self.all_items_data = csc_URM_train.data
 
+
         if self.similarity_matrix_normalized:
             np.random.seed(0)
             self.S = np.random.rand(self.n_movies, self.n_movies)
-            self.gradient_vector = np.zeros((self.n_movies, self.n_movies))
         else:
             self.S = np.zeros((self.n_movies, self.n_movies))
 
@@ -151,13 +197,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
     def epochIteration_Cython(self):
 
+        cdef double[:] prediction = np.zeros(self.n_users)
+
         cdef int[:] URM_without_indptr, t_column_indices, item_indices
         cdef int[:, :] URM_without_indices, URM_without_data
         cdef double[:] t_column_data
 
-        cdef double gradient, sum_vector
+        cdef double gradient
 
-        cdef double error_function, prediction
+        cdef double error_function
         cdef double partial_error, cum_loss = 0
 
         cdef int counter
@@ -171,6 +219,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int index
         cdef int n_iter
         cdef int t_index
+        cdef int p_index, length, non_zero_count, support_index
+        cdef double *non_zero_gradient
+
 
 
         if self.gradient_option == "adam":
@@ -178,6 +229,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
+            vector_sum_counter = 0
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
@@ -185,7 +237,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     self.S[index, j] /= sum_vector
             #if j%500 ==0:
             #    print("Column ", j)
-
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
@@ -195,48 +246,87 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     #print("Iteration %d of column %d\n", n_iter, j)
                 counter = 0
                 for t_index in range(item_indices.shape[0]):
+                    #print(t_index, item_indices.shape[0])
                     user_index = item_indices[t_index]
                     user_indices = self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
-                    if user_indices.shape[0] > 1:
-                        user_data = self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
-                        prediction = cython_product_sparse(user_indices, user_data, self.S[:, j], j)
-                        partial_error = (prediction - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter])
-                        cum_loss += partial_error**2
+                    #if user_indices.shape[0] > 1:
+                    user_data = self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
+                    partial_error = (cython_product_sparse(user_indices, user_data, self.S[:, j], j) - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter])
+                    cum_loss += partial_error**2
+
+                    if self.similarity_matrix_normalized:
+
+                        non_zero_gradient = <double *>malloc((user_indices.shape[0] - 1) * sizeof(double))
+                        support_index = 0
+                        prova_vector = []
                         for index in range(user_indices.shape[0]):
                             target_user_index = user_indices[index]
                             if target_user_index != j:
+                                non_zero_gradient[support_index] = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
+                                prova_vector.append(partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma)
+                                #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
+                                support_index += 1
 
-                                if self.similarity_matrix_normalized:
-                                    gradient = (user_data[index]*(sum_vector - self.S[target_user_index, j]) - (prediction - self.S[target_user_index, j]*user_data[index]))*(prediction - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter]*(sum_vector))/((sum_vector)**3)
-                                else:
-                                    gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
+                    if self.similarity_matrix_normalized:
+                        length = user_indices.shape[0] - 1
+                        self.A = np.ones((1, length))
+                        self.P = np.identity(length) - np.dot(self.A.T, (np.dot(1/<double>length, self.A)))
 
-                                if self.gradient_option == "adagrad":
-                                    self.adagrad_cache[target_user_index, j] += gradient**2
-                                    self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+                    vector_sum_counter_1 = 0
+                    p_index = 0
+                    for index in range(user_indices.shape[0]):
+                        target_user_index = user_indices[index]
 
-                                elif self.gradient_option == "adam":
-                                    self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
-                                    self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
-                                    self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
-                                    self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
-                                    self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
+                        if target_user_index == j:
+                            p_index -= 1
 
-                                elif self.gradient_option == "rmsprop":
-                                    self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
-                                    self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
+                        else:
+                            if self.similarity_matrix_normalized:
+                                gradient = vector_product(self.P[p_index, :], non_zero_gradient, j, user_index)
 
-                            if self.S[target_user_index, j] < 0:
-                                self.S[target_user_index, j] = 0
-                        counter += 1
+                                vector_sum_counter += gradient
+                                vector_sum_counter_1 += gradient
+                            else:
+                                gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
+                            #print("GRADIENT, T_INDEX", gradient, t_index)
 
-            self.S[j, j] = 0
-            #print(vector_sum(self.S[:, j]))
+                            if self.gradient_option == "adagrad":
+                                self.adagrad_cache[target_user_index, j] += gradient**2
+                                self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+
+                            elif self.gradient_option == "adam":
+                                self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
+                                self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
+                                self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
+                                self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
+                                self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
+
+                            elif self.gradient_option == "rmsprop":
+                                self.rmsprop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
+                                self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
+
+                            elif self.gradient_option == "normal":
+                                self.S[target_user_index, j] -= self.alpha*gradient
+
+                        #if self.S[target_user_index, j] < 0:
+                         #   self.S[target_user_index, j] = 0
+                        p_index += 1
+                    counter = counter + 1
+                    if j == 2:
+                        print("VECTOR SUM", vector_sum_counter, vector_sum_counter_1, user_index, user_indices.shape[0])
+                    free(non_zero_gradient)
+
+
+            if self.similarity_matrix_normalized:
+                print("SUM", j, vector_sum(self.S[:, j]))
+                self.S[j, j] = 0
+                sum_vector = vector_sum(self.S[:, j])
+                for index in range(self.S[:, j].shape[0]):
+                    self.S[index, j] /= sum_vector
         print("CUM loss: {:.2E}".format(cum_loss))
 
         #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
         #print(error_function)
-
 
     def get_S(self):
         return np.asarray(self.S)
