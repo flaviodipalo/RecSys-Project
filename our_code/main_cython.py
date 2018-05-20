@@ -41,4 +41,6 @@ def run_recommender_optimization():
 
     parameterSearch.evaluate_on_test(URM_test)
 
+#run_recommender()
 run_recommender_optimization()
+

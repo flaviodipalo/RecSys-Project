@@ -39,7 +39,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             print("Compilation Complete")
 
     def fit(self,learning_rate = 1e-2, l1_penalty=0, l2_penalty=0,topK = 300, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
-            stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=20):
+            stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=10):
         print('fit has started',l1_penalty,l2_penalty,topK)
 
         self.sparse_weights = False
@@ -53,6 +53,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         URM_train_positive = self.URM_train.copy()
 
         self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="normal")
+        #self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad")
 
         if (topK != False and topK < 1):
             raise ValueError(

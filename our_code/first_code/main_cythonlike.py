@@ -136,5 +136,3 @@ if __name__ == '__main__':
     for i in range(n_users):
         if (URM_train[i, 1] != 0):
             print("Real: %s    predicted: %s" % (URM_train[i, 1], URM_train[i, :].dot(S)))
-
-
