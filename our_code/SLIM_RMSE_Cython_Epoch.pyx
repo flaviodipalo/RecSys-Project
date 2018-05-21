@@ -227,7 +227,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
-            vector_sum_counter = 0
+            print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
@@ -239,20 +239,31 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
 
             item_indices = self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]]
-            for n_iter in range(self.i_iterations):
-                #if n_iter % 100 == 0:
-                    #print("Iteration %d of column %d\n", n_iter, j)
-                counter = 0
-                for t_index in range(item_indices.shape[0]):
-                    #print(t_index, item_indices.shape[0])
-                    user_index = item_indices[t_index]
-                    user_indices = self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
-                    #if user_indices.shape[0] > 1:
+
+            counter = 0
+            for t_index in range(item_indices.shape[0]):
+
+                user_index = item_indices[t_index]
+                user_indices = self.URM_indices[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
+                if user_indices.shape[0] > 1:
                     user_data = self.URM_data[self.URM_indptr[user_index]:self.URM_indptr[user_index+1]]
                     partial_error = (cython_product_sparse(user_indices, user_data, self.S[:, j], j) - self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]][counter])
                     cum_loss += partial_error**2
 
                     if self.similarity_matrix_normalized:
+
+                        length = user_indices.shape[0] - 1
+                        self.P = <double **>malloc(length * sizeof(double*))
+                        for support_index in range(length):
+                            self.P[support_index] = <double *>malloc(length * sizeof(double))
+
+                        for i in range(length):
+                            for support_index in range(length):
+                                if i == support_index:
+                                    self.P[i][support_index] = 1 - (1/<double>length)
+                                else:
+                                    self.P[i][support_index] = - (1/<double>length)
+
 
                         non_zero_gradient = <double *>malloc((user_indices.shape[0] - 1) * sizeof(double ))
                         support_index = 0
@@ -274,28 +285,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     non_zero_gradient[support_index] = self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
 
                                 elif self.gradient_option == "rmsprop":
-                                    self.rmsprop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
+                                    self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
                                     non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
 
+
                                 #non_zero_gradient[support_index] = randint(10**5, 10**10)
-                                prova_vector.append(partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma)
+
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
                                 support_index += 1
 
-                        length = user_indices.shape[0] - 1
-                        self.P = <double **>malloc(length * sizeof(double*))
-                        for support_index in range(length):
-                            self.P[support_index] = <double *>malloc(length * sizeof(double))
-
-                        for i in range(length):
-                            for support_index in range(length):
-                                if i == support_index:
-                                    self.P[i][support_index] = 1 - (1/<double>length)
-                                else:
-                                    self.P[i][support_index] = - (1/<double>length)
-
-
-                    vector_sum_counter_1 = 0
                     p_index = 0
                     for index in range(user_indices.shape[0]):
                         target_user_index = user_indices[index]
@@ -305,11 +303,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                         else:
                             if self.similarity_matrix_normalized:
-                                #print(p_index)
                                 gradient = vector_product(self.P[p_index], non_zero_gradient, j, user_index, length)
 
-                                vector_sum_counter += gradient
-                                vector_sum_counter_1 += gradient
                                 self.S[target_user_index, j] -= self.alpha*gradient
                             else:
                                 gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
@@ -327,7 +322,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
 
                                 elif self.gradient_option == "rmsprop":
-                                    self.rmsprop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
+                                    self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
                                     self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
 
 
@@ -335,8 +330,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             self.S[target_user_index, j] = 0
                         p_index += 1
                     counter += 1
-                    free(non_zero_gradient)
-                    free(self.P)
+                    if self.similarity_matrix_normalized:
+                        free(non_zero_gradient)
+                        for i in range(length):
+                            free(self.P[i])
+                        free(self.P)
 
 
             if self.similarity_matrix_normalized:
