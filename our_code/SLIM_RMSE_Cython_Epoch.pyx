@@ -5,7 +5,6 @@ from libc.stdlib cimport malloc, free
 import numpy as np
 from random import randint
 
-
 from libc.math cimport sqrt
 import random
 #call(shlex.split('python3 /home/alessio/PycharmProjects/RecSys_Project/our_code/SLIM_RMSE/setup.py build_ext --inplace'))
@@ -16,7 +15,6 @@ import timeit
 #TODO: usare il 10M MA usato così: una volta completo ed una volta togliendo il 33% dei top popular item.
 #TODO: utilizziamo un KNN come baseline
 #TODO: proviamo
-#
 
 cdef double vector_product(double* A,double * B, int column, int index, int length):
 
@@ -320,7 +318,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
 
-
                             elif self.gradient_option == "adam":
                                 self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
                                 self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
@@ -339,6 +336,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             self.S[target_user_index, j] = 0
                         p_index += 1
                     counter += 1
+                    #print(gradient_vector)
                     if self.similarity_matrix_normalized:
                         free(non_zero_gradient)
                         for i in range(length):
@@ -348,6 +346,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
             if self.similarity_matrix_normalized:
                 #print("SUM", j, vector_sum(self.S[:, j]))
+
+                total_normalization_error += vector_sum(self.S[:, j]) - 1
                 self.S[j, j] = 0
                 sum_vector = vector_sum(self.S[:, j])
                 for index in range(self.S[:, j].shape[0]):
