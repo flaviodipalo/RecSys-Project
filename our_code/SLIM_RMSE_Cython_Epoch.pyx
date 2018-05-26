@@ -202,7 +202,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         cdef double error_function, total_normalization_error, sum_gradient
         cdef double partial_error, cum_loss = 0
-
+#
         cdef int counter
         cdef int time_counter = 0
         cdef int[:] user_indices
