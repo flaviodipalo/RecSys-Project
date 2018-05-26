@@ -343,7 +343,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             free(self.P[i])
                         free(self.P)
 
-
             if self.similarity_matrix_normalized:
                 #print("SUM", j, vector_sum(self.S[:, j]))
 
