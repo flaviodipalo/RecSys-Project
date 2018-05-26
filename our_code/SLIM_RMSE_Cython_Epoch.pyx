@@ -12,10 +12,11 @@ import random
 #python setup.py build_ext --inplace
 import time
 import timeit
-#TODO: portare le funzioni di prodotto fra matrici fuori dalla classe, idealmente in un nuovo file.
-#####
-#TODO: parallelizzare
-#TODO: cambiare il gradient e provare con la nostra alternativa
+
+#TODO: usare il 10M MA usato così: una volta completo ed una volta togliendo il 33% dei top popular item.
+#TODO: utilizziamo un KNN come baseline
+#TODO: proviamo
+#
 
 cdef double vector_product(double* A,double * B, int column, int index, int length):
 
@@ -142,7 +143,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
 
         self.i_beta = beta
         self.i_iterations = iterations
@@ -154,8 +155,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.i_gamma = gamma
         self.alpha = learning_rate
         self.gradient_option = gradient_option
-        self.similarity_matrix_normalized = similarity_matrix_normalized
-
+        self.similarity_matrix_normalized = True
 
         #for i in range(URM_train.shape[0]):
          #   for j in range(URM_train.shape[1]):
@@ -167,13 +167,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.all_items_indices = csc_URM_train.indices
         self.all_items_data = csc_URM_train.data
 
-
         if self.similarity_matrix_normalized:
             np.random.seed(0)
-            self.S = np.random.rand(self.n_movies, self.n_movies)
+            #self.S = np.random.normal(0, 5, (self.n_movies, self.n_movies))
+            self.S = np.random.rand( self.n_movies, self.n_movies)
         else:
             self.S = np.zeros((self.n_movies, self.n_movies))
-
 
         #ADAGRAD
         self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
@@ -201,9 +200,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int[:, :] URM_without_indices, URM_without_data
         cdef double[:] t_column_data
 
-        cdef double gradient
+        cdef double gradient,gradient_vector
 
-        cdef double error_function
+        cdef double error_function, total_normalization_error, sum_gradient
         cdef double partial_error, cum_loss = 0
 
         cdef int counter
@@ -211,7 +210,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int[:] user_indices
         cdef double[:] user_data
 
-        cdef int user_index, target_user_index
+        cdef int user_index, target_user_index, new_adagrad_perfect
         cdef int j
         cdef int i
         cdef int index
@@ -225,8 +224,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
         if self.gradient_option == "adam":
             self.time_t += 1
 
+
+        total_normalization_error = 0
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
+            gradient_vector = 0
             print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
@@ -266,13 +268,16 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
                         non_zero_gradient = <double *>malloc((user_indices.shape[0] - 1) * sizeof(double ))
+
                         support_index = 0
                         prova_vector = []
+
                         for index in range(user_indices.shape[0]):
                             target_user_index = user_indices[index]
                             if target_user_index != j:
                                 non_zero_gradient[support_index] = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
-
+                                self.adagrad_cache[target_user_index, j] += non_zero_gradient[support_index]**2
+                                '''
                                 if self.gradient_option == "adagrad":
                                     self.adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
                                     non_zero_gradient[support_index] = (1/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*non_zero_gradient[support_index]
@@ -287,13 +292,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 elif self.gradient_option == "rmsprop":
                                     self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
                                     non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
-
-
+                                '''
                                 #non_zero_gradient[support_index] = randint(10**5, 10**10)
 
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
                                 support_index += 1
-
+                    sum_gradient = vector_sum(self.adagrad_cache[:, j])
                     p_index = 0
                     for index in range(user_indices.shape[0]):
                         target_user_index = user_indices[index]
@@ -304,27 +308,32 @@ cdef class SLIM_RMSE_Cython_Epoch:
                         else:
                             if self.similarity_matrix_normalized:
                                 gradient = vector_product(self.P[p_index], non_zero_gradient, j, user_index, length)
-
-                                self.S[target_user_index, j] -= self.alpha*gradient
+                                gradient_vector += gradient
+                                #self.S[target_user_index, j] -= self.alpha*gradient
                             else:
                                 gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
 
+                            if self.gradient_option == "adagrad":
+#
+                                self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
 
-                                if self.gradient_option == "adagrad":
-                                    self.adagrad_cache[target_user_index, j] += gradient**2
-                                    self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+                                #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
-                                elif self.gradient_option == "adam":
-                                    self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
-                                    self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
-                                    self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
-                                    self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
-                                    self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
 
-                                elif self.gradient_option == "rmsprop":
-                                    self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
-                                    self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
 
+                            elif self.gradient_option == "adam":
+                                self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
+                                self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
+                                self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
+                                self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
+                                self.S[target_user_index, j] -= self.alpha*self.m_adjusted/(sqrt(self.v_adjusted) + self.eps)
+#
+                            elif self.gradient_option == "rmsprop":
+                                self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
+                                self.S[target_user_index, j] -= self.alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
+
+                            elif self.gradient_option == "normal":
+                                self.S[target_user_index, j] -= self.alpha*gradient
 
                         if self.S[target_user_index, j] < 0:
                             self.S[target_user_index, j] = 0
@@ -347,6 +356,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
         #print(error_function)
+        print("TOTAL", total_normalization_error)
 
     def get_S(self):
         return np.asarray(self.S)

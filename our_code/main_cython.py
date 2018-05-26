@@ -1,15 +1,18 @@
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
+from data.movielens_10m.Movielens10MReader import Movielens10MReader
+
 from ParameterTuning.ParameterTuning import BayesianSearch
 from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 import numpy as np
 import time
 
-
 print('Loading Data...')
 data_reader = Movielens1MReader(0.8)
+
+#data_reader = Movielens10MReader(0.8)
 URM_train = data_reader.URM_train
 URM_test = data_reader.URM_test
 print('Data Loaded !')
@@ -18,7 +21,6 @@ def run_recommender():
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
     recommender.fit()
-
 
 def run_recommender_optimization():
     recommender_class = SLIM_RMSE_Cython
@@ -41,6 +43,5 @@ def run_recommender_optimization():
 
     parameterSearch.evaluate_on_test(URM_test)
 
-#run_recommender()
-run_recommender_optimization()
-
+run_recommender()
+#run_recommender_optimization()
