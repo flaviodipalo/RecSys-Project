@@ -1,7 +1,6 @@
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
-from data.movielens_10m.Movielens10MReader import Movielens10MReader
 
 from ParameterTuning.ParameterTuning import BayesianSearch
 from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
@@ -30,6 +29,7 @@ def run_recommender_optimization():
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
 
+
     #logFilePath = 'logs/'
     #logFile = open(logFilePath + 'SLIM_RMSE_Cython' + "_GridSearch.txt", "a")
 
@@ -43,5 +43,5 @@ def run_recommender_optimization():
 
     parameterSearch.evaluate_on_test(URM_test)
 
-run_recommender()
-#run_recommender_optimization()
+#run_recommender()
+run_recommender_optimization()

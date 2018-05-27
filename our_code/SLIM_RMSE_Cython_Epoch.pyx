@@ -141,7 +141,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option,similarity_matrix_normalized):
 
         self.i_beta = beta
         self.i_iterations = iterations
@@ -153,7 +153,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.i_gamma = gamma
         self.alpha = learning_rate
         self.gradient_option = gradient_option
-        self.similarity_matrix_normalized = True
+        self.similarity_matrix_normalized = similarity_matrix_normalized
 
         #for i in range(URM_train.shape[0]):
          #   for j in range(URM_train.shape[1]):
@@ -227,7 +227,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
             gradient_vector = 0
-            print(j, self.n_movies)
+            #print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
@@ -313,9 +313,13 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                             if self.gradient_option == "adagrad":
 #
-                                self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
+                                    # Here we apply adagrad considering that in order to mantain the constraint we need to update all the gradient column with the same
+                                    # learning rate so if the matrix is normalized we consider the mean of the learning rate for all the users on a column instead of
+                                    # a single learning rate for each user
 
-                                #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+                                    self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
+
+                                    #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
 
                             elif self.gradient_option == "adam":
@@ -344,6 +348,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                         free(self.P)
 
             if self.similarity_matrix_normalized:
+
                 #print("SUM", j, vector_sum(self.S[:, j]))
 
                 total_normalization_error += vector_sum(self.S[:, j]) - 1

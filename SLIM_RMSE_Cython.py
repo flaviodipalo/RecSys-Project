@@ -50,7 +50,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         # Select only positive interactions
         URM_train_positive = self.URM_train.copy()
 
-        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=gamma, beta=beta, iterations=1, gradient_option="adagrad", similarity_matrix_normalized=True)
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=gamma, beta=beta, iterations=1, gradient_option="adagrad", similarity_matrix_normalized=False)
 
         if (topK != False and topK < 1):
             raise ValueError(
@@ -195,6 +195,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         # Command to generate html report
         # cython -a SLIM_BPR_Cython_Epoch.pyx
     '''
+
     def get_S_incremental_and_set_W(self):
 
         self.S_incremental = self.cythonEpoch.get_S()
