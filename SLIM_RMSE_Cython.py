@@ -40,6 +40,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
     def fit(self,learning_rate = 1e-2, gamma=0, beta=0,topK = 300, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
             stop_on_validation=False, lower_validatons_allowed=5, validation_metric="map",epochs=20):
+        print('real fit has started', gamma,beta,topK)
         self.sparse_weights = False
         self.train_with_sparse_weights = False
         self.epochs = epochs

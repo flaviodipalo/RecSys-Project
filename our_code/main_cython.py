@@ -2,8 +2,11 @@ from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 
-#from ParameterTuning.ParameterTuning import BayesianSearch
-#from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
+from ParameterTuning.ParameterTuning import BayesianSearch
+from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
+
+#ssh -i /Users/flaviodipalo/Downloads/recsys-project.pem ubuntu@131.175.21.230
+
 
 import numpy as np
 import time
@@ -23,6 +26,7 @@ def run_recommender():
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
     recommender.fit(epochs=3)
+    recommender.evaluate(URM_test)
 
 def run_recommender_optimization():
     recommender_class = SLIM_RMSE_Cython
@@ -32,18 +36,15 @@ def run_recommender_optimization():
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
 
-    #logFilePath = 'logs/'
-    #logFile = open(logFilePath + 'SLIM_RMSE_Cython' + "_GridSearch.txt", "a")
-
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
                               DictionaryKeys.FIT_KEYWORD_ARGS: dict(),
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
-    best_parameters = parameterSearch.search(recommenderDictionary,output_root_path='logs/')
+    parameterSearch.search(recommenderDictionary,output_root_path='logs/')
 
     parameterSearch.evaluate_on_test(URM_test)
 
-run_recommender()
-#run_recommender_optimization()
+#run_recommender()
+run_recommender_optimization()

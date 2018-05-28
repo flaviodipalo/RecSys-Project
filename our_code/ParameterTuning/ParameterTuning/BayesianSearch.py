@@ -129,7 +129,6 @@ class BayesianSearch(AbstractClassSearch):
         return self.best_solution_parameters.copy()
 
 
-
     def evaluate_on_test(self, URM_test):
 
         # Create an object of the same class of the imput

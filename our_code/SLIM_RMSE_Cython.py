@@ -137,6 +137,17 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
         sys.stdout.flush()
 
+    def evaluate(self,URM_test_external,logFile):
+        print("SLIM_RMSE_Cython: Validation begins...")
+
+        self.get_S_incremental_and_set_W()
+        results_run = self.evaluateRecommendations(URM_test_external)
+
+        print("SLIM_RMSE_Cython: {}".format(results_run))
+
+        if (logFile != None):
+            logFile.write("Test Set Results {}\n".format(results_run))
+
 
     def writeCurrentConfig(self, currentEpoch, results_run, logFile):
 
