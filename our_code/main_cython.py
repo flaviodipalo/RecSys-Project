@@ -1,6 +1,7 @@
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
+from data.movielens_10m.Movielens10MReader import Movielens10MReader
 
 #from ParameterTuning.ParameterTuning import BayesianSearch
 #from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
@@ -9,7 +10,8 @@ import numpy as np
 import time
 
 print('Loading Data...')
-data_reader = Movielens1MReader(train_test_split = 0.8)
+data_reader = Movielens10MReader(train_test_split = 0.8, delete_popular = True)
+#data_reader = Movielens1MReader(train_test_split = 0.8)
 
 #if you need also a validation set.
 #data_reader = Movielens1MReader(train_test_split = 0.6,train_validation_split=0.5)
