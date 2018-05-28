@@ -362,3 +362,4 @@ cdef class SLIM_RMSE_Cython_Epoch:
 #
     def get_S(self):
         return np.asarray(self.S)
+#
