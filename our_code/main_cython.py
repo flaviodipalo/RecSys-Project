@@ -10,8 +10,8 @@ import numpy as np
 import time
 
 print('Loading Data...')
-data_reader = Movielens10MReader(train_test_split = 0.8, delete_popular = True)
-#data_reader = Movielens1MReader(train_test_split = 0.8)
+#data_reader = Movielens10MReader(train_test_split = 0.8, delete_popular = True)
+data_reader = Movielens1MReader(train_test_split = 0.8, delete_popular=True)
 
 #if you need also a validation set.
 #data_reader = Movielens1MReader(train_test_split = 0.6,train_validation_split=0.5)

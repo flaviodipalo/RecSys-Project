@@ -4,7 +4,7 @@ import os
 
 class Movielens1MReader(object):
     #TODO: aggiungere validation option.
-    def __init__(self, train_test_split, train_validation_split=None):
+    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None):
         '''
         :param train_test_split: is the percentage of the training set
         '''
@@ -19,6 +19,14 @@ class Movielens1MReader(object):
         self.users = np.array(data[:,0]).astype(int)
         self.movies = np.array(data[:,1]).astype(int)
         self.ratings = np.array(data[:,2])
+
+        if delete_popular:
+            unique, counts = np.unique(self.ratings, return_counts=True)
+            d = dict(zip(unique, counts))
+            sorted(d.items(), key=lambda x: x[1])
+            print(d)
+
+
 
         self.unique_movies = np.sort(np.unique(self.movies)).astype(int)
         self.unique_users = np.sort(np.unique(self.users))
