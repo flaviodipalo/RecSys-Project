@@ -59,6 +59,6 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     #the next function is used to evaluate with the test set while training with validation
     #parameterSearch.evaluate_on_test(URM_test)
 
-#run_recommender(epoch)
-run_recommender_optimization(epoch)
+run_recommender(epoch)
+#run_recommender_optimization(epoch)
 
