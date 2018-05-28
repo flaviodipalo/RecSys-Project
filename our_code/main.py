@@ -45,7 +45,7 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
-    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [True]
+    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
 
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
@@ -59,6 +59,6 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     #the next function is used to evaluate with the test set while training with validation
     #parameterSearch.evaluate_on_test(URM_test)
 
-run_recommender(epoch)
-#run_recommender_optimization()
+#run_recommender(epoch)
+run_recommender_optimization(epoch)
 

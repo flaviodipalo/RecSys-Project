@@ -39,7 +39,7 @@ class BayesianSearch(AbstractClassSearch):
         super(BayesianSearch, self).__init__(recommender_class, URM_validation,  evaluation_function = evaluation_function)
 
     def search(self, dictionary, metric ="map", n_cases = 30, output_root_path = None, parallelPoolSize = 2, parallelize = True,
-               save_best_model = False):
+               save_best_model = True):
 
         # Associate the params that will be returned by BayesianOpt object to those you want to save
         # E.g. with early stopping you know which is the optimal number of epochs only afterwards
@@ -228,7 +228,6 @@ class BayesianSearch(AbstractClassSearch):
                 if self.save_best_model:
                     print("BayesianSearch: Saving model in {}\n".format(self.output_root_path))
                     recommender.saveModel(self.output_root_path, namePrefix = "_best_model")
-
 
             else:
                 writeLog("BayesianSearch: Config is suboptimal. Config: {} - results: {}\n".format(paramether_dictionary_to_save, result_dict), self.logFile)
