@@ -142,7 +142,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
     def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option,similarity_matrix_normalized):
-
+        print(learning_rate,beta,gamma,similarity_matrix_normalized)
         self.i_beta = beta
         self.i_iterations = iterations
         self.n_users = URM_train.shape[0]

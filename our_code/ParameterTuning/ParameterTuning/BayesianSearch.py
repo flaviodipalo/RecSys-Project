@@ -136,7 +136,6 @@ class BayesianSearch(AbstractClassSearch):
         recommender = self.recommender_class(*self.dictionary_input[DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS],
                                              **self.dictionary_input[DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS])
 
-
         recommender.fit(*self.dictionary_input[DictionaryKeys.FIT_POSITIONAL_ARGS],
                         **self.dictionary_input[DictionaryKeys.FIT_KEYWORD_ARGS],
                         **self.best_solution_parameters)
@@ -198,7 +197,6 @@ class BayesianSearch(AbstractClassSearch):
             # Passing the paramether as a dictionary
             recommender = self.recommender_class(*dictionary[DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS],
                                                  **dictionary[DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS])
-
 
             print("BayesianSearch: Testing config: {}".format(paramether_dictionary))
 

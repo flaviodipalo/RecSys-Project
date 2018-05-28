@@ -39,8 +39,9 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             print("Compilation Complete")
 
     def fit(self,learning_rate = 1e-2, l1_penalty=0, l2_penalty=0,topK = 300, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
-            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=10):
-        print('fit has started',l1_penalty,l2_penalty,topK)
+            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=3,similarity_matrix_normalized=False):
+
+        print('fit has started',l1_penalty,l2_penalty,topK,similarity_matrix_normalized)
 
         self.sparse_weights = False
         self.train_with_sparse_weights = False
@@ -53,7 +54,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         URM_train_positive = self.URM_train.copy()
 
         #self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="normal")
-        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=False)
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized)
 
         if (topK != False and topK < 1):
             raise ValueError(
@@ -120,7 +121,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                     if lower_validatons_count >= lower_validatons_allowed:
                         convergence = True
                         print(
-                            "SLIM_BPR_Cython: Convergence reached! Terminating at epoch {}. Best value for '{}' at epoch {} is {:.4f}. Elapsed time {:.2f} min".format(
+                            "SLIM_RMSE_Cython: Convergence reached! Terminating at epoch {}. Best value for '{}' at epoch {} is {:.4f}. Elapsed time {:.2f} min".format(
                                 currentEpoch + 1, validation_metric, self.epochs_best, best_validation_metric,
                                 (time.time() - start_time) / 60))
 
@@ -128,7 +129,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             if not stop_on_validation:
                 self.S_best = self.S_incremental.copy()
 
-            print("SLIM_BPR_Cython: Epoch {} of {}. Elapsed time {:.2f} min".format(
+            print("SLIM_RMSE_Cython: Epoch {} of {}. Elapsed time {:.2f} min".format(
                 currentEpoch + 1, self.epochs, (time.time() - start_time) / 60))
 
             currentEpoch += 1
