@@ -141,7 +141,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option,similarity_matrix_normalized):
 
         self.i_beta = beta
         self.i_iterations = iterations
@@ -153,7 +153,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.i_gamma = gamma
         self.alpha = learning_rate
         self.gradient_option = gradient_option
-        self.similarity_matrix_normalized = True
+        self.similarity_matrix_normalized = similarity_matrix_normalized
 
         #for i in range(URM_train.shape[0]):
          #   for j in range(URM_train.shape[1]):
