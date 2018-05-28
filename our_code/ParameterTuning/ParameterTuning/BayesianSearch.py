@@ -213,8 +213,6 @@ class BayesianSearch(AbstractClassSearch):
             self.from_fit_params_to_saved_params[frozenset(paramether_dictionary.items())] = paramether_dictionary_to_save
 
 
-
-
             if self.best_solution_val == None or self.best_solution_val<result_dict[metric]:
 
                 writeLog("BayesianSearch: New best config found. Config: {} - results: {}\n".format(paramether_dictionary_to_save, result_dict), self.logFile)
@@ -234,7 +232,6 @@ class BayesianSearch(AbstractClassSearch):
 
             else:
                 writeLog("BayesianSearch: Config is suboptimal. Config: {} - results: {}\n".format(paramether_dictionary_to_save, result_dict), self.logFile)
-
 
             return result_dict[metric]
 

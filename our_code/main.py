@@ -29,9 +29,11 @@ def run_recommender():
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
     recommender.fit(epochs=10,similarity_matrix_normalized=True)
-    recommender.evaluate(URM_test)
 
-def run_recommender_optimization():
+def run_recommender_optimization(Normalized = True, Dataset = True):
+    #the file path that will print the solution for each configuration file
+    file_path = 'Norm_='+str(Normalized)+'Dataset='+str(Dataset)
+
     recommender_class = SLIM_RMSE_Cython
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_test)
 
@@ -41,15 +43,17 @@ def run_recommender_optimization():
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [True]
 
+
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
                               DictionaryKeys.FIT_KEYWORD_ARGS: dict(),
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
-    parameterSearch.search(recommenderDictionary,output_root_path='logs/')
+    parameterSearch.search(recommenderDictionary,output_root_path='logs/'+file_path)
 
-    parameterSearch.evaluate_on_test(URM_test)
+    #the next function is used to evaluate with the test set while training with validation
+    #parameterSearch.evaluate_on_test(URM_test)
 
-#run_recommender()
-run_recommender_optimization()
+run_recommender()
+#run_recommender_optimization()
