@@ -45,7 +45,7 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
-    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
+    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [True]
 
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
