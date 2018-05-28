@@ -28,16 +28,18 @@ print('Data Loaded !')
 def run_recommender():
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
-    recommender.fit(epochs=3)
+    recommender.fit(epochs=10,similarity_matrix_normalized=True)
     recommender.evaluate(URM_test)
 
 def run_recommender_optimization():
     recommender_class = SLIM_RMSE_Cython
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_test)
+
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
+    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [True]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
