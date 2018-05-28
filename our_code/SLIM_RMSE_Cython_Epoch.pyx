@@ -313,10 +313,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
 
                             if self.gradient_option == "adagrad":
+                                if self.similarity_matrix_normalized:
+                                    self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
 
-                                self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
-
-                                #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+                                else:
+                                    self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
 
                             elif self.gradient_option == "adam":

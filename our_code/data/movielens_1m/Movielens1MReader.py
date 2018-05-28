@@ -34,7 +34,6 @@ class Movielens1MReader(object):
         # gli id degli users partono da 1 e sono tutti consecutivi, quindi l'unica
         # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo
         '''
-        print(type(self.users[0]), type(self.movies[0]))
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
 
