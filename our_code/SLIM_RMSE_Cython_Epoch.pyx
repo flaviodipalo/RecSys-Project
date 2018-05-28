@@ -320,7 +320,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
                                     self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
-
                             elif self.gradient_option == "adam":
                                 self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient
                                 self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(gradient)**2
