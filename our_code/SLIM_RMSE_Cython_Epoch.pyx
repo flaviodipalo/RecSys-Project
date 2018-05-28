@@ -227,7 +227,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
             gradient_vector = 0
-            #print(j, self.n_movies)
+            if j % 100 == 0:
+                print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
@@ -275,7 +276,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             if target_user_index != j:
                                 non_zero_gradient[support_index] = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
                                 self.adagrad_cache[target_user_index, j] += non_zero_gradient[support_index]**2
-                                '''
+
                                 if self.gradient_option == "adagrad":
                                     self.adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
                                     non_zero_gradient[support_index] = (1/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*non_zero_gradient[support_index]
@@ -290,7 +291,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 elif self.gradient_option == "rmsprop":
                                     self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
                                     non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
-                                '''
+
                                 #non_zero_gradient[support_index] = randint(10**5, 10**10)
 
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
@@ -316,11 +317,10 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     # Here we apply adagrad considering that in order to mantain the constraint we need to update all the gradient column with the same
                                     # learning rate so if the matrix is normalized we consider the mean of the learning rate for all the users on a column instead of
                                     # a single learning rate for each user
-
-                                    self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
-
-                                    #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
-
+                                    if self.similarity_matrix_normalized:
+                                        self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
+                                    else:
+                                        self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
                             elif self.gradient_option == "adam":
                                 self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*gradient

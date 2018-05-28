@@ -9,7 +9,10 @@ import numpy as np
 import time
 
 print('Loading Data...')
-data_reader = Movielens1MReader(0.8)
+data_reader = Movielens1MReader(train_test_split = 0.8)
+
+#se vuoi anche la possibilità di avere un validation set
+#data_reader = Movielens1MReader(train_test_split = 0.6,train_validation_split=0.5)
 
 #data_reader = Movielens10MReader(0.8)
 URM_train = data_reader.URM_train
@@ -19,7 +22,7 @@ print('Data Loaded !')
 def run_recommender():
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
-    recommender.fit()
+    recommender.fit(epochs=3)
 
 def run_recommender_optimization():
     recommender_class = SLIM_RMSE_Cython
@@ -28,7 +31,6 @@ def run_recommender_optimization():
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
-
 
     #logFilePath = 'logs/'
     #logFile = open(logFilePath + 'SLIM_RMSE_Cython' + "_GridSearch.txt", "a")
@@ -43,5 +45,5 @@ def run_recommender_optimization():
 
     parameterSearch.evaluate_on_test(URM_test)
 
-#run_recommender()
-run_recommender_optimization()
+run_recommender()
+#run_recommender_optimization()

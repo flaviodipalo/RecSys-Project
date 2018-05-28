@@ -53,7 +53,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         URM_train_positive = self.URM_train.copy()
 
         #self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="normal")
-        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=False)
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=True)
 
         if (topK != False and topK < 1):
             raise ValueError(
@@ -137,7 +137,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
         sys.stdout.flush()
 
-    '''
+
     def writeCurrentConfig(self, currentEpoch, results_run, logFile):
 
         current_config = {'lambda_i': self.lambda_i,
@@ -156,7 +156,8 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             logFile.write("Test case: {}, Results {}\n".format(current_config, results_run))
             # logFile.write("Weights: {}\n".format(str(list(self.weights))))
             logFile.flush()
- 
+
+    '''
     def runCompilationScript(self):
 
         # Run compile script setting the working directory to ensure the compiled file are contained in the
