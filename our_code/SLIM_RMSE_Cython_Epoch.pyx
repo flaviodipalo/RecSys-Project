@@ -1,16 +1,10 @@
-from data.movielens_1m.Movielens1MReader import Movielens1MReader
-from cython.parallel import parallel,  prange
-cimport cython
 from libc.stdlib cimport malloc, free
 import numpy as np
-from random import randint
 
 from libc.math cimport sqrt
 import random
 #call(shlex.split('python3 /home/alessio/PycharmProjects/RecSys_Project/our_code/SLIM_RMSE/setup.py build_ext --inplace'))
 #python setup.py build_ext --inplace
-import time
-import timeit
 
 #TODO: usare il 10M MA usato così: una volta completo ed una volta togliendo il 33% dei top popular item.
 #TODO: utilizziamo un KNN come baseline
@@ -39,31 +33,6 @@ cdef double vector_sum(double[:] vector):
     return counter
 
 
-cdef double[:, :] scalar_with_matrix(double scalar, double[:, :] A):
-
-    cdef int i, j
-    cdef double [:, :] result
-
-    for i in range(A.shape[0]):
-        for j in range(A.shape[1]):
-            A[i, j] = A[i, j]*scalar
-
-    return A
-
-
-cdef matrix_product(double[:, :] A, double[:, :] B, double[:, :] C):
-
-    cdef int i, j, x
-    cdef double result
-
-    for i in range(A.shape[0]):
-        for x in range(B.shape[1]):
-            result = 0
-            for j in range(A.shape[1]):
-                result += A[i, j]*B[j, x]
-            C[i, x] = result
-
-
 cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
 
         cdef double result = 0
@@ -73,42 +42,6 @@ cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double
             if URM_indices[x] != column_index_with_zero:
                 result += URM_data[x]*S_column[URM_indices[x]]
         return result
-
-
-cdef double[:] prediction_error(int[:] URM_indptr, int[:] URM_indices, double[:] URM_data, double[:] S, int[:] t_column_indices, double[:] t_column_data, int column_index_with_zero, double[:] prediction):
-
-        #cdef double[:] prediction = np.zeros(len(t_column_indices))
-        cdef int x, user, index, i
-        cdef int[:] user_indices
-        cdef double[:] user_data
-
-        for index in range(t_column_indices.shape[0]):
-            user = t_column_indices[index]
-            user_indices = URM_indices[URM_indptr[user]:URM_indptr[user + 1]]
-            user_data = URM_data[URM_indptr[user]:URM_indptr[user + 1]]
-
-            prediction[index] = 0
-            for x in range(user_data.shape[0]):
-                if user_indices[x] != column_index_with_zero:
-                    prediction[index] += user_data[x]*S[user_indices[x]]
-            prediction[index] = t_column_data[index] - prediction[index]
-
-        return prediction
-
-cdef double cython_norm(double[:] vector, int option):
-
-    cdef int i
-    cdef double counter = 0
-
-    if option == 2:
-        for i in range(vector.shape[0]):
-            counter += vector[i]**2
-        counter = sqrt(counter)
-    elif option == 1:
-        for i in range(vector.shape[0]):
-            counter += vector[i]
-
-    return counter
 
 
 cdef class SLIM_RMSE_Cython_Epoch:
@@ -227,7 +160,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
             gradient_vector = 0
-            print(j, self.n_movies)
+            if j%100 == 0:
+                print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
@@ -312,10 +246,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 gradient = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
 
                             if self.gradient_option == "adagrad":
-#
-                                self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
+                                if self.similarity_matrix_normalized:
+                                    self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
 
-                                #self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
+                                else:
+                                    self.adagrad_cache[target_user_index, j] += gradient**2
+                                    self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
 
                             elif self.gradient_option == "adam":
@@ -354,9 +290,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     self.S[index, j] /= sum_vector
         print("CUM loss: {:.2E}".format(cum_loss))
 
-        #error_function = cython_norm(prediction_error(self.URM_indptr, self.URM_indices, self.URM_data, self.S[:, j], self.all_items_indices[self.all_items_indptr[j]:self.all_items_indptr[j+1]], self.all_items_data[self.all_items_indptr[j]:self.all_items_indptr[j+1]], j, prediction), 2)**2 + self.i_beta*cython_norm(self.S[:, j], 2)**2  + self.i_gamma*cython_norm(self.S[:, j], 1)
-        #print(error_function)
-        print("TOTAL", total_normalization_error)
 
     def get_S(self):
         return np.asarray(self.S)

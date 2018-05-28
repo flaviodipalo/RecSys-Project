@@ -32,7 +32,7 @@ def run_recommender(epoch):
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
 
-    recommender.fit(epochs=epoch,similarity_matrix_normalized=True)
+    recommender.fit(epochs=epoch,similarity_matrix_normalized=False)
 
 def run_recommender_optimization(Normalized = True, Dataset = True):
     #the file path that will print the solution for each configuration file
@@ -45,7 +45,7 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
-    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [True]
+    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
 
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train],
