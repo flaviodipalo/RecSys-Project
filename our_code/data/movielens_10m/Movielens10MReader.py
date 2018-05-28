@@ -5,7 +5,7 @@ import os
 
 class Movielens10MReader(object):
     # TODO: aggiungere validation option.
-    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None):
+    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None, top_popular_threshold = 0.33):
         '''
         :param train_test_split: is the percentage of the training set
         '''
@@ -22,10 +22,23 @@ class Movielens10MReader(object):
         self.ratings = np.array(data[:, 2])
 
         if delete_popular:
-            unique, counts = np.unique(self.ratings, return_counts=True)
-            d = dict(zip(unique, counts))
-            sorted(d.items(), key=lambda x: x[1])
-            print(d)
+            unique, counts = np.unique(self.movies, return_counts=True)
+            dictionary = dict(zip(unique, counts))
+            sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1])
+            cutting_index = round(len(sorted_dictionary) * (1 - top_popular_threshold))
+            least_popular_item = [x[0] for x in sorted_dictionary[:cutting_index]]
+
+            popular_mask = []
+            for item in self.movies:
+
+                if item in least_popular_item:
+                    popular_mask.append(True)
+                else:
+                    popular_mask.append(False)
+
+            self.movies = self.movies[popular_mask]
+            self.users = self.users[popular_mask]
+            self.ratings = self.ratings[popular_mask]
 
 
 
