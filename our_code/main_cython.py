@@ -2,8 +2,8 @@ from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 
-from ParameterTuning.ParameterTuning import BayesianSearch
-from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
+#from ParameterTuning.ParameterTuning import BayesianSearch
+#from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 import numpy as np
 import time
