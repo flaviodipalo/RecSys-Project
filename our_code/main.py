@@ -43,7 +43,7 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
 
     recommender_class = SLIM_RMSE_Cython
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_test)
-
+#
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
