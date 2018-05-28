@@ -24,7 +24,6 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         self.URM_train = URM_train.copy()
         self.n_users = URM_train.shape[0]
         self.n_items = URM_train.shape[1]
-        self.normalize = False
 
         if URM_validation is not None:
             self.URM_validation = URM_validation.copy()
@@ -39,21 +38,21 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             print("Compilation Complete")
 
     def fit(self,learning_rate = 1e-2, l1_penalty=0, l2_penalty=0,topK = 300, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
-            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=3,similarity_matrix_normalized=False):
+            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=13,similarity_matrix_normalized=False):
 
-        print('fit has started',l1_penalty,l2_penalty,topK,similarity_matrix_normalized)
+        print('fit has started',stop_on_validation,validation_every_n,l1_penalty,l2_penalty,topK,similarity_matrix_normalized)
 
         self.sparse_weights = False
         self.train_with_sparse_weights = False
         self.epochs = epochs
         self.batch_size = 1
+
         # Import compiled module
         from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 
         # Select only positive interactions
         URM_train_positive = self.URM_train.copy()
 
-        #self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="normal")
         self.cythonEpoch = SLIM_RMSE_Cython_Epoch(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized)
 
         if (topK != False and topK < 1):

@@ -209,6 +209,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             if target_user_index != j:
                                 non_zero_gradient[support_index] = partial_error*user_data[index] + self.i_beta*self.S[target_user_index, j] + self.i_gamma
                                 self.adagrad_cache[target_user_index, j] += non_zero_gradient[support_index]**2
+
                                 '''
                                 if self.gradient_option == "adagrad":
                                     self.adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
@@ -225,6 +226,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
                                     non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + self.eps))
                                 '''
+
                                 #non_zero_gradient[support_index] = randint(10**5, 10**10)
 
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])

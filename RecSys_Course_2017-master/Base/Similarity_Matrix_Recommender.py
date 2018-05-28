@@ -14,8 +14,6 @@ class Similarity_Matrix_Recommender(object):
     def __init__(self):
         super(Similarity_Matrix_Recommender, self).__init__()
 
-
-
     def recommend(self, user_id, n=None, exclude_seen=True, filterTopPop = False, filterCustomItems = False):
 
         if n==None:
