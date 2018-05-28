@@ -227,7 +227,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, self.n_movies):
             gradient_vector = 0
-            print(j, self.n_movies)
+            if j % 100 == 0:
+                print(j, self.n_movies)
             self.S[j, j] = 0
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
