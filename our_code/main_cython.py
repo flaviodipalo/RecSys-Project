@@ -11,7 +11,7 @@ import time
 print('Loading Data...')
 data_reader = Movielens1MReader(train_test_split = 0.8)
 
-#se vuoi anche la possibilità di avere un validation set
+#if you need also a validation set.
 #data_reader = Movielens1MReader(train_test_split = 0.6,train_validation_split=0.5)
 
 #data_reader = Movielens10MReader(0.8)

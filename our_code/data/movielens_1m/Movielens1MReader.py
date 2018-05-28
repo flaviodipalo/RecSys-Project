@@ -20,6 +20,9 @@ class Movielens1MReader(object):
         self.movies = np.array(data[:,1])
         self.ratings = np.array(data[:,2])
 
+
+
+
         self.unique_movies = np.sort(np.unique(self.movies)).astype(int)
         self.unique_users = np.sort(np.unique(self.users))
         '''
@@ -59,8 +62,4 @@ class Movielens1MReader(object):
         self.URM_test = URM_test[0:, :]
 
 
-dataset = Movielens1MReader(0.8)
-
-print(dataset.URM_test.nnz)
-print(dataset.URM_train.nnz)
-print(dataset.URM_validation.nnz)
+#dataset = Movielens1MReader(0.8,0.9)
