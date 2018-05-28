@@ -317,6 +317,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.S[target_user_index, j] -= (self.alpha/sqrt(sum_gradient)/len(self.adagrad_cache) + self.eps)*gradient
 
                                 else:
+                                    self.adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
                                     self.S[target_user_index, j] -= (self.alpha/sqrt(self.adagrad_cache[target_user_index, j] + self.eps))*gradient
 
 
