@@ -2,11 +2,17 @@ from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from data.movielens_10m.Movielens10MReader import Movielens10MReader
+import argparse
 
 from ParameterTuning.ParameterTuning import BayesianSearch
 from ParameterTuning.ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 #ssh -i /Users/flaviodipalo/Downloads/recsys-project.pem ubuntu@131.175.21.230
+parser = argparse.ArgumentParser()
+parser.add_argument("epoch", type=int)
+
+args = parser.parse_args()
+epoch = args.epoch
 
 
 import numpy as np
@@ -25,9 +31,10 @@ URM_train = data_reader.URM_train
 URM_test = data_reader.URM_test
 print('Data Loaded !')
 
-def run_recommender():
+def run_recommender(epoch):
     #cython epoch only version
     recommender = SLIM_RMSE_Cython(URM_train = URM_train, URM_validation = URM_test)
+
     recommender.fit(epochs=10,similarity_matrix_normalized=True)
 
 def run_recommender_optimization(Normalized = True, Dataset = True):
@@ -55,5 +62,6 @@ def run_recommender_optimization(Normalized = True, Dataset = True):
     #the next function is used to evaluate with the test set while training with validation
     #parameterSearch.evaluate_on_test(URM_test)
 
-run_recommender()
+run_recommender(epoch)
 #run_recommender_optimization()
+

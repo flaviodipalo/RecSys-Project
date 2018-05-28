@@ -14,7 +14,7 @@ class Movielens1MReader(object):
 
         data = np.loadtxt(filename, delimiter="::")
         #data2 = np.loadtxt(filename2, delimiter="::")
-    
+
         #These arrays are sorted by user
         self.users = np.array(data[:,0]).astype(int)
         self.movies = np.array(data[:,1]).astype(int)
