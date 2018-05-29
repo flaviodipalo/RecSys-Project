@@ -62,8 +62,8 @@ def run_recommender_optimization(normalized = False, popular = False):
 #
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-3, 1e-4]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-3, 1e-4]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
@@ -72,7 +72,7 @@ def run_recommender_optimization(normalized = False, popular = False):
                               DictionaryKeys.FIT_KEYWORD_ARGS: dict(),
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
-    parameterSearch.search(recommenderDictionary,output_root_path='logs/'+file_path)
+    parameterSearch.search(recommenderDictionary,output_root_path='logs/new'+file_path)
     parameterSearch.evaluate_on_test(URM_test)
 
 #run_recommender(3)
