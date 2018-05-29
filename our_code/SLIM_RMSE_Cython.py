@@ -38,7 +38,10 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             print("Compilation Complete")
 #
     def fit(self,learning_rate = 1e-2, l1_penalty=0, l2_penalty=0,topK = 300, logFile='SLIM_RMSE_training.log',validation_every_n = 1,validation_function=None,
-            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=13,similarity_matrix_normalized=False):
+            stop_on_validation=True, lower_validatons_allowed=5, validation_metric="map",epochs=13,similarity_matrix_normalized=False,URM_validation=None):
+        print(self.URM_validation is None)
+        if  self.URM_validation is None and URM_validation is not None :
+            self.URM_validation = URM_validation.copy()
 
         print('fit has started',stop_on_validation,validation_every_n,l1_penalty,l2_penalty,topK,similarity_matrix_normalized)
 
@@ -111,6 +114,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                     if best_validation_metric is None or best_validation_metric < current_metric_value:
 
                         best_validation_metric = current_metric_value
+
                         self.S_best = self.S_incremental.copy()
                         self.epochs_best = currentEpoch + 1
 
@@ -123,6 +127,8 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                             "SLIM_RMSE_Cython: Convergence reached! Terminating at epoch {}. Best value for '{}' at epoch {} is {:.4f}. Elapsed time {:.2f} min".format(
                                 currentEpoch + 1, validation_metric, self.epochs_best, best_validation_metric,
                                 (time.time() - start_time) / 60))
+                        ##TODO:Added THIS
+                        #self.W = self.S_best.copy()
 
             # If no validation required, always keep the latest
             if not stop_on_validation:
@@ -132,11 +138,12 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                 currentEpoch + 1, self.epochs, (time.time() - start_time) / 60))
 
             currentEpoch += 1
-
-        self.get_S_incremental_and_set_W()
+        self.W = self.S_best.copy()
+        #self.get_S_incremental_and_set_W()
 
         sys.stdout.flush()
 
+    #written by us
     def evaluate(self,URM_test_external,logFile):
         print("SLIM_RMSE_Cython: Validation begins...")
 
@@ -221,3 +228,5 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                 self.W_sparse = similarityMatrixTopK(self.S_incremental, k=self.topK)
             else:
                 self.W = self.S_incremental
+
+

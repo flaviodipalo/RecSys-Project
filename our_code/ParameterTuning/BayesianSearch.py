@@ -40,9 +40,6 @@ class BayesianSearch(AbstractClassSearch):
 
         super(BayesianSearch, self).__init__(recommender_class, URM_validation,  evaluation_function = evaluation_function)
 
-
-
-
     def search(self, dictionary, metric ="map", n_cases = 30, output_root_path = None, parallelPoolSize = 2, parallelize = True,
                save_best_model = False):
 
