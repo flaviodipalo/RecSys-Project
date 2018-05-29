@@ -1,4 +1,6 @@
+import sys
 
+sys.path.append("/usr/local/lib/python3.6/site-packages")
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 from SLIM_RMSE.SLIM_RMSE import SLIM_RMSE
 
@@ -15,19 +17,18 @@ from data.Movielens10MReader import Movielens10MReader
 if __name__ == '__main__':
 
 
-    dataReader = Movielens10MReader()
+    dataReader = Movielens10MReader(splitTrainTest = True, eliminate_top_popular = True)
 
     URM_train = dataReader.get_URM_train()
     URM_validation = dataReader.get_URM_validation()
     URM_test = dataReader.get_URM_test()
 
     recommender_list = []
-    recommender_list.append(ItemKNNCFRecommender(URM_train))
     recommender_list.append(UserKNNCFRecommender(URM_train))
-    recommender_list.append(MF_BPR_Cython(URM_train))
-    recommender_list.append(FunkSVD(URM_train))
-    recommender_list.append(SLIM_BPR_Cython(URM_train, sparse_weights=False))
-    recommender_list.append(SLIM_RMSE(URM_train))
+    #recommender_list.append(MF_BPR_Cython(URM_train))
+    #recommender_list.append(FunkSVD(URM_train))
+    #recommender_list.append(SLIM_BPR_Cython(URM_train, sparse_weights=False))
+    #recommender_list.append(SLIM_RMSE(URM_train))
 
 
 

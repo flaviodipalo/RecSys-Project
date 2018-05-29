@@ -1,11 +1,12 @@
 import numpy as np
 import scipy.sparse as sps
 import os
+from itertools import compress
 
 
 class Movielens10MReader(object):
     # TODO: aggiungere validation option.
-    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None, top_popular_threshold = 0.33):
+    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None, top_popular_threshold = 0.33, delimiter = "::"):
         '''
         :param train_test_split: is the percentage of the training set
         '''
@@ -13,37 +14,68 @@ class Movielens10MReader(object):
         dir = os.path.dirname(__file__)
         filename = dir + "/ratings.dat"
 
-        data = np.loadtxt(filename, delimiter="::")
+
+        rows, cols, vals = [], [], []
+        numCells = 0
+
+        fileHandle = open(filename, "r")
+
+        for line in fileHandle:
+            numCells += 1
+            if (numCells % 1000000 == 0):
+                print("Processed {} cells".format(numCells))
+
+            if (len(line)) > 1:
+                line = line.split(delimiter)
+
+                line[-1] = line[-1].replace("\n", "")
+
+                if not line[2] == "0" and not line[2] == "NaN":
+                    rows.append(int(line[0]))
+                    cols.append(int(line[1]))
+                    vals.append(float(line[2]))
         # data2 = np.loadtxt(filename2, delimiter="::")
 
         # These arrays are sorted by user
-        self.users = np.array(data[:, 0]).astype(int)
-        self.movies = np.array(data[:, 1]).astype(int)
-        self.ratings = np.array(data[:, 2])
+        self.users = np.array(rows)
+        self.movies = np.array(cols)
+        self.ratings = np.array(vals)
 
         if delete_popular:
-            unique, counts = np.unique(self.movies, return_counts=True)
+
+            print("Eliminating top {}% popular items...".format(top_popular_threshold * 100))
+            unique_movies = np.unique(self.movies)
+            unique, counts = np.unique(unique_movies, return_counts=True)
             dictionary = dict(zip(unique, counts))
             sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1])
             cutting_index = round(len(sorted_dictionary) * (1 - top_popular_threshold))
-            least_popular_item = [x[0] for x in sorted_dictionary[:cutting_index]]
+            least_popular_item = set([x[0] for x in sorted_dictionary[:cutting_index]])
 
             popular_mask = []
-            for item in self.movies:
+            numCells = 0
 
-                if item in least_popular_item:
-                    popular_mask.append(True)
-                else:
-                    popular_mask.append(False)
+            fileHandle = open(filename, "r")
 
-            self.movies = self.movies[popular_mask]
+            for line in fileHandle:
+                numCells += 1
+                if (numCells % 1000000 == 0):
+                    print("Processed {} cells".format(numCells))
+
+                if (len(line)) > 1:
+                    line = line.split(delimiter)
+
+                    line[-1] = line[-1].replace("\n", "")
+
+                    if not line[2] == "0" and not line[2] == "NaN":
+                        if int(line[1]) in least_popular_item:
+                            popular_mask.append(True)
+                        else:
+                            popular_mask.append(False)
+
             self.users = self.users[popular_mask]
+            self.movies = self.movies[popular_mask]
             self.ratings = self.ratings[popular_mask]
 
-
-
-        self.unique_movies = np.sort(np.unique(self.movies)).astype(int)
-        self.unique_users = np.sort(np.unique(self.users))
         '''
         #These arrays are sorted by item
         self.users_by_item = np.array(data2[:,0])

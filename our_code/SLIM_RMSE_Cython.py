@@ -95,6 +95,8 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
             else:
                 print("No batch not available")
 
+
+            print(self.URM_validation)
             # Determine whether a validaton step is required
             if self.URM_validation is not None and (currentEpoch + 1) % self.validation_every_n == 0:
 

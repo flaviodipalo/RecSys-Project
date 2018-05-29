@@ -54,7 +54,7 @@ class BayesianSearch(AbstractClassSearch):
         hyperparamethers_range_dictionary = dictionary[DictionaryKeys.FIT_RANGE_KEYWORD_ARGS].copy()
 
         self.output_root_path = output_root_path
-        self.logFile = open(self.output_root_path + "_BayesianSearch.txt", "a")
+        #self.logFile = open(self.output_root_path + "_BayesianSearch.txt", "a")
         self.save_best_model = save_best_model
 
         self.categorical_mapper_dict_case_to_index = {}

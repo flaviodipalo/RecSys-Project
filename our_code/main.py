@@ -1,3 +1,6 @@
+#import sys
+#sys.path.append('/usr/local/lib/python3.6/site-packages')
+
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
@@ -31,15 +34,15 @@ elif normalized == "True":
 else:
     raise Exception("Wrong argument")
 
-
-def run_recommender(epoch):
+def run_recommender(normalized, popular):
     #cython epoch only version
     data_reader = Movielens1MReader(train_test_split=0.6,train_validation_split = 0.5, delete_popular=False)
 
+    print('Loading Data...')
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     URM_validation = data_reader.URM_validation
-
+    print('Data Loaded!')
     recommender = SLIM_RMSE_Cython(URM_train = URM_train,URM_validation = URM_validation)
 
     recommender.fit(epochs=epoch,similarity_matrix_normalized=False)
