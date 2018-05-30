@@ -67,14 +67,9 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_validation)
 
     hyperparamethers_range_dictionary = {}
-    #hyperparamethers_range_dictionary["topK"] = [50, 100]
-    #hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    #hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["topK"] = [ 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2]
-
-    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
+    hyperparamethers_range_dictionary["topK"] = [50, 100]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
@@ -83,8 +78,12 @@ def run_recommender_optimization(normalized=False, popular=False):
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary,output_root_path='logs/new'+file_path)
-    print('I arrive here')
     parameterSearch.evaluate_on_test(URM_test)
 
+
 #run_recommender(normalized, popular)
+from telegram_bot import TelegramBot
+telegram_bot = TelegramBot(chat_id = '65065237')
+telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 run_recommender_optimization(normalized, popular)
+telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))

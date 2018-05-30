@@ -103,7 +103,7 @@ class BayesianSearch(AbstractClassSearch):
 
 
 
-        self.bayesian_optimizer = BayesianOptimization(self.runSingleCase_partial, hyperparamethers_range_dictionary)
+        self.bayesian_optimizer = BayesianOptimization(self.runSingleCase_partial, hyperparamethers_range_dictionary,verbose=False)
 
         self.best_solution_val = None
         self.best_solution_parameters = None
