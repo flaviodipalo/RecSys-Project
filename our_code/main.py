@@ -65,11 +65,15 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     recommender_class = SLIM_RMSE_Cython
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_validation)
-#
+
     hyperparamethers_range_dictionary = {}
-    hyperparamethers_range_dictionary["topK"] = [50, 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["topK"] = [50, 100]
+    #hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["topK"] = [ 100]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2]
+
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [False]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
@@ -79,6 +83,7 @@ def run_recommender_optimization(normalized=False, popular=False):
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary,output_root_path='logs/new'+file_path)
+    print('I arrive here')
     parameterSearch.evaluate_on_test(URM_test)
 
 #run_recommender(normalized, popular)
