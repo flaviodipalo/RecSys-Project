@@ -62,7 +62,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     print('Data Loaded !')
     #the file path that will print the solution for each configuration file
     file_path = 'Norm_='+str(normalized)+'_delete_popular='+str(popular)
-
+#
     recommender_class = SLIM_RMSE_Cython
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_validation)
 
