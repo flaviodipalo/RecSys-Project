@@ -52,7 +52,7 @@ def run_recommender(normalized, popular):
 
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
-    data_reader = Movielens1MReader(train_test_split=0.8,train_validation_split=0.5, delete_popular=popular)
+    data_reader = Movielens1MReader(train_test_split=0.8,train_validation_split=0.8, delete_popular=popular)
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
