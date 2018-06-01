@@ -34,7 +34,6 @@ elif normalized == "True":
 else:
     raise Exception("Wrong argument")
 
-
 def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
