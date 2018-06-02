@@ -5,15 +5,10 @@ import random
 
 class Movielens1MReader(object):
     #TODO: aggiungere validation option.
-    def __init__(self, train_test_split, train_validation_split=None, delete_popular=None, top_popular_threshold=0.33):
+    def __init__(self, train_test_split=None, train_validation_split=None, delete_popular=None, top_popular_threshold=0.33):
         '''
         :param train_test_split: is the percentage of the training set
         '''
-
-
-        prova = np.array([1, 2, 3, 1, 2, 3, 1, 1])
-        a = prova == 1
-        print (a)
 
 
         dir = os.path.dirname(__file__)
@@ -64,28 +59,32 @@ class Movielens1MReader(object):
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
 
-        numInteractions = self.URM_all.nnz
+        num_interactions = self.URM_all.nnz
 
-        train_mask = np.random.choice([True, False], numInteractions, p=[train_test_split, 1-train_test_split])
+        if train_validation_split is not None:
+            split = np.random.choice([1, 2, 3], num_interactions, p=train_validation_split)
 
-        test_mask = np.logical_not(train_mask)
+            train_mask = split == 1
 
-        if train_validation_split != None:
-            splitted_test_mask = [random.choice([True, False]) if x else False for x in test_mask]
-            validation_mask = np.logical_and(np.logical_not(splitted_test_mask), test_mask)
+            test_mask = split == 2
 
-            URM_test = sps.csr_matrix((self.ratings[splitted_test_mask], (self.users[splitted_test_mask], self.movies[splitted_test_mask])))
-            URM_validation = sps.csr_matrix((self.ratings[validation_mask], (self.users[validation_mask], self.movies[validation_mask])))
+            validation_mask = split == 3
 
-            self.URM_validation = URM_validation[0:, :]
-            #print(URM_validation.nnz, URM_test.nnz, numInteractions)
+            self.URM_validation = sps.coo_matrix((self.URM_all.data[validation_mask],
+                                                  (self.URM_all.row[validation_mask],
+                                                   self.URM_all.col[validation_mask])))
+            self.URM_validation = self.URM_validation.tocsr()
+
+        elif train_test_split is not None:
+            train_mask = np.random.choice([True, False], num_interactions, p=[train_test_split, 1 - train_test_split])
+
+            test_mask = np.logical_not(train_mask)
 
         else:
-            URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
+            raise Exception("One between train_test_split and train_validation_split must be valid")
 
-        URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
+        self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
-        self.URM_train = URM_train[0:, :]
-        self.URM_test = URM_test[0:, :]
+        self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
 
 #dataset = Movielens1MReader(0.8,0.9)
