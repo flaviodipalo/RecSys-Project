@@ -10,6 +10,12 @@ class Movielens1MReader(object):
         :param train_test_split: is the percentage of the training set
         '''
 
+
+        prova = np.array([1, 2, 3, 1, 2, 3, 1, 1])
+        a = prova == 1
+        print (a)
+
+
         dir = os.path.dirname(__file__)
         filename = dir+"/ratings.dat"
 
