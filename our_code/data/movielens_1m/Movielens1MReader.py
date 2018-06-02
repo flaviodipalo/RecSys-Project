@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.sparse as sps
 import os
+import random
 
 class Movielens1MReader(object):
     #TODO: aggiungere validation option.
@@ -59,19 +60,19 @@ class Movielens1MReader(object):
 
         numInteractions = self.URM_all.nnz
 
-        train_mask = np.random.choice([True,False], numInteractions, p=[train_test_split, 1-train_test_split])
+        train_mask = np.random.choice([True, False], numInteractions, p=[train_test_split, 1-train_test_split])
 
         test_mask = np.logical_not(train_mask)
 
-        if train_validation_split!=None:
-            new_mask =  np.random.choice([True,False], numInteractions, p=[train_validation_split, 1 - train_validation_split])
-            splitted_test_mask = np.logical_and(new_mask,test_mask)
-            validation_mask = np.logical_and(np.logical_not(new_mask),test_mask)
+        if train_validation_split != None:
+            splitted_test_mask = [random.choice([True, False]) if x else False for x in test_mask]
+            validation_mask = np.logical_and(np.logical_not(splitted_test_mask), test_mask)
 
             URM_test = sps.csr_matrix((self.ratings[splitted_test_mask], (self.users[splitted_test_mask], self.movies[splitted_test_mask])))
             URM_validation = sps.csr_matrix((self.ratings[validation_mask], (self.users[validation_mask], self.movies[validation_mask])))
 
             self.URM_validation = URM_validation[0:, :]
+            #print(URM_validation.nnz, URM_test.nnz, numInteractions)
 
         else:
             URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))

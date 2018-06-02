@@ -81,7 +81,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test(URM_test)
 
 
-#run_recommender(normalized, popular)
+run_recommender(normalized, popular)
 from telegram_bot import TelegramBot
 telegram_bot = TelegramBot(chat_id = '65065237')
 telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
