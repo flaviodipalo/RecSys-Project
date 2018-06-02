@@ -87,6 +87,7 @@ class Movielens10MReader(object):
         '''
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
+        self.URM_all = self.URM_all.tocoo()
 
         num_interactions = self.URM_all.nnz
 
