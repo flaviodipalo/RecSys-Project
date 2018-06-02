@@ -72,7 +72,8 @@ class Movielens1MReader(object):
             URM_validation = sps.csr_matrix((self.ratings[validation_mask], (self.users[validation_mask], self.movies[validation_mask])))
 
             self.URM_validation = URM_validation[0:, :]
-            #print(URM_validation.nnz, URM_test.nnz, numInteractions)
+
+            print(URM_validation.nnz, URM_test.nnz, numInteractions)
 
         else:
             URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
@@ -82,4 +83,4 @@ class Movielens1MReader(object):
         self.URM_train = URM_train[0:, :]
         self.URM_test = URM_test[0:, :]
 
-#dataset = Movielens1MReader(0.8,0.9)
+dataset = Movielens1MReader(0.8,0.9)
