@@ -41,10 +41,6 @@ class Movielens1MReader(object):
             self.users = self.users[popular_mask]
             self.ratings = self.ratings[popular_mask]
 
-
-
-
-
         self.unique_movies = np.sort(np.unique(self.movies)).astype(int)
         self.unique_users = np.sort(np.unique(self.users))
         '''
