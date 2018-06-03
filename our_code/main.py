@@ -46,13 +46,13 @@ def run_recommender(normalized, popular):
     print('Data Loaded !')
     recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
 
-    recommender.fit(epochs = 5, similarity_matrix_normalized = normalized)
+    recommender.fit(epochs=5, similarity_matrix_normalized=normalized)
 
 
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
     #data_reader = Movielens10MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
-    data_reader = Movielens1MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
+    data_reader = Movielens1MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
 
 
     URM_train = data_reader.URM_train
