@@ -94,3 +94,4 @@ telegram_bot = TelegramBot(chat_id = '65065237')
 telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 run_recommender_optimization(normalized, popular)
 telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+#
