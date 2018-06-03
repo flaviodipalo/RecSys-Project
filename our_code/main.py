@@ -41,7 +41,7 @@ def run_recommender(normalized, popular):
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
-    #URM_validation = data_reader.URM_validation
+    URM_validation = data_reader.URM_validation
 
     print('Data Loaded !')
     recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
@@ -58,7 +58,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     #TODO:pay attention here
-    URM_validation = data_reader.URM_test
+    URM_validation = data_reader.URM_validation
 
     print('Data Loaded !')
     #the file path that will print the solution for each configuration file
@@ -69,8 +69,11 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-4]
+
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
@@ -83,6 +86,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test(URM_test)
 
 
+#run_recommender(normalized, popular)
 #run_recommender(normalized, popular)
 from telegram_bot import TelegramBot
 telegram_bot = TelegramBot(chat_id = '65065237')
