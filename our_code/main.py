@@ -37,14 +37,14 @@ else:
 def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
-    data_reader = Movielens1MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
+    data_reader = Movielens1MReader(train_test_split=0.8, delete_popular=popular)
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
-    URM_validation = data_reader.URM_validation
+    #URM_validation = data_reader.URM_validation
 
     print('Data Loaded !')
-    recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_validation)
+    recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
 
     recommender.fit(epochs = 5, similarity_matrix_normalized = normalized)
 
@@ -83,7 +83,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test(URM_test)
 
 
-run_recommender(normalized, popular)
+#run_recommender(normalized, popular)
 from telegram_bot import TelegramBot
 telegram_bot = TelegramBot(chat_id = '65065237')
 telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
