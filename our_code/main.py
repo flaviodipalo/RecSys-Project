@@ -69,8 +69,11 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    #hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-4]
+
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
 
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
