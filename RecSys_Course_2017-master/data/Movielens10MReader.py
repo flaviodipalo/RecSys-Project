@@ -134,7 +134,6 @@ class Movielens10MReader(object):
                 self.URM_all = removeZeroRatingRowAndCol(self.URM_all)
 
 
-
         if splitTrainTest:
 
             self.URM_all = self.URM_all.tocoo()
