@@ -265,7 +265,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                         target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
 
-
                         if target_user_index != j:
                             if self.similarity_matrix_normalized:
                                 gradient = vector_product(P[p_index], non_zero_gradient, j, user_index, length)
