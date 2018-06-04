@@ -1,5 +1,5 @@
-#import sys
-#sys.path.append('/usr/local/lib/python3.6/site-packages')
+import sys
+sys.path.append('/usr/local/lib/python3.6/site-packages')
 
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
@@ -41,7 +41,7 @@ def run_recommender(normalized, popular):
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
-    URM_validation = data_reader.URM_validation
+    #URM_validation = data_reader.URM_validation
 
     print('Data Loaded !')
     recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
@@ -52,7 +52,7 @@ def run_recommender(normalized, popular):
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
     #data_reader = Movielens10MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
-    data_reader = Movielens1MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
+    data_reader = Movielens1MReader(train_test_split=0.6, train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
 
 
     URM_train = data_reader.URM_train
@@ -86,10 +86,9 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test(URM_test)
 
 
-#run_recommender(normalized, popular)
-#run_recommender(normalized, popular)
-from telegram_bot import TelegramBot
-telegram_bot = TelegramBot(chat_id = '65065237')
-telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
-run_recommender_optimization(normalized, popular)
-telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+run_recommender(normalized, popular)
+#from telegram_bot import TelegramBot
+#telegram_bot = TelegramBot(chat_id = '65065237')
+#telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
+#run_recommender_optimization(normalized, popular)
+#telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
