@@ -185,10 +185,10 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         total_normalization_error = 0
         #for j in self.unique_movies:
-        with nogil, parallel():
+        with nogil, parallel(num_threads=10):
             for j in prange(0, n_movies):
                 gradient_vector = 0
-                if j%50 == 0:
+                if j%1 == 0:
                     printf("%d, %d\n", j, n_movies)
                 S[j, j] = 0
                 if self.similarity_matrix_normalized:

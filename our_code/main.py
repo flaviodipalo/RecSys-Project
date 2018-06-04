@@ -1,5 +1,5 @@
-import sys
-sys.path.append('/usr/local/lib/python3.6/site-packages')
+#import sys
+#sys.path.append('/usr/local/lib/python3.6/site-packages')
 
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
@@ -87,8 +87,8 @@ def run_recommender_optimization(normalized=False, popular=False):
 
 
 run_recommender(normalized, popular)
-#from telegram_bot import TelegramBot
-#telegram_bot = TelegramBot(chat_id = '65065237')
-#telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
+from telegram_bot import TelegramBot
+telegram_bot = TelegramBot(chat_id = '65065237')
+telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 #run_recommender_optimization(normalized, popular)
-#telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
