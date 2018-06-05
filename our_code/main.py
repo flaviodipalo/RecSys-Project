@@ -54,7 +54,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     #data_reader = Movielens10MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
     #data_reader = Movielens1MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
     #data_reader = Movielens1MReader(train_test_split=0.8, delete_popular=popular)
-    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular)
+    data_reader = Movielens10MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -70,10 +70,9 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50, 100]
-    #hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    #hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-4]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+
 
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
 
