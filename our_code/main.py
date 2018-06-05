@@ -59,7 +59,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     #TODO:pay attention here
-    URM_validation = data_reader.URM_test
+    URM_validation = data_reader.URM_validation
 
     print('Data Loaded !')
     #the file path that will print the solution for each configuration file

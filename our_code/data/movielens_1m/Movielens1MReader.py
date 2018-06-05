@@ -58,19 +58,15 @@ class Movielens1MReader(object):
 
         num_interactions = self.URM_all.nnz
 
+        train_mask = np.random.choice([True, False], num_interactions, p=[train_test_split, 1 - train_test_split])
+        test_mask = np.logical_not(train_mask)
+
         if train_validation_split is not None:
-            split = np.random.choice([1, 2, 3], num_interactions, p=train_validation_split)
 
-            train_mask = split == 1
+            splitted_test_mask = [random.choice([True, False]) if x else False for x in test_mask]
+            validation_mask = np.logical_and(np.logical_not(splitted_test_mask), test_mask)
 
-            test_mask = split == 2
-
-            validation_mask = split == 3
-
-            self.URM_validation = sps.coo_matrix((self.URM_all.data[validation_mask],
-                                                  (self.URM_all.row[validation_mask],
-                                                   self.URM_all.col[validation_mask])))
-            self.URM_validation = self.URM_validation.tocsr()
+            self.URM_validation = sps.csr_matrix((self.ratings[validation_mask], (self.users[validation_mask], self.movies[validation_mask])))
 
         elif train_test_split is not None:
             train_mask = np.random.choice([True, False], num_interactions, p=[train_test_split, 1 - train_test_split])
@@ -83,5 +79,7 @@ class Movielens1MReader(object):
         self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
+
+        #print(num_interactions, self.URM_test.nnz, self.URM_train.nnz, self.URM_validation.nnz)
 
 #dataset = Movielens1MReader(0.8,0.9)
