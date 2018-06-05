@@ -85,7 +85,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.search(recommenderDictionary,output_root_path='logs/new'+file_path)
     parameterSearch.evaluate_on_test(URM_test)
 
-
+#
 #run_recommender(normalized, popular)
 #run_recommender(normalized, popular)
 from telegram_bot import TelegramBot
