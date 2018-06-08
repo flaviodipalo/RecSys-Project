@@ -192,7 +192,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, n_movies, schedule='guided'):
             gradient_vector = 0
-            if j%50 == 0:
+            if j%10 == 0:
                 printf("%d, %d\n", j, n_movies)
             S[j, j] = 0
             if self.similarity_matrix_normalized:
