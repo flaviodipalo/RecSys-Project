@@ -190,7 +190,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         total_normalization_error = 0
         #for j in self.unique_movies:
-        for j in range(0, n_movies, schedule='guided'):
+        for j in range(0, n_movies):
             gradient_vector = 0
             if j%1 == 0:
                 printf("%d, %d\n", j, n_movies)
