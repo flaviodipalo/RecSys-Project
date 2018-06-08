@@ -91,11 +91,11 @@ class BookCrossingReader(object):
         self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
         print(self.URM_test.nnz)
         print(self.URM_test.shape[1])
-        self.URM_test = self.URM_test[mask, 0:100000]
+        self.URM_test = self.URM_test[mask, 0:20000]
         print(self.URM_test.nnz)
 
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
-        self.URM_train = self.URM_train[mask, 0:100000]
+        self.URM_train = self.URM_train[mask, 0:20000]
 
 
 
