@@ -15,7 +15,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("normalized", type=str)
 parser.add_argument("popular", type=str)
 
-
 args = parser.parse_args()
 normalized = args.normalized
 popular = args.popular
