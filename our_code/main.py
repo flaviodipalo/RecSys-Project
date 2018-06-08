@@ -37,7 +37,7 @@ else:
 def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
-    data_reader = Movielens1MReader(train_test_split=0.8, delete_popular=popular)
+    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular)
 
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -87,8 +87,8 @@ def run_recommender_optimization(normalized=False, popular=False):
 
 
 run_recommender(normalized, popular)
-from telegram_bot import TelegramBot
-telegram_bot = TelegramBot(chat_id = '65065237')
-telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
+#from telegram_bot import TelegramBot
+#telegram_bot = TelegramBot(chat_id = '65065237')
+#telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 #run_recommender_optimization(normalized, popular)
-telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+#telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
