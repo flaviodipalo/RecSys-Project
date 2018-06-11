@@ -249,7 +249,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             cols = clean_support_vector(cols, self.n_users)
             vals = clean_support_vector(vals, self.n_users)
             if j%1 == 0:
-                printf("%d, %d\n", j, n_movies)
+                print(j, n_movies)
             #S[j, j] = 0
             #########METTERE A POSTO PER SIMILARITA'################
             '''
