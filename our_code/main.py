@@ -1,5 +1,5 @@
-#import sys
-#sys.path.append('/usr/local/lib/python3.6/site-packages')
+import sys
+sys.path.append('/home/alexbacce/.local/lib/python3.6/site-packages')
 
 from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
@@ -8,8 +8,8 @@ from data.book_crossing.BookCrossingReader import BookCrossingReader
 from data.movielens_10m.Movielens10MReader import Movielens10MReader
 import argparse
 
-from ParameterTuning import BayesianSearch
-from ParameterTuning.AbstractClassSearch import DictionaryKeys
+#from ParameterTuning import BayesianSearch
+#from ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 #ssh -i /Users/flaviodipalo/Downloads/recsys-project.pem ubuntu@131.175.21.230
 parser = argparse.ArgumentParser()
@@ -38,7 +38,7 @@ else:
 def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
-    data_reader = BookCrossingReader(train_test_split=0.8)
+    data_reader = Movielens1MReader(train_test_split=0.8)
 #
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -87,12 +87,12 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test(URM_test)
 
 #
+run_recommender(normalized, popular)
 #run_recommender(normalized, popular)
-#run_recommender(normalized, popular)
-from telegram_bot import TelegramBot
-telegram_bot = TelegramBot(chat_id = '65065237')
-telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
+#from telegram_bot import TelegramBot
+#telegram_bot = TelegramBot(chat_id = '65065237')
+#telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 #run_recommender_optimization(normalized, popular)
-run_recommender(normalized,popular)
-telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+#run_recommender(normalized,popular)
+#telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
 #
