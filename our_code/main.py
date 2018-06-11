@@ -89,11 +89,11 @@ def run_recommender_optimization(normalized=False, popular=False):
 #
 
 #run_recommender(normalized, popular)
-from telegram_bot import TelegramBot
+#from telegram_bot import TelegramBot
 #run_recommender(normalized, popular)
-telegram_bot = TelegramBot(chat_id = '511442421')
-telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
+#telegram_bot = TelegramBot(chat_id = '65065237')
+#telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 #run_recommender_optimization(normalized, popular)
 run_recommender(normalized,popular)
-telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
+#telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
 #

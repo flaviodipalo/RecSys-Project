@@ -259,7 +259,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     S[index, j] /= sum_vector
             '''
             ###########################################
-
+            print("INIZIO")
             #if j%500 ==0:
             #    print("Column ", j)
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
@@ -331,6 +331,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
                                 support_index = support_index + 1
                     '''
+                    print("META'")
                     sum_gradient = vector_sum(adagrad_cache[:, j])
                     p_index = 0
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
@@ -387,8 +388,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             '''
                         #if S[target_user_index, j] < 0:
                         #    S[target_user_index, j] = 0
-
-                    counter = counter + 1
+                    print("FINE")
+                    counter += 1
                     #print(gradient_vector)
                     #if self.similarity_matrix_normalized:
                      #   PyMem_Free(non_zero_gradient)
@@ -406,7 +407,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                 for index in range(S[:, j].shape[0]):
                     S[index, j] /= sum_vector
             '''
-        printf("CUM loss: %f\n", cum_loss)
+        print(cum_loss)
         #self.S = S
         self.adagrad_cache = adagrad_cache
 
