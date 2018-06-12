@@ -334,8 +334,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
     def get_S(self):
-        self.S.get_scipy_csr(self.topK)
-        return self.S
+
+        return self.S.get_scipy_csr(self.topK)
+
 
 ##################################################################################################################
 #####################
