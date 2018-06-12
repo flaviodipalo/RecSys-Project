@@ -216,7 +216,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                 if URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] > 1:
                     #user_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
                     partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], self.S, j) - all_items_data[all_items_indptr[j]:all_items_indptr[j+1]][counter])
-                    #partial_error = 10
                     cum_loss += partial_error**2
 
                     if self.similarity_matrix_normalized:
@@ -292,7 +291,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                                 else:
                                     adagrad_cache[target_user_index] += gradient**2
-                                    self.S.add_value(target_user_index, j, (alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient)
+                                    self.S.add_value(target_user_index, j, -(alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient)
 
 
                             elif gradient_option == adam_option:
