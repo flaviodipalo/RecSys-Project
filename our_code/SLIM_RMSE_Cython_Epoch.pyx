@@ -292,7 +292,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                                 else:
                                     adagrad_cache[target_user_index] += gradient**2
-                                    self.S.add_value(target_user_index, j, (alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient)
+                                    self.S.add_value(target_user_index, j, -(alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient)
 
 
                             elif gradient_option == adam_option:
