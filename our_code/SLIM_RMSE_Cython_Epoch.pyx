@@ -248,7 +248,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #rows = clean_support_vector(rows)
             #cols = clean_support_vector(cols)
             vals = clean_support_vector(vals)
-            if j%1 == 0:
+            if j%100 == 0:
                 print(j, n_movies)
             #S[j, j] = 0
             #########METTERE A POSTO PER SIMILARITA'################
