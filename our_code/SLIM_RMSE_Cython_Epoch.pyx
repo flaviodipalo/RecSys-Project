@@ -351,7 +351,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
                                 else:
                                     gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
-
                             if gradient_option == adagrad_option:
                                 if self.similarity_matrix_normalized:
                                     print("DA CAMBIARE")
@@ -364,9 +363,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                         vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
                                         #rows[target_user_index] = target_user_index
                                         #cols[index_for_support] = j
+                                    else:
+                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
 
-                                        if vals[target_user_index] < 0:
-                                            vals[target_user_index] = 0
+                                    if vals[target_user_index] < 0:
+                                        vals[target_user_index] = 0
                                     #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
 
                             '''
