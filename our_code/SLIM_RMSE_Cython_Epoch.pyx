@@ -59,11 +59,11 @@ cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, int[:]
 
     return result
 
-cdef double[:] clean_support_vector(double[:] vector, int length):
+cdef double[:] clean_support_vector(double[:] vector):
 
     cdef int i
 
-    for i in range(length):
+    for i in range(vector.shape[0]):
         vector[i] = 0
 
     return vector
@@ -218,17 +218,18 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int[:] S_indptr = self.S_indptr
         cdef int[:] S_indices = self.S_indices
         cdef double[:] S_data = self.S_data
-        self.rows = np.zeros(self.n_users)
-        self.cols = np.zeros(self.n_users)
-        self.vals = np.zeros(self.n_users)
-        cdef double[:] rows = self.rows
-        cdef double[:] cols = self.cols
+        self.rows = np.zeros(self.n_movies)
+        #self.cols = np.zeros(self.n_movies)
+        self.vals = np.zeros(self.n_movies)
+        #cdef double[:] rows = self.rows
+        #cdef double[:] cols = self.cols
         cdef double[:] vals = self.vals
-
+        cdef long[:] topK_elements_indices
+        cdef double value_to_insert
 
         ##### PARTE MATRICE SPARSA
-        cdef double[:, :] support_matrix_value = np.zeros((self.n_movies, self.topK))
-        cdef double[:, :] support_matrix_indices = np.zeros((self.n_movies, self.topK))
+        cdef double[:, :] support_matrix_values = np.zeros((self.n_movies, self.topK))
+        cdef long[:, :] support_matrix_indices = np.zeros((self.n_movies, self.topK)).astype(long)
 
 
 
@@ -244,10 +245,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         for j in range(0, n_movies):
             gradient_vector = 0
-            index_for_support = 0
-            rows = clean_support_vector(rows, self.n_users)
-            cols = clean_support_vector(cols, self.n_users)
-            vals = clean_support_vector(vals, self.n_users)
+            #rows = clean_support_vector(rows)
+            #cols = clean_support_vector(cols)
+            vals = clean_support_vector(vals)
             if j%1 == 0:
                 print(j, n_movies)
             #S[j, j] = 0
@@ -259,7 +259,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     S[index, j] /= sum_vector
             '''
             ###########################################
-            print("INIZIO")
+
             #if j%500 ==0:
             #    print("Column ", j)
             #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
@@ -331,7 +331,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
                                 support_index = support_index + 1
                     '''
-                    print("META'")
+
                     sum_gradient = vector_sum(adagrad_cache[:, j])
                     p_index = 0
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
@@ -355,20 +355,19 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                             if gradient_option == adagrad_option:
                                 if self.similarity_matrix_normalized:
-                                    print("NO")
+                                    print("DA CAMBIARE")
                                     #S[target_user_index, j] -= (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
 
                                 else:
                                     adagrad_cache[target_user_index, j] += gradient**2
-                                    rows[index_for_support] = target_user_index
-                                    cols[index_for_support] = j
+                                    #print(index_for_support, rows.shape[0])
                                     if found:
-                                        vals[index_for_support] = S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
-                                    else:
-                                        vals[index_for_support] = - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
-                                    if vals[index_for_support] < 0:
-                                        vals[index_for_support] = 0
-                                    index_for_support += 1
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
+                                        #rows[target_user_index] = target_user_index
+                                        #cols[index_for_support] = j
+
+                                        if vals[target_user_index] < 0:
+                                            vals[target_user_index] = 0
                                     #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
 
                             '''
@@ -388,7 +387,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             '''
                         #if S[target_user_index, j] < 0:
                         #    S[target_user_index, j] = 0
-                    print("FINE")
+
                     counter += 1
                     #print(gradient_vector)
                     #if self.similarity_matrix_normalized:
@@ -407,11 +406,36 @@ cdef class SLIM_RMSE_Cython_Epoch:
                 for index in range(S[:, j].shape[0]):
                     S[index, j] /= sum_vector
             '''
+
+            #### SORTING ####
+            topK_elements_indices = np.argpartition(vals, -self.topK)[-self.topK:]
+            support_matrix_indices[j, :] = topK_elements_indices
+            for index_for_support in range(self.topK):
+                #print(vals[support_matrix_indices[j, index_for_support]])
+                value_to_insert = vals[int(support_matrix_indices[j, index_for_support])]
+                support_matrix_values[j, index_for_support] = value_to_insert
+
+        print("Creating S matrix...")
+        rows, cols, values = [], [], []
+        for j in range(self.n_movies):
+            for index_for_support in range(self.topK):
+                value_to_insert = support_matrix_values[j, index_for_support]
+                if value_to_insert > 0:
+                    rows.append(j)
+                    cols.append(support_matrix_indices[j, index_for_support])
+                    values.append(value_to_insert)
+        S_matrix = sp.sparse.csc_matrix((values, (rows, cols)), shape=(self.n_movies, self.n_movies))
+        self.S_data = S_matrix.data
+        self.S_indices = S_matrix.indices
+        self.S_indptr = S_matrix.indptr
         print(cum_loss)
         #self.S = S
         self.adagrad_cache = adagrad_cache
 
 
     def get_S(self):
+
+
+
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
         return np.asarray(S)
