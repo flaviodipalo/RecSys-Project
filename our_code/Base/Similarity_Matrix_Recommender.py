@@ -24,7 +24,7 @@ class Similarity_Matrix_Recommender(object):
         # compute the scores using the dot product
         if self.sparse_weights:
             user_profile = self.URM_train[user_id]
-
+            print(type(self.W_sparse), self.W_sparse.shape)
             scores = user_profile.dot(self.W_sparse).toarray().ravel()
 
         else:
