@@ -83,7 +83,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         convergence = False
 
         self.S_incremental = self.cythonEpoch.get_S()
-        self.S_best = self.S_incremental.copy()
+        self.S_best = np.asarray(self.S_incremental).copy()
         self.epochs_best = 0
         currentEpoch = 0
 
