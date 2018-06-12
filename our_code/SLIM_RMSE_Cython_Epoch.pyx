@@ -415,7 +415,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             for index_for_support in range(vals.shape[0]):
                 if vals[index_for_support] != 0:
                     value_to_insert += 1
-            print("NON 0 ELEMENTS", value_to_insert)
+            #print("NON 0 ELEMENTS", value_to_insert)
             topK_elements_indices = np.argpartition(vals, -self.topK)[-self.topK:]
             support_matrix_indices[j, :] = topK_elements_indices
             for index_for_support in range(self.topK):
