@@ -154,8 +154,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
         self.eps = 10e-8
 
-
-        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc')
+        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.0000001)
         self.S_indptr = S.indptr
         self.S_indices = S.indices
         self.S_data = S.data
