@@ -222,7 +222,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
     def get_S_incremental_and_set_W(self):
 
         self.S_incremental = self.cythonEpoch.get_S()
-        print(type(self.S_incremental))
+
         if self.train_with_sparse_weights:
             self.W_sparse = self.S_incremental
         else:
