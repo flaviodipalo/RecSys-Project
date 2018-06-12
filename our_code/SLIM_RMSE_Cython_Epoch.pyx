@@ -42,14 +42,14 @@ cdef double vector_sum(double[:] vector):
     return counter
 
 #@cython.boundscheck(False)
-cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, double[:] S_column, int column_index_with_zero):
+cdef double cython_product_sparse(int[:] URM_indices, double[:] URM_data, S, int column_index_with_zero):
 
         cdef double result = 0
         cdef int x
 
         for x in range(URM_data.shape[0]):
             if URM_indices[x] != column_index_with_zero:
-                result += URM_data[x]*S_column[URM_indices[x]]
+                result += URM_data[x]*S.get_value(URM_indices[x], column_index_with_zero)
         return result
 
 #@cython.boundscheck(False)
@@ -215,8 +215,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
                 #user_indices = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]]
                 if URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] > 1:
                     #user_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
-                    #partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], self.S, j) - all_items_data[all_items_indptr[j]:all_items_indptr[j+1]][counter])
-                    partial_error = 10
+                    partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], self.S, j) - all_items_data[all_items_indptr[j]:all_items_indptr[j+1]][counter])
+                    #partial_error = 10
                     cum_loss += partial_error**2
 
                     if self.similarity_matrix_normalized:
