@@ -247,7 +247,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #rows = clean_support_vector(rows)
             #cols = clean_support_vector(cols)
             vals = clean_support_vector(vals)
-            if j%100 == 0:
+            if j%50 == 0:
                 print(j, n_movies)
             #S[j, j] = 0
             #########METTERE A POSTO PER SIMILARITA'################
@@ -344,9 +344,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 #S[target_user_index, j] -= alpha*gradient
                             else:
                                 found = False
+                                #if S_indices[S_indptr[j]:S_indptr[j+1]].shape[0] > 0:
+                                #    print("SHAPE OF S", S_indices[S_indptr[j]:S_indptr[j+1]].shape[0])
                                 for index_for_found_flag in range(S_indices[S_indptr[j]:S_indptr[j+1]].shape[0]):
-                                    if S_indices[S_indptr[j]:S_indptr[j+1]].shape[0] == target_user_index:
+                                    if S_indices[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] == target_user_index:
                                         found = True
+                                        break
                                 if found:
                                     gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
                                 else:
@@ -408,6 +411,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
             '''
 
             #### SORTING ####
+            value_to_insert = 0
+            for index_for_support in range(vals.shape[0]):
+                if vals[index_for_support] != 0:
+                    value_to_insert += 1
+            print("NON 0 ELEMENTS", value_to_insert)
             topK_elements_indices = np.argpartition(vals, -self.topK)[-self.topK:]
             support_matrix_indices[j, :] = topK_elements_indices
             for index_for_support in range(self.topK):
@@ -421,13 +429,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
             for index_for_support in range(self.topK):
                 value_to_insert = support_matrix_values[j, index_for_support]
                 if value_to_insert > 0:
-                    rows.append(j)
-                    cols.append(support_matrix_indices[j, index_for_support])
+                    rows.append(support_matrix_indices[j, index_for_support])
+                    cols.append(j)
                     values.append(value_to_insert)
+
         S_matrix = sp.sparse.csc_matrix((values, (rows, cols)), shape=(self.n_movies, self.n_movies))
         self.S_data = S_matrix.data
         self.S_indices = S_matrix.indices
         self.S_indptr = S_matrix.indptr
+        print("SHAPE OF INDICES", self.S_indices[self.S_indptr[2]:self.S_indptr[2+1]].shape[0])
         print(cum_loss)
         #self.S = S
         self.adagrad_cache = adagrad_cache
@@ -435,8 +445,5 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
     def get_S(self):
 
-
-
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
-        print(S.nnz)
         return S
