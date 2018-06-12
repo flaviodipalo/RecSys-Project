@@ -46,7 +46,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         print('fit has started',stop_on_validation,validation_every_n,l1_penalty,l2_penalty,topK,similarity_matrix_normalized)
 
         self.sparse_weights = True
-        self.train_with_sparse_weights = True
+        self.train_with_sparse_weights = False
         self.epochs = epochs
         self.batch_size = 1
 
@@ -222,7 +222,7 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
     def get_S_incremental_and_set_W(self):
 
         self.S_incremental = self.cythonEpoch.get_S()
-
+        print(type(self.S_incremental))
         if self.train_with_sparse_weights:
             self.W_sparse = self.S_incremental
         else:
