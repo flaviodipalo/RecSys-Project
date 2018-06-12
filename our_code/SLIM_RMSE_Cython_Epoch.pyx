@@ -438,4 +438,5 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
-        return np.asarray(S)
+        print(S.nnz)
+        return S
