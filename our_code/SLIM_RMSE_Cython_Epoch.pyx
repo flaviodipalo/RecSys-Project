@@ -196,7 +196,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             gradient_vector = 0
             if j%100 == 0:
                 printf("%d, %d\n", j, n_movies)
-            self.S.add_value(j, j, 0)
+            self.S.set_value(j, j, 0)
             if self.similarity_matrix_normalized:
                 sum_vector = vector_sum(self.S[:, j])
                 for index in range(self.S[:, j].shape[0]):
@@ -310,7 +310,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 self.S[target_user_index, j] -= alpha*gradient
 
                         if self.S.get_value(target_user_index, j) < 0:
-                            self.S.add_value(target_user_index, j, 0)
+                            self.S.set_value(target_user_index, j, 0)
 
                     counter = counter + 1
                     #print(gradient_vector)
@@ -440,6 +440,74 @@ cdef class Sparse_Matrix_Tree_CSR:
         # Initialize all rows to empty
         for index in range(self.num_rows):
             self.row_pointer[index].head = NULL
+
+
+    cpdef double set_value(self, long row, long col, double value):
+        """
+        The function adds a value to the specified cell. A new cell is created if necessary.
+
+        :param row: cell coordinates
+        :param col:  cell coordinates
+        :param value: value to add
+        :return double: resulting cell value
+        """
+
+        if row >= self.num_rows or col >= self.num_cols or row < 0 or col < 0:
+            raise ValueError("Cell is outside matrix. Matrix shape is ({},{}), coordinates given are ({},{})".format(
+                self.num_rows, self.num_cols, row, col))
+
+        cdef matrix_element_tree_s* current_element, new_element, * old_element
+        cdef int stopSearch = False
+
+
+        # If the row is empty, create a new element
+        if self.row_pointer[row].head == NULL:
+
+            # row_pointer is a python object, so I need the object itself and not the address
+            self.row_pointer[row].head = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+
+        # If the row is not empty, look for the cell
+        # row_pointer contains the struct itself, but I just want its address
+        current_element = self.row_pointer[row].head
+
+        # Follow the tree structure
+        while not stopSearch:
+
+            if current_element.column < col and current_element.higher != NULL:
+                current_element = current_element.higher
+
+            elif current_element.column > col and current_element.lower != NULL:
+                current_element = current_element.lower
+
+            else:
+                stopSearch = True
+
+        # If the cell exist, update its value
+        if current_element.column == col:
+            current_element.data = value
+
+            return current_element.data
+
+
+        # The cell is not found, create new Higher element
+        elif current_element.column < col and current_element.higher == NULL:
+
+            current_element.higher = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        # The cell is not found, create new Lower element
+        elif current_element.column > col and current_element.lower == NULL:
+
+            current_element.lower = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        else:
+            assert False, 'ERROR - Current insert operation is not implemented'
 
 
     cpdef double add_value(self, long row, long col, double value):
@@ -590,7 +658,6 @@ cdef class Sparse_Matrix_Tree_CSR:
                 self.row_pointer[row].head = self.subtree_to_list_flat(self.row_pointer[row].head)
 
                 if TopK:
-                    print("SONO QUA")
                     self.row_pointer[row].head = self.topK_selection_from_list(self.row_pointer[row].head, TopK)
 
 
