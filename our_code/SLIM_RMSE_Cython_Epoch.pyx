@@ -590,6 +590,7 @@ cdef class Sparse_Matrix_Tree_CSR:
                 self.row_pointer[row].head = self.subtree_to_list_flat(self.row_pointer[row].head)
 
                 if TopK:
+                    print("SONO QUA")
                     self.row_pointer[row].head = self.topK_selection_from_list(self.row_pointer[row].head, TopK)
 
 
