@@ -270,21 +270,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                         length = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] - 1
 
-                        P = <double **>malloc(length * sizeof(double*))
-                        support_index = 0
-                        for index_for_gil in range(length):
-                            P[support_index] = <double *>malloc(length * sizeof(double))
-                            support_index = support_index + 1
-
-                        for i in range(length):
-                            nogilsupport_index = 0
-                            for index_for_gil in range(length):
-                                if i == support_index:
-                                    P[i][support_index] = 1 - (1/<double>length)
-                                else:
-                                    P[i][support_index] = - (1/<double>length)
-                                support_index = support_index + 1
-
                         diagonal_value_P = 1 - (1/<double>length)
                         other_value_P = - (1/<double>length)
 
@@ -318,7 +303,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
                                     non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + eps))
 
-                                support_index = support_index + 1
+                                support_index += 1
 
 
                     sum_gradient = vector_sum(adagrad_cache[:, j])
@@ -386,9 +371,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                     counter += 1
                     if self.similarity_matrix_normalized:
                         PyMem_Free(non_zero_gradient)
-                        for i in range(length):
-                            free(P[i])
-                        free(P)
 
             '''
             if self.similarity_matrix_normalized:
