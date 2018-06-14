@@ -348,9 +348,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             if gradient_option == adagrad_option:
                                 if self.similarity_matrix_normalized:
                                     if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sum_gradient/n_movies + eps)*gradient
                                     else:
-                                        vals[target_user_index] -= (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
+                                        vals[target_user_index] -= (alpha/sum_gradient/n_movies + eps)*gradient
                                 else:
                                     adagrad_cache[target_user_index, j] += gradient**2
                                     #print(index_for_support, rows.shape[0])
