@@ -71,6 +71,9 @@ cdef double[:] clean_support_vector(double[:] vector):
 #@cython.boundscheck(False)
 cdef class SLIM_RMSE_Cython_Epoch:
 
+    cdef int[:] S_indptr
+    cdef int[:] S_indices
+    cdef double[:] S_data
     cdef double[:] users, movies, ratings
     cdef int[:] all_items_indptr, all_items_indices
     cdef double[:] all_items_data
@@ -86,12 +89,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double **P
     cdef int topK
     cdef double[:] rows, cols, vals
-    cdef int[:] S_indices, S_indptr
-    cdef double[:] S_data
-
 
     #Adagrad
-    cdef double [:, :] adagrad_cache
+    cdef double[:, :] adagrad_cache
 
 
     #Adam
@@ -140,24 +140,23 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #ADAGRAD
         self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
 
-
         #ADAM
-        self.adam_m = np.zeros((2, 2))                  #CAMBIARE
-        self.adam_v = np.zeros((2, 2))                  #CAMBIARE
+        self.adam_m = np.zeros((self.n_movies, self.n_movies))
+        self.adam_v = np.zeros((self.n_movies, self.n_movies))
         self.beta_1 = 0.9
         self.beta_2 = 0.999
         self.time_t = 0
 
         #RMSprop
-        self.rms_prop_term = np.zeros((2, 2))           #CAMBIARE
+        self.rms_prop_term = np.zeros((self.n_movies, self.n_movies))
 
 
         #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
         self.eps = 10e-8
 
-        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.001)
-        self.S_indices = S.indices
+        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.0000001)
         self.S_indptr = S.indptr
+        self.S_indices = S.indices
         self.S_data = S.data
 
 
@@ -226,8 +225,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double[:] vals = self.vals
         cdef long[:] topK_elements_indices
         cdef double value_to_insert
-        cdef int index_to_use
-
 
         ##### PARTE MATRICE SPARSA
         cdef double[:, :] support_matrix_values = np.zeros((self.n_movies, self.topK))
@@ -250,62 +247,80 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #rows = clean_support_vector(rows)
             #cols = clean_support_vector(cols)
             vals = clean_support_vector(vals)
-            if j%1 == 0:
+            if j%50 == 0:
                 print(j, n_movies)
-
+            #S[j, j] = 0
+            #########METTERE A POSTO PER SIMILARITA'################
+            '''
             if self.similarity_matrix_normalized:
-                sum_vector = vector_sum(S_data)
-                for index in range(S_data.shape[0]):
-                    S_data[index] /= sum_vector
+                sum_vector = vector_sum(S[:, j])
+                for index in range(S[:, j].shape[0]):
+                    S[index, j] /= sum_vector
+            '''
+            ###########################################
+
+            #if j%500 ==0:
+            #    print("Column ", j)
+            #t_column_indices = item_indices[item_indptr[j]:item_indptr[j+1]]
+            #t_column_data = item_data[item_indptr[j]:item_indptr[j+1]]
+
+            #item_indices = all_items_indices[all_items_indptr[j]:all_items_indptr[j+1]]
 
             counter = 0
             for t_index in range(all_items_indices[all_items_indptr[j]:all_items_indptr[j+1]].shape[0]):
 
                 user_index = all_items_indices[all_items_indptr[j]:all_items_indptr[j+1]][t_index]
+                #user_indices = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]]
                 if URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] > 1:
+                    #user_data = URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]]
+
                     partial_error = (cython_product_sparse(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]], URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]], S_indices[S_indptr[j]:S_indptr[j+1]], S_data[S_indptr[j]:S_indptr[j+1]], j) - all_items_data[all_items_indptr[j]:all_items_indptr[j+1]][counter])
                     cum_loss += partial_error**2
-
+                    '''
                     if self.similarity_matrix_normalized:
-
                         length = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] - 1
-
+                        #P = <double **>malloc(length * sizeof(double*))
+                        #support_index = 0
+                        #for index_for_gil in range(length):
+                        #    P[support_index] = <double *>malloc(length * sizeof(double))
+                        #    support_index = support_index + 1
+#
+ #                       for i in range(length):
+  #                           nogilsupport_index = 0
+   #                         for index_for_gil in range(length):
+    #                            if i == support_index:
+     #                               P[i][support_index] = 1 - (1/<double>length)
+      #                          else:
+       ##                             P[i][support_index] = - (1/<double>length)
+         #                       support_index = support_index + 1
                         diagonal_value_P = 1 - (1/<double>length)
                         other_value_P = - (1/<double>length)
-
                         non_zero_gradient = <double *>PyMem_Malloc((URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] - 1) * sizeof(double ))
-
                         support_index = 0
                         for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                             target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
                             if target_user_index != j:
-                                found = False
-                                for index_for_found_flag in range(S_indices[S_indptr[j]:S_indptr[j+1]].shape[0]):
-                                    if S_indices[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] == target_user_index:
-                                        found = True
-                                        break
-                                if found:
-                                    non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
-                                else:
-                                    non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
-
-                                if gradient_option == "adagrad":
-                                    adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
-                                    non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
-
-                                elif gradient_option == "adam":
-                                    self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*non_zero_gradient[support_index]
-                                    self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(non_zero_gradient[support_index])**2
-                                    self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
-                                    self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
-                                    non_zero_gradient[support_index] = self.m_adjusted/(sqrt(self.v_adjusted) + eps)
-
-                                elif gradient_option == "rmsprop":
-                                    self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
-                                    non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + eps))
-
-                                support_index += 1
-
+                                non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S[target_user_index, j] + i_gamma
+                                adagrad_cache[target_user_index, j] += non_zero_gradient[support_index]**2
+                           #     if gradient_option == "adagrad":
+                            #        adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
+                             #       non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
+#
+ #                               elif gradient_option == "adam":
+  #                                  self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*non_zero_gradient[support_index]
+   #                                 self.adam_v[target_user_index, j] = self.beta_2*self.adam_v[target_user_index, j] + (1-self.beta_2)*(non_zero_gradient[support_index])**2
+    #####                            self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
+         #                           self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
+          #                          non_zero_gradient[support_index] = self.m_adjusted/(sqrt(self.v_adjusted) + eps)
+#
+ #                               elif gradient_option == "rmsprop":
+  #                                  self.rms_prop_term[target_user_index, j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*non_zero_gradient[support_index]**2
+   #                                 non_zero_gradient[support_index] = non_zero_gradient[support_index]/(sqrt(self.rms_prop_term[target_user_index,j] + eps))
+    #
+                                #non_zero_gradient[support_index] = randint(10**5, 10**10)
+                                #print("ERROR", partial_error, user_data[index], non_zero_gradient[support_index])
+                                support_index = support_index + 1
+                    '''
 
                     sum_gradient = vector_sum(adagrad_cache[:, j])
                     p_index = 0
@@ -313,19 +328,15 @@ cdef class SLIM_RMSE_Cython_Epoch:
                         target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
 
                         if target_user_index != j:
-
                             if self.similarity_matrix_normalized:
                                 gradient = vector_product(diagonal_value_P, other_value_P, non_zero_gradient, j, p_index, length)
                                 gradient_vector += gradient
-                                p_index += 1
-                                if found:
-                                    vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sum_gradient)*gradient
-                                else:
-                                    vals[target_user_index] -= (alpha/sum_gradient)*gradient
-                                if vals[target_user_index] < 0:
-                                        vals[target_user_index] = 0
+                                p_index = p_index + 1
+                                #S[target_user_index, j] -= alpha*gradient
                             else:
                                 found = False
+                                #if S_indices[S_indptr[j]:S_indptr[j+1]].shape[0] > 0:
+                                #    print("SHAPE OF S", S_indices[S_indptr[j]:S_indptr[j+1]].shape[0])
                                 for index_for_found_flag in range(S_indices[S_indptr[j]:S_indptr[j+1]].shape[0]):
                                     if S_indices[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] == target_user_index:
                                         found = True
@@ -334,7 +345,12 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
                                 else:
                                     gradient = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
-                                if gradient_option == adagrad_option:
+                            if gradient_option == adagrad_option:
+                                if self.similarity_matrix_normalized:
+                                    print("DA CAMBIARE")
+                                    #S[target_user_index, j] -= (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
+
+                                else:
                                     adagrad_cache[target_user_index, j] += gradient**2
                                     #print(index_for_support, rows.shape[0])
                                     if found:
@@ -346,12 +362,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
                                     if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
-
-                                elif gradient_option == normal_option:
-                                    if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - alpha*gradient
-                                    else:
-                                        vals[target_user_index] -= alpha*gradient
+                                    #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
 
                             '''
                             elif gradient_option == adam_option:
@@ -360,23 +371,27 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 self.m_adjusted = self.adam_m[target_user_index, j]/(1 - self.beta_1**self.time_t)
                                 self.v_adjusted = self.adam_v[target_user_index, j]/(1 - self.beta_2**self.time_t)
                                 S[target_user_index, j] -= alpha*self.m_adjusted/(sqrt(self.v_adjusted) + eps)
-
+#
                             elif gradient_option == rmsprop_option:
                                 self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
                                 S[target_user_index, j] -= alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + eps))
-
-
+                            elif gradient_option == normal_option:
+                                S[target_user_index, j] -= alpha*gradient
                             '''
-
+                        #if S[target_user_index, j] < 0:
+                        #    S[target_user_index, j] = 0
 
                     counter += 1
-                    if self.similarity_matrix_normalized:
-                        PyMem_Free(non_zero_gradient)
+                    #print(gradient_vector)
+                    #if self.similarity_matrix_normalized:
+                     #   PyMem_Free(non_zero_gradient)
+                      #  #for i in range(length):
+                            #free(P[i])
+                        #free(P)
 
             '''
             if self.similarity_matrix_normalized:
                 #print("SUM", j, vector_sum(S[:, j]))
-
                 total_normalization_error += vector_sum(S[:, j]) - 1
                 S[j, j] = 0
                 sum_vector = vector_sum(S[:, j])
@@ -394,8 +409,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             support_matrix_indices[j, :] = topK_elements_indices
             for index_for_support in range(self.topK):
                 #print(vals[support_matrix_indices[j, index_for_support]])
-                index_to_use = int(support_matrix_indices[j, index_for_support])
-                value_to_insert = vals[index_to_use]
+                value_to_insert = vals[int(support_matrix_indices[j, index_for_support])]
                 support_matrix_values[j, index_for_support] = value_to_insert
 
         print("Creating S matrix...")
@@ -412,6 +426,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.S_data = S_matrix.data
         self.S_indices = S_matrix.indices
         self.S_indptr = S_matrix.indptr
+        print("SHAPE OF INDICES", self.S_indices[self.S_indptr[2]:self.S_indptr[2+1]].shape[0])
         print(cum_loss)
         #self.S = S
         self.adagrad_cache = adagrad_cache
@@ -421,8 +436,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
         return S
-
-
+'''
 ##################################################################################################################
 #####################
 #####################            SPARSE MATRIX
@@ -1028,3 +1042,4 @@ cdef class Sparse_Matrix_Tree_CSR:
 
 
         return current_element
+'''
