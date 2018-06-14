@@ -91,7 +91,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
     #Adagrad
-    cdef Sparse_Matrix_Tree_CSR adagrad_cache
+    cdef double [:, :] adagrad_cache
 
 
     #Adam
@@ -138,7 +138,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #    self.S = np.zeros((self.n_movies, self.n_movies))
 
         #ADAGRAD
-        self.adagrad_cache = Sparse_Matrix_Tree_CSR(self.n_movies, self.n_movies)
+        self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
 
 
         #ADAM
@@ -201,7 +201,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double[:] URM_data = self.URM_data
         cdef double i_beta = self.i_beta
         cdef double i_gamma = self.i_gamma
-        cdef Sparse_Matrix_Tree_CSR adagrad_cache = self.adagrad_cache
+        cdef double[:, :] adagrad_cache = self.adagrad_cache
         cdef double[:] all_items_data = self.all_items_data
         cdef double alpha = self.alpha
         cdef double eps = self.eps
@@ -309,7 +309,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
                             if target_user_index != j:
                                 non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S[target_user_index, j] + i_gamma
-                                adagrad_cache.add_value(target_user_index, j, non_zero_gradient[support_index]**2)
+                                adagrad_cache[target_user_index, j] =  non_zero_gradient[support_index]**2
 
 
                            #     if gradient_option == "adagrad":
@@ -334,7 +334,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 support_index = support_index + 1
                     '''
 
-                    #sum_gradient = vector_sum(adagrad_cache)   DA METTERE
+                    sum_gradient = vector_sum(adagrad_cache[:, j])
                     p_index = 0
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                         target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
@@ -363,18 +363,18 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     #S[target_user_index, j] -= (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
 
                                 else:
-                                    adagrad_cache.add_value(target_user_index, j, gradient**2)
+                                    adagrad_cache[target_user_index, j] += gradient**2
                                     #print(index_for_support, rows.shape[0])
                                     if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
                                         #rows[target_user_index] = target_user_index
                                         #cols[index_for_support] = j
                                     else:
-                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
+                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
 
                                     if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
-                                    #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
+                                    #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
                             elif gradient_option == normal_option:
                                 if found:
                                     vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - alpha*gradient
