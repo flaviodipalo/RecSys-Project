@@ -91,7 +91,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
     #Adagrad
-    cdef double[:] adagrad_cache
+    cdef Sparse_Matrix_Tree_CSR adagrad_cache
 
 
     #Adam
@@ -138,7 +138,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #    self.S = np.zeros((self.n_movies, self.n_movies))
 
         #ADAGRAD
-        self.adagrad_cache = np.zeros((self.n_movies), dtype=float)
+        self.adagrad_cache = Sparse_Matrix_Tree_CSR(self.n_movies, self.n_movies)
 
 
         #ADAM
@@ -201,7 +201,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double[:] URM_data = self.URM_data
         cdef double i_beta = self.i_beta
         cdef double i_gamma = self.i_gamma
-        cdef double[:] adagrad_cache = self.adagrad_cache
+        cdef Sparse_Matrix_Tree_CSR adagrad_cache = self.adagrad_cache
         cdef double[:] all_items_data = self.all_items_data
         cdef double alpha = self.alpha
         cdef double eps = self.eps
@@ -226,6 +226,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double[:] vals = self.vals
         cdef long[:] topK_elements_indices
         cdef double value_to_insert
+        cdef int index_to_use
+
 
         ##### PARTE MATRICE SPARSA
         cdef double[:, :] support_matrix_values = np.zeros((self.n_movies, self.topK))
@@ -307,7 +309,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
                             if target_user_index != j:
                                 non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S[target_user_index, j] + i_gamma
-                                adagrad_cache[target_user_index] += non_zero_gradient[support_index]**2
+                                adagrad_cache.add_value(target_user_index, j, non_zero_gradient[support_index]**2)
 
 
                            #     if gradient_option == "adagrad":
@@ -332,7 +334,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 support_index = support_index + 1
                     '''
 
-                    sum_gradient = vector_sum(adagrad_cache)
+                    #sum_gradient = vector_sum(adagrad_cache)   DA METTERE
                     p_index = 0
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                         target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
@@ -361,18 +363,18 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     #S[target_user_index, j] -= (alpha/sqrt(sum_gradient)/n_movies + eps)*gradient
 
                                 else:
-                                    adagrad_cache[target_user_index] += gradient**2
+                                    adagrad_cache.add_value(target_user_index, j, gradient**2)
                                     #print(index_for_support, rows.shape[0])
                                     if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
                                         #rows[target_user_index] = target_user_index
                                         #cols[index_for_support] = j
                                     else:
-                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient
+                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
 
                                     if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
-                                    #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache[target_user_index] + eps))*gradient
+                                    #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
 
                             '''
                             elif gradient_option == adam_option:
@@ -421,7 +423,8 @@ cdef class SLIM_RMSE_Cython_Epoch:
             support_matrix_indices[j, :] = topK_elements_indices
             for index_for_support in range(self.topK):
                 #print(vals[support_matrix_indices[j, index_for_support]])
-                value_to_insert = vals[int(support_matrix_indices[j, index_for_support])]
+                index_to_use = int(support_matrix_indices[j, index_for_support])
+                value_to_insert = vals[index_to_use]
                 support_matrix_values[j, index_for_support] = value_to_insert
 
         print("Creating S matrix...")
@@ -447,3 +450,610 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
         return S
+
+
+##################################################################################################################
+#####################
+#####################            SPARSE MATRIX
+#####################
+##################################################################################################################
+
+import scipy.sparse as sps
+
+import numpy as np
+cimport numpy as np
+
+from libc.stdlib cimport malloc, free#, qsort
+
+# Declaring QSORT as "gil safe", appending "nogil" at the end of the declaration
+# Otherwise I will not be able to pass the comparator function pointer
+# https://stackoverflow.com/questions/8353076/how-do-i-pass-a-pointer-to-a-c-function-in-cython
+cdef extern from "stdlib.h":
+    ctypedef void const_void "const void"
+    void qsort(void *base, int nmemb, int size,
+            int(*compar)(const_void *, const_void *)) nogil
+
+
+# Node struct
+ctypedef struct matrix_element_tree_s:
+    long column
+    double data
+    matrix_element_tree_s *higher
+    matrix_element_tree_s *lower
+
+ctypedef struct head_pointer_tree_s:
+    matrix_element_tree_s *head
+
+
+# Function to allocate a new node
+cdef matrix_element_tree_s * pointer_new_matrix_element_tree_s(long column, double data, matrix_element_tree_s *higher,  matrix_element_tree_s *lower):
+
+    cdef matrix_element_tree_s * new_element
+
+    new_element = < matrix_element_tree_s * > malloc(sizeof(matrix_element_tree_s))
+    new_element.column = column
+    new_element.data = data
+    new_element.higher = higher
+    new_element.lower = lower
+
+    return new_element
+
+
+# Functions to compare structs to be used in C qsort
+cdef int compare_struct_on_column(const void *a_input, const void *b_input):
+    """
+    The function compares the column contained in the two struct passed.
+    If a.column > b.column returns >0
+    If a.column < b.column returns <0
+
+    :return int: a.column - b.column
+    """
+
+    cdef head_pointer_tree_s *a_casted = <head_pointer_tree_s *> a_input
+    cdef head_pointer_tree_s *b_casted = <head_pointer_tree_s *> b_input
+
+    return a_casted.head.column  - b_casted.head.column
+
+
+
+cdef int compare_struct_on_data(const void * a_input, const void * b_input):
+    """
+    The function compares the data contained in the two struct passed.
+    If a.data > b.data returns >0
+    If a.data < b.data returns <0
+
+    :return int: +1 or -1
+    """
+
+    cdef head_pointer_tree_s * a_casted = <head_pointer_tree_s *> a_input
+    cdef head_pointer_tree_s * b_casted = <head_pointer_tree_s *> b_input
+
+    if (a_casted.head.data - b_casted.head.data) > 0.0:
+        return +1
+    else:
+        return -1
+
+
+
+#################################
+#################################       CLASS DECLARATION
+#################################
+
+cdef class Sparse_Matrix_Tree_CSR:
+
+    cdef long num_rows, num_cols
+
+    # Array containing the struct (object, not pointer) corresponding to the root of the tree
+    cdef head_pointer_tree_s* row_pointer
+
+    def __init__(self, long num_rows, long num_cols):
+
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+
+        self.row_pointer = < head_pointer_tree_s *> malloc(self.num_rows * sizeof(head_pointer_tree_s))
+
+        # Initialize all rows to empty
+        for index in range(self.num_rows):
+            self.row_pointer[index].head = NULL
+
+
+    cpdef double set_value(self, long row, long col, double value):
+        """
+        The function adds a value to the specified cell. A new cell is created if necessary.
+
+        :param row: cell coordinates
+        :param col:  cell coordinates
+        :param value: value to add
+        :return double: resulting cell value
+        """
+
+        if row >= self.num_rows or col >= self.num_cols or row < 0 or col < 0:
+            raise ValueError("Cell is outside matrix. Matrix shape is ({},{}), coordinates given are ({},{})".format(
+                self.num_rows, self.num_cols, row, col))
+
+        cdef matrix_element_tree_s* current_element, new_element, * old_element
+        cdef int stopSearch = False
+
+
+        # If the row is empty, create a new element
+        if self.row_pointer[row].head == NULL:
+
+            # row_pointer is a python object, so I need the object itself and not the address
+            self.row_pointer[row].head = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+
+        # If the row is not empty, look for the cell
+        # row_pointer contains the struct itself, but I just want its address
+        current_element = self.row_pointer[row].head
+
+        # Follow the tree structure
+        while not stopSearch:
+
+            if current_element.column < col and current_element.higher != NULL:
+                current_element = current_element.higher
+
+            elif current_element.column > col and current_element.lower != NULL:
+                current_element = current_element.lower
+
+            else:
+                stopSearch = True
+
+        # If the cell exist, update its value
+        if current_element.column == col:
+            current_element.data = value
+
+            return current_element.data
+
+
+        # The cell is not found, create new Higher element
+        elif current_element.column < col and current_element.higher == NULL:
+
+            current_element.higher = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        # The cell is not found, create new Lower element
+        elif current_element.column > col and current_element.lower == NULL:
+
+            current_element.lower = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        else:
+            assert False, 'ERROR - Current insert operation is not implemented'
+
+
+    cpdef double add_value(self, long row, long col, double value):
+        """
+        The function adds a value to the specified cell. A new cell is created if necessary.
+
+        :param row: cell coordinates
+        :param col:  cell coordinates
+        :param value: value to add
+        :return double: resulting cell value
+        """
+
+        if row >= self.num_rows or col >= self.num_cols or row < 0 or col < 0:
+            raise ValueError("Cell is outside matrix. Matrix shape is ({},{}), coordinates given are ({},{})".format(
+                self.num_rows, self.num_cols, row, col))
+
+        cdef matrix_element_tree_s* current_element, new_element, * old_element
+        cdef int stopSearch = False
+
+
+        # If the row is empty, create a new element
+        if self.row_pointer[row].head == NULL:
+
+            # row_pointer is a python object, so I need the object itself and not the address
+            self.row_pointer[row].head = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+
+        # If the row is not empty, look for the cell
+        # row_pointer contains the struct itself, but I just want its address
+        current_element = self.row_pointer[row].head
+
+        # Follow the tree structure
+        while not stopSearch:
+
+            if current_element.column < col and current_element.higher != NULL:
+                current_element = current_element.higher
+
+            elif current_element.column > col and current_element.lower != NULL:
+                current_element = current_element.lower
+
+            else:
+                stopSearch = True
+
+        # If the cell exist, update its value
+        if current_element.column == col:
+            current_element.data += value
+
+            return current_element.data
+
+
+        # The cell is not found, create new Higher element
+        elif current_element.column < col and current_element.higher == NULL:
+
+            current_element.higher = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        # The cell is not found, create new Lower element
+        elif current_element.column > col and current_element.lower == NULL:
+
+            current_element.lower = pointer_new_matrix_element_tree_s(col, value, NULL, NULL)
+
+            return value
+
+        else:
+            assert False, 'ERROR - Current insert operation is not implemented'
+
+
+
+
+    cpdef double get_value(self, long row, long col):
+        """
+        The function returns the value of the specified cell.
+
+        :param row: cell coordinates
+        :param col:  cell coordinates
+        :return double: cell value
+        """
+
+
+        if row >= self.num_rows or col >= self.num_cols or row < 0 or col < 0:
+            raise ValueError(
+                "Cell is outside matrix. Matrix shape is ({},{}), coordinates given are ({},{})".format(
+                    self.num_rows, self.num_cols, row, col))
+
+
+        cdef matrix_element_tree_s* current_element
+        cdef int stopSearch = False
+
+        # If the row is empty, return default
+        if self.row_pointer[row].head == NULL:
+            return 0.0
+
+
+        # If the row is not empty, look for the cell
+        # row_pointer contains the struct itself, but I just want its address
+        current_element = self.row_pointer[row].head
+
+        # Follow the tree structure
+        while not stopSearch:
+
+            if current_element.column < col and current_element.higher != NULL:
+                current_element = current_element.higher
+
+            elif current_element.column > col and current_element.lower != NULL:
+                current_element = current_element.lower
+
+            else:
+                stopSearch = True
+
+
+        # If the cell exist, return its value
+        if current_element.column == col:
+            return current_element.data
+
+        # The cell is not found, return default
+        else:
+            return 0.0
+
+
+
+
+    cpdef get_scipy_csr(self, long TopK = False):
+        """
+        The function returns the current sparse matrix as a scipy_csr object
+
+        :return double: scipy_csr object
+        """
+        cdef int terminate
+        cdef long row
+
+        data = []
+        indices = []
+        indptr = []
+
+        # Loop the rows
+        for row in range(self.num_rows):
+
+            #Always set indptr
+            indptr.append(len(data))
+
+            # row contains data
+            if self.row_pointer[row].head != NULL:
+
+                # Flatten the data structure
+                self.row_pointer[row].head = self.subtree_to_list_flat(self.row_pointer[row].head)
+
+                if TopK:
+                    self.row_pointer[row].head = self.topK_selection_from_list(self.row_pointer[row].head, TopK)
+
+
+                # Flatten the tree data
+                subtree_column, subtree_data = self.from_linked_list_to_python_list(self.row_pointer[row].head)
+                data.extend(subtree_data)
+                indices.extend(subtree_column)
+
+                # Rebuild the tree
+                self.row_pointer[row].head = self.build_tree_from_list_flat(self.row_pointer[row].head)
+
+
+        #Set terminal indptr
+        indptr.append(len(data))
+
+        return sps.csr_matrix((data, indices, indptr), shape=(self.num_rows, self.num_cols))
+
+
+
+    cpdef rebalance_tree(self, long TopK = False):
+        """
+        The function builds a balanced binary tree from the current one, for all matrix rows
+
+        :param TopK: either False or an integer number. Number of the highest elements to preserve
+        """
+
+        cdef long row
+
+        #start_time = time.time()
+
+        for row in range(self.num_rows):
+
+            if self.row_pointer[row].head != NULL:
+
+                # Flatten the data structure
+                self.row_pointer[row].head = self.subtree_to_list_flat(self.row_pointer[row].head)
+
+                if TopK:
+                    self.row_pointer[row].head = self.topK_selection_from_list(self.row_pointer[row].head, TopK)
+
+                # Rebuild the tree
+                self.row_pointer[row].head = self.build_tree_from_list_flat(self.row_pointer[row].head)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    cdef matrix_element_tree_s * subtree_to_list_flat(self, matrix_element_tree_s * root):
+        """
+        The function flatten the structure of the subtree whose root is passed as a paramether
+        The list is bidirectional and ordered with respect to the column
+        The column ordering follows from the insertion policy
+
+        :param root: tree root
+        :return list, list: data and corresponding column. Empty list if root is None
+        """
+
+        if root == NULL:
+            return NULL
+
+        cdef matrix_element_tree_s *flat_list_head, *current_element
+
+        # Flatten lower subtree
+        flat_list_head = self.subtree_to_list_flat(root.lower)
+
+        # If no lower elements exist, the head is the current element
+        if flat_list_head == NULL:
+            flat_list_head = root
+            root.lower = NULL
+
+        # Else move to the tail and add the subtree root
+        else:
+            current_element = flat_list_head
+            while current_element.higher != NULL:
+                current_element = current_element.higher
+
+            # Attach the element with the bidirectional pointers
+            current_element.higher = root
+            root.lower = current_element
+
+        # Flatten higher subtree and attach it to the tail of the flat list
+        root.higher = self.subtree_to_list_flat(root.higher)
+
+        # Attach the element with the bidirectional pointers
+        if root.higher != NULL:
+            root.higher.lower = root
+
+        return flat_list_head
+
+
+
+    cdef from_linked_list_to_python_list(self, matrix_element_tree_s * head):
+
+        data = []
+        column = []
+
+        while head != NULL:
+            data.append(head.data)
+            column.append(head.column)
+
+            head = head.higher
+
+        return column, data
+
+
+
+    cdef subtree_free_memory(self, matrix_element_tree_s* root):
+        """
+        The function frees all struct in the subtree whose root is passed as a parameter, root included
+
+        :param root: tree root
+        """
+
+        if root != NULL:
+            # If the root exists, open recursion
+            self.subtree_free_memory(root.higher)
+            self.subtree_free_memory(root.lower)
+
+            # Once the lower elements have been reached, start freeing from the bottom
+            free(root)
+
+
+
+    cdef list_free_memory(self, matrix_element_tree_s * head):
+        """
+        The function frees all struct in the list whose head is passed as a parameter, head included
+
+        :param head: list head
+        """
+
+        if head != NULL:
+            # If the root exists, open recursion
+            self.subtree_free_memory(head.higher)
+
+            # Once the tail element have been reached, start freeing from them
+            free(head)
+
+
+
+    cdef matrix_element_tree_s* build_tree_from_list_flat(self, matrix_element_tree_s* flat_list_head):
+        """
+        The function builds a tree containing the passed data. This is the recursive function, the
+        data should be sorted by te caller
+        To ensure the tree is balanced, data is sorted according to the column
+
+        :param row: row in which to create new tree
+        :param column_vector: column coordinates
+        :param data_vector: cell data
+        """
+
+        if flat_list_head == NULL:
+            return NULL
+
+
+        cdef long list_length = 0
+        cdef long middle_element_step = 0
+
+        cdef matrix_element_tree_s *current_element, *middleElement, *tree_root
+
+        current_element = flat_list_head
+        middleElement = flat_list_head
+
+        # Explore the flat list moving the middle elment every tho jumps
+        while current_element != NULL:
+            current_element = current_element.higher
+            list_length += 1
+            middle_element_step += 1
+
+            if middle_element_step == 2:
+                middleElement = middleElement.higher
+                middle_element_step = 0
+
+        tree_root = middleElement
+
+        # To execute the recursion it is necessary to cut the flat list
+        # The last of the lower elements will have to be a tail
+        if middleElement.lower != NULL:
+            middleElement.lower.higher = NULL
+
+            tree_root.lower = self.build_tree_from_list_flat(flat_list_head)
+
+
+        # The first of the higher elements will have to be a head
+        if middleElement.higher != NULL:
+            middleElement.higher.lower = NULL
+
+            tree_root.higher = self.build_tree_from_list_flat(middleElement.higher)
+
+
+        return tree_root
+
+
+
+
+    cdef matrix_element_tree_s* topK_selection_from_list(self, matrix_element_tree_s* head, long TopK):
+        """
+        The function selects the topK highest elements in the given list
+
+        :param head: head of the list
+        :param TopK: number of highest elements to preserve
+        :return matrix_element_tree_s*: head of the new list
+        """
+
+        cdef head_pointer_tree_s *vector_pointer_to_list_elements
+        cdef matrix_element_tree_s *current_element
+        cdef long list_length, index, selected_count
+
+        # Get list size
+        current_element = head
+        list_length = 0
+
+        while current_element != NULL:
+            list_length += 1
+            current_element = current_element.higher
+
+
+        # If list elements are not enough to perform a selection, return
+        if list_length < TopK:
+            return head
+
+        # Allocate vector that will be used for sorting
+        vector_pointer_to_list_elements = < head_pointer_tree_s *> malloc(list_length * sizeof(head_pointer_tree_s))
+
+        # Fill vector wit pointers to list elements
+        current_element = head
+        for index in range(list_length):
+            vector_pointer_to_list_elements[index].head = current_element
+            current_element = current_element.higher
+
+
+        # Sort array elements on their data field
+        qsort(vector_pointer_to_list_elements, list_length, sizeof(head_pointer_tree_s), compare_struct_on_data)
+
+        # Sort only the TopK according to their column field
+        # Sort is from lower to higher, therefore the elements to be considered are from len-topK to len
+        qsort(&vector_pointer_to_list_elements[list_length-TopK], TopK, sizeof(head_pointer_tree_s), compare_struct_on_column)
+
+
+        # Rebuild list attaching the consecutive elements
+        index = list_length-TopK
+
+        # Detach last TopK element from previous ones
+        vector_pointer_to_list_elements[index].head.lower = NULL
+
+        while index<list_length-1:
+            # Rearrange bidirectional pointers
+            vector_pointer_to_list_elements[index+1].head.lower = vector_pointer_to_list_elements[index].head
+            vector_pointer_to_list_elements[index].head.higher = vector_pointer_to_list_elements[index+1].head
+
+            index += 1
+
+        # Last element in vector will be the hew head
+        vector_pointer_to_list_elements[list_length - 1].head.higher = NULL
+
+        # Get hew list head
+        current_element = vector_pointer_to_list_elements[list_length-TopK].head
+
+        # If there are exactly enough elements to reach TopK, index == 0 will be the tail
+        # Else, index will be the tail and the other elements will be removed
+        index = list_length - TopK - 1
+        if index > 0:
+
+            index -= 1
+            while index >= 0:
+                free(vector_pointer_to_list_elements[index].head)
+                index -= 1
+
+        # Free array
+        free(vector_pointer_to_list_elements)
+
+
+        return current_element
