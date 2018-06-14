@@ -22,10 +22,13 @@ class BookCrossingReader(object):
 
         rows, cols, vals = [], [], []
         numCells = 0
-        fileHandle['ISBN'], levels = pd.factorize(fileHandle['ISBN'] )
+        fileHandle['ISBN'], levels = pd.factorize(fileHandle['ISBN'])
+        fileHandle['User-ID'], levels = pd.factorize(fileHandle['User-ID'])
+        print(fileHandle.iloc[0:100])
+
         #fileHandle['User'], levels = pd.factorize(fileHandle['ISBN'] )
 
-        print(fileHandle)
+        #print(fileHandle)
 
         #These arrays are sorted by user
         self.users = np.array(fileHandle['User-ID']).astype(int)
@@ -86,16 +89,16 @@ class BookCrossingReader(object):
         else:
             raise Exception("One between train_test_split and train_validation_split must be valid")
 
-        mask = np.random.choice([True, False], len(self.unique_users), p=[0.3, 0.7])
+        #mask = np.random.choice([True, False], len(self.unique_users), p=[0.3, 0.7])
 
         self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
         print(self.URM_test.nnz)
         print(self.URM_test.shape[1])
-        self.URM_test = self.URM_test[mask]
+        #self.URM_test = self.URM_test[mask]
         print(self.URM_test.nnz)
 
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
-        self.URM_train = self.URM_train[mask]
+        #self.URM_train = self.URM_train[mask]
 
 
 
