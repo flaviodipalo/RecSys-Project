@@ -155,7 +155,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
         self.eps = 10e-8
 
-        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.01)
+        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.001)
         self.S_indices = S.indices
         self.S_indptr = S.indptr
         self.S_data = S.data
@@ -250,7 +250,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #rows = clean_support_vector(rows)
             #cols = clean_support_vector(cols)
             vals = clean_support_vector(vals)
-            if j%50 == 0:
+            if j%1 == 0:
                 print(j, n_movies)
 
             if self.similarity_matrix_normalized:
