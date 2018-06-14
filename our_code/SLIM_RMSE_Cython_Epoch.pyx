@@ -194,7 +194,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #for j in self.unique_movies:
         for j in range(0, n_movies):
             gradient_vector = 0
-            if j%100 == 0:
+            if j%10000 == 0:
                 printf("%d, %d\n", j, n_movies)
             self.S.set_value(j, j, 0)
             if self.similarity_matrix_normalized:
@@ -334,7 +334,10 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
 
     def get_S(self):
-        return self.S.get_scipy_csr(self.topK)
+        S = self.S.get_scipy_csr(self.topK)
+        print("NNNZ", S.nnz)
+        print(S[:100, :])
+        return S
 
 ##################################################################################################################
 #####################
