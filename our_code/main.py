@@ -97,4 +97,3 @@ def run_recommender_optimization(normalized=False, popular=False):
 #run_recommender_optimization(normalized, popular)
 run_recommender(normalized,popular)
 #telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
-#
