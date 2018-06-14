@@ -284,9 +284,10 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     if S_indices[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] == target_user_index:
                                         found = True
                                         break
-                                non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
-                                adagrad_cache[target_user_index, j] =  non_zero_gradient[support_index]**2
-
+                                if found:
+                                    non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
+                                else:
+                                    non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
 
                                 if gradient_option == "adagrad":
                                     adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
@@ -318,9 +319,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 gradient_vector += gradient
                                 p_index += 1
                                 if found:
-                                    vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - alpha*gradient
+                                    vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sum_gradient)*gradient
                                 else:
-                                    vals[target_user_index] -= alpha*gradient
+                                    vals[target_user_index] -= (alpha/sum_gradient)*gradient
                                 if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
                             else:
