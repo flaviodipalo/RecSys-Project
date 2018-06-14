@@ -60,7 +60,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double[:] all_items_data
     cdef int[:] URM_indptr,  URM_indices
     cdef double[:] URM_data
-    cdef S
+    cdef Sparse_Matrix_Tree_CSR S
     cdef int n_users, n_movies, i_gamma
     cdef double alpha
     cdef int i_iterations
