@@ -303,7 +303,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_beta*S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] + i_gamma
                                 else:
                                     non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
-                                adagrad_cache[target_user_index, j] += non_zero_gradient[support_index]**2
                                 if gradient_option == "adagrad":
                                     adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
                                     non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
