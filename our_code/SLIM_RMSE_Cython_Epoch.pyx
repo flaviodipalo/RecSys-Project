@@ -375,6 +375,11 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
                                     #S[target_user_index, j] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
+                            elif gradient_option == normal_option:
+                                if found:
+                                    vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - alpha*gradient
+                                else:
+                                    vals[target_user_index] -= alpha*gradient
 
                             '''
                             elif gradient_option == adam_option:
@@ -388,8 +393,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 self.rms_prop_term[target_user_index,j] = 0.9*self.rms_prop_term[target_user_index,j] + 0.1*gradient**2
                                 S[target_user_index, j] -= alpha*gradient/(sqrt(self.rms_prop_term[target_user_index,j] + eps))
 
-                            elif gradient_option == normal_option:
-                                S[target_user_index, j] -= alpha*gradient
+
                             '''
                         #if S[target_user_index, j] < 0:
                         #    S[target_user_index, j] = 0
