@@ -289,7 +289,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                         '''
                         diagonal_value_P = 1 - (1/<double>length)
                         other_value_P = - (1/<double>length)
-                        non_zero_gradient = <double *>PyMem_Malloc((URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0] - 1) * sizeof(double ))
+                        non_zero_gradient = <double *>PyMem_Malloc(length * sizeof(double ))
                         support_index = 0
                         for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                             target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
@@ -348,9 +348,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             if gradient_option == adagrad_option:
                                 if self.similarity_matrix_normalized:
                                     if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sum_gradient/n_movies + eps)*gradient
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha)*gradient
                                     else:
-                                        vals[target_user_index] -= (alpha/sum_gradient/n_movies + eps)*gradient
+                                        vals[target_user_index] -= (alpha)*gradient
                                 else:
                                     adagrad_cache[target_user_index, j] += gradient**2
                                     #print(index_for_support, rows.shape[0])
