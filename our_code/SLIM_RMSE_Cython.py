@@ -58,10 +58,10 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         # Select only positive interactions
         URM_train_positive = self.URM_train.copy()
 
-        if similarity_matrix_normalized:
-            self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normalized(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
-        else:
-            self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normal(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
+        #if similarity_matrix_normalized:
+         #   self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normalized(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
+        #else:
+        self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normal(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
 
 
 
