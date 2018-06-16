@@ -156,14 +156,14 @@ cdef class SLIM_RMSE_Cython_Epoch:
         self.adagrad_cache = Sparse_Matrix_Tree_CSR(self.n_movies, self.n_movies)
 
         #ADAM
-        self.adam_m = np.zeros((self.n_movies, self.n_movies))
-        self.adam_v = np.zeros((self.n_movies, self.n_movies))
+        self.adam_m = np.zeros((2, 2))          #CAMBIARE
+        self.adam_v = np.zeros((2, 2))          #CAMBIARE
         self.beta_1 = 0.9
         self.beta_2 = 0.999
         self.time_t = 0
 
         #RMSprop
-        self.rms_prop_term = np.zeros((self.n_movies, self.n_movies))
+        self.rms_prop_term = np.zeros((2, 2))   #CAMBIARE
 
 
         #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
