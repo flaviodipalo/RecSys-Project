@@ -89,7 +89,6 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double **P
     cdef int topK
     cdef double[:] rows, cols, vals
-    cdef Sparse_Matrix_Tree_CSR S_sparse
     #Adagrad
     cdef double[:, :] adagrad_cache
 
@@ -104,7 +103,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized, topK=None, sparse):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized, topK=None):
 
         self.i_beta = beta
         self.i_iterations = iterations
