@@ -305,7 +305,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
                                 if gradient_option == "adagrad":
                                     adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
-                                    non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
+                                    #non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
 
                                 elif gradient_option == "adam":
                                     self.adam_m[target_user_index, j] = self.beta_1*self.adam_m[target_user_index, j] + (1-self.beta_1)*non_zero_gradient[support_index]
@@ -348,9 +348,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                             if gradient_option == adagrad_option:
                                 if self.similarity_matrix_normalized:
                                     if found:
-                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha)*gradient
+                                        vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/(sqrt(sum_gradient/length + eps)))*gradient
                                     else:
-                                        vals[target_user_index] -= (alpha)*gradient
+                                        vals[target_user_index] -= (alpha/(sqrt(sum_gradient/length + eps)))*gradient
                                 else:
                                     adagrad_cache[target_user_index, j] += gradient**2
                                     #print(index_for_support, rows.shape[0])
