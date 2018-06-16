@@ -48,10 +48,10 @@ class Movielens10MReader(object):
             unique, counts = np.unique(unique_movies, return_counts=True)
             dictionary = dict(zip(unique, counts))
             sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1])
-            print(sorted_dictionary.shape)
+            print(len(sorted_dictionary))
             cutting_index = round(len(sorted_dictionary) * (1 - top_popular_threshold))
             least_popular_item = set([x[0] for x in sorted_dictionary[:cutting_index]])
-            print(least_popular_item.shape)
+            print(len(least_popular_item))
             popular_mask = []
             numCells = 0
 
