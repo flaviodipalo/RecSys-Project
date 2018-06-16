@@ -89,7 +89,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double **P
     cdef int topK
     cdef double[:] rows, cols, vals
-
+    cdef Sparse_Matrix_Tree_CSR S_sparse
     #Adagrad
     cdef double[:, :] adagrad_cache
 
@@ -104,7 +104,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef double eps
 
 
-    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized, topK=None):
+    def __init__(self, URM_train, learning_rate, gamma, beta, iterations, gradient_option, similarity_matrix_normalized, topK=None, sparse):
 
         self.i_beta = beta
         self.i_iterations = iterations
@@ -133,7 +133,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
         if self.similarity_matrix_normalized:
             np.random.seed(0)
             #self.S = np.random.normal(0, 5, (self.n_movies, self.n_movies))
-            S = np.random.rand( self.n_movies, self.n_movies)
+            #if sparse:
+                #self.S_sparse = Sparse_Matrix_Tree_CSR(self.n_movies, self.n_movies)
+            #S = np.random.rand( self.n_movies, self.n_movies)
         #else:
         #    self.S = np.zeros((self.n_movies, self.n_movies))
 
@@ -154,7 +156,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #GRADIENT DESCENT EPS FOR AVOIDING DIVISION BY ZERO
         self.eps = 10e-8
 
-        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.0000001)
+        S = sp.sparse.random(self.n_movies, self.n_movies, format='csc', density=0.00001)
         self.S_indptr = S.indptr
         self.S_indices = S.indices
         self.S_data = S.data
