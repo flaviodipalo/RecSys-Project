@@ -38,8 +38,8 @@ else:
 def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
-    #data_reader = Movielens1MReader(train_test_split=0.8)
-    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular)
+    data_reader = Movielens1MReader(train_test_split=0.8)
+    #data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular)
     #data_reader = BookCrossingReader(train_test_split=0.8)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -54,10 +54,10 @@ def run_recommender(normalized, popular):
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
     #data_reader = Movielens10MReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=popular)
-    #data_reader = Movielens1MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
+    data_reader = Movielens1MReader(train_test_split=0.6, train_validation_split=True, delete_popular=popular)
     #data_reader = Movielens1MReader(train_test_split=0.8, delete_popular=popular)
     #data_reader = Movielens10MReader(train_validation_split=[0.8, 0.1, 0.1], delete_popular=popular)
-    data_reader = BookCrossingReader(train_test_split=0.8)
+    #data_reader = BookCrossingReader(train_test_split=0.8)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     #TODO:pay attention here
@@ -71,9 +71,9 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_validation)
 
     hyperparamethers_range_dictionary = {}
-    hyperparamethers_range_dictionary["topK"] = [50, 100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-4]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-4]
+    hyperparamethers_range_dictionary["topK"] = [50]
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-2]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-2]
 
 
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
@@ -84,17 +84,15 @@ def run_recommender_optimization(normalized=False, popular=False):
                               DictionaryKeys.FIT_KEYWORD_ARGS: dict(),
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
-    parameterSearch.search(recommenderDictionary,output_root_path='logs/new'+file_path)
+    parameterSearch.search(recommenderDictionary, output_root_path='logs/new'+file_path)
     parameterSearch.evaluate_on_test(URM_test)
 
 #
 
-#run_recommender(normalized, popular)
 #from telegram_bot import TelegramBot
-#run_recommender(normalized, popular)
 #telegram_bot = TelegramBot(chat_id = '65065237')
 #telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
-#run_recommender_optimization(normalized, popular)
-run_recommender(normalized,popular)
+run_recommender_optimization(normalized, popular)
+#run_recommender(normalized,popular)
 #telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
 #
