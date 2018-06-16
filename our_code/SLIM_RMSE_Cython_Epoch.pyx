@@ -32,13 +32,27 @@ cdef double vector_product(double diagonal_value, double other_value,double * B,
     return result
 
 #@cython.boundscheck(False)
-cdef double vector_sum(double[:] vector):
+
+cdef double vector_sum_normalization(double[:] vector):
 
     cdef int i
     cdef double counter = 0
 
     for i in range(vector.shape[0]):
         counter += vector[i]
+
+    return counter
+
+
+
+
+cdef double vector_sum(Sparse_Matrix_Tree_CSR vector, int j, int length):
+
+    cdef int i
+    cdef double counter = 0
+
+    for i in range(length):
+        counter += vector.get_value(i, j)
 
     return counter
 
@@ -90,7 +104,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
     cdef int topK
     cdef double[:] rows, cols, vals
     #Adagrad
-    cdef double[:, :] adagrad_cache
+    cdef Sparse_Matrix_Tree_CSR adagrad_cache
 
 
     #Adam
@@ -139,7 +153,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         #    self.S = np.zeros((self.n_movies, self.n_movies))
 
         #ADAGRAD
-        self.adagrad_cache = np.zeros((self.n_movies, self.n_movies))
+        self.adagrad_cache = Sparse_Matrix_Tree_CSR(self.n_movies, self.n_movies)
 
         #ADAM
         self.adam_m = np.zeros((self.n_movies, self.n_movies))
@@ -180,7 +194,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef int[:] user_indices
         cdef double[:] user_data
 
-        cdef int user_index, target_user_index, new_adagrad_perfect
+        cdef int user_index, target_user_index
         cdef int j
         cdef int i
         cdef int index
@@ -201,7 +215,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
         cdef double[:] URM_data = self.URM_data
         cdef double i_beta = self.i_beta
         cdef double i_gamma = self.i_gamma
-        cdef double[:, :] adagrad_cache = self.adagrad_cache
+        cdef Sparse_Matrix_Tree_CSR adagrad_cache = self.adagrad_cache
         cdef double[:] all_items_data = self.all_items_data
         cdef double alpha = self.alpha
         cdef double eps = self.eps
@@ -253,7 +267,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
             #########METTERE A POSTO PER SIMILARITA'################
 
             if self.similarity_matrix_normalized:
-                sum_vector = vector_sum(S_data)
+                sum_vector = vector_sum_normalization(S_data)
                 for index in range(S_data.shape[0]):
                     S_data[index] /= sum_vector
 
@@ -305,7 +319,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 else:
                                     non_zero_gradient[support_index] = partial_error*URM_data[URM_indptr[user_index]:URM_indptr[user_index+1]][index] + i_gamma
                                 if gradient_option == "adagrad":
-                                    adagrad_cache[target_user_index, j] += (non_zero_gradient[support_index])**2
+                                    adagrad_cache.add_value(target_user_index, j, non_zero_gradient[support_index]**2)
                                     #non_zero_gradient[support_index] = (1/sqrt(adagrad_cache[target_user_index, j] + eps))*non_zero_gradient[support_index]
 
                                 elif gradient_option == "adam":
@@ -324,8 +338,9 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                 support_index = support_index + 1
 
 
-                    sum_gradient = vector_sum(adagrad_cache[:, j])
-                    p_index = 0
+                    if self.similarity_matrix_normalized:
+                        sum_gradient = vector_sum(adagrad_cache, j, self.n_movies)
+                        p_index = 0
                     for index in range(URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]].shape[0]):
                         target_user_index = URM_indices[URM_indptr[user_index]:URM_indptr[user_index+1]][index]
 
@@ -353,14 +368,14 @@ cdef class SLIM_RMSE_Cython_Epoch:
                                     else:
                                         vals[target_user_index] -= (alpha/(sqrt(sum_gradient/length + eps)))*gradient
                                 else:
-                                    adagrad_cache[target_user_index, j] += gradient**2
+                                    adagrad_cache.add_value(target_user_index, j, gradient**2)
                                     #print(index_for_support, rows.shape[0])
                                     if found:
                                         vals[target_user_index] += S_data[S_indptr[j]:S_indptr[j+1]][index_for_found_flag] - (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
                                         #rows[target_user_index] = target_user_index
                                         #cols[index_for_support] = j
                                     else:
-                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache[target_user_index, j] + eps))*gradient
+                                        vals[target_user_index] -= (alpha/sqrt(adagrad_cache.get_value(target_user_index, j) + eps))*gradient
 
                                     if vals[target_user_index] < 0:
                                         vals[target_user_index] = 0
@@ -440,7 +455,7 @@ cdef class SLIM_RMSE_Cython_Epoch:
 
         S = sp.sparse.csc_matrix((self.S_data, self.S_indices, self.S_indptr), shape=(self.n_movies, self.n_movies))
         return S
-'''
+
 ##################################################################################################################
 #####################
 #####################            SPARSE MATRIX
@@ -1046,4 +1061,3 @@ cdef class Sparse_Matrix_Tree_CSR:
 
 
         return current_element
-'''
