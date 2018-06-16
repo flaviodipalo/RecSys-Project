@@ -47,7 +47,7 @@ def run_recommender(normalized, popular):
     print('Data Loaded !')
     recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
 
-    recommender.fit(epochs = 5, similarity_matrix_normalized = normalized)
+    recommender.fit(epochs=5, similarity_matrix_normalized = normalized)
 
 
 def run_recommender_optimization(normalized=False, popular=False):
@@ -67,7 +67,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     file_path = 'Norm_='+str(normalized)+'_delete_popular='+str(popular)
 #
     recommender_class = SLIM_RMSE_Cython
-    parameterSearch = BayesianSearch.BayesianSearch(recommender_class,URM_validation)
+    parameterSearch = BayesianSearch.BayesianSearch(recommender_class, URM_validation)
 
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [50]
