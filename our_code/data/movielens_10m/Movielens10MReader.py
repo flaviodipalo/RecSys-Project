@@ -1,8 +1,7 @@
 import numpy as np
 import scipy.sparse as sps
 import os
-from itertools import compress
-
+import pandas as pd
 
 class Movielens10MReader(object):
     # TODO: aggiungere validation option.
@@ -40,11 +39,13 @@ class Movielens10MReader(object):
         self.users = np.array(rows)
         self.movies = np.array(cols)
         self.ratings = np.array(vals)
+        print(len(self.users))
+        self.users, unique_users = pd.factorize(self.users)
+        self.movies, unique_movies = pd.factorize(self.movies)
 
         if delete_popular:
 
             print("Eliminating top {}% popular items...".format(top_popular_threshold * 100))
-            unique_movies = np.unique(self.movies)
             unique, counts = np.unique(unique_movies, return_counts=True)
             dictionary = dict(zip(unique, counts))
             sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1])
@@ -116,7 +117,9 @@ class Movielens10MReader(object):
         self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
-
+        print(self.URM_train.shape)
+        unique_movies = np.unique(self.movies)
+        print(len(unique_movies), max(unique_movies))
         #self.URM_train = URM_train[0:, :]
         #self.URM_test = URM_test[0:, :]
 
