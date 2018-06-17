@@ -8,8 +8,8 @@ from data.book_crossing.BookCrossingReader import BookCrossingReader
 from data.movielens_10m.Movielens10MReader import Movielens10MReader
 import argparse
 
-#from ParameterTuning import BayesianSearch
-#from ParameterTuning.AbstractClassSearch import DictionaryKeys
+from ParameterTuning import BayesianSearch
+from ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 #ssh -i /Users/flaviodipalo/Downloads/recsys-project.pem ubuntu@131.175.21.230
 parser = argparse.ArgumentParser()
@@ -70,7 +70,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch = BayesianSearch.BayesianSearch(recommender_class, URM_validation)
 
     hyperparamethers_range_dictionary = {}
-    hyperparamethers_range_dictionary["topK"] = [50]
+    hyperparamethers_range_dictionary["topK"] = [100]
     hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-2]
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-2]
 
@@ -91,7 +91,7 @@ def run_recommender_optimization(normalized=False, popular=False):
 #from telegram_bot import TelegramBot
 #telegram_bot = TelegramBot(chat_id = '65065237')
 #telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
-#run_recommender_optimization(normalized, popular)
-run_recommender(normalized,popular)
+run_recommender_optimization(normalized, popular)
+#run_recommender(normalized,popular)
 #telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
 #
