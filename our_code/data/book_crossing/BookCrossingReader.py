@@ -100,9 +100,6 @@ class BookCrossingReader(object):
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
         self.URM_train = self.URM_train[0:1000, :]
 
-
-
-
         #print(num_interactions, self.URM_test.nnz, self.URM_train.nnz, self.URM_validation.nnz)
 
 #dataset = BookCrossingReader(0.8,0.9)

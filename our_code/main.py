@@ -71,9 +71,8 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
     hyperparamethers_range_dictionary["topK"] = [100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-2, 1e-2]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-2, 1e-2]
-
+    hyperparamethers_range_dictionary["l1_penalty"] = [1e-1, 1e-2]
+    hyperparamethers_range_dictionary["l2_penalty"] = [1e-1, 1e-2]
 
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
 
@@ -92,6 +91,6 @@ def run_recommender_optimization(normalized=False, popular=False):
 #telegram_bot = TelegramBot(chat_id = '65065237')
 #telegram_bot.send_message('Optimization startded: '+str(normalized)+str(popular))
 #run_recommender_optimization(normalized, popular)
-run_recommender(normalized,popular)
+#run_recommender(normalized,popular)
 #telegram_bot.send_message('Optimization ended: '+str(normalized)+str(popular))
 #
