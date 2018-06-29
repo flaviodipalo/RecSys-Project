@@ -102,6 +102,7 @@ class Movielens10MReader(object):
 
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
+        
         if k_cores != None:
             self.URM_all = select_k_cores(self.URM_all, k_value=k_cores)
 
