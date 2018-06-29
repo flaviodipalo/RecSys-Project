@@ -2,10 +2,11 @@ import numpy as np
 import scipy.sparse as sps
 import os
 import pandas as pd
+#from Base.URM_Dense_K_Cores import select_k_cores
 
 class Movielens10MReader(object):
     # TODO: aggiungere validation option.
-    def __init__(self, train_test_split=None, train_validation_split=None, delete_popular=None, top_popular_threshold = 0.33, delimiter = "::"):
+    def __init__(self, train_test_split=None, train_validation_split=None, delete_popular=None, k_cores=None, delete_interactions=None, top_popular_threshold = 0.33, delimiter = "::"):
         '''
         :param train_test_split: is the percentage of the training set
         '''
@@ -87,9 +88,19 @@ class Movielens10MReader(object):
         # gli id degli users partono da 1 e sono tutti consecutivi, quindi l'unica
         # riga della URM che ha tutti 0 è la prima (riga 0) che quindi eliminiamo
         '''
-        URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
-        self.URM_all = URM_all_partial
-        self.URM_all = self.URM_all.tocoo()
+
+        if delete_interactions != None:
+
+            print("LEN OF USERS", len(self.users))
+            random_interactions_mask = np.random.choice([True, False], len(self.users), p=[delete_interactions, 1-delete_interactions])
+
+            self.users = self.users[random_interactions_mask]
+            self.movies = self.movies[random_interactions_mask]
+            self.ratings = self.ratings[random_interactions_mask]
+
+            print("LEN OF USERS AFTER", len(self.users))
+        if k_cores != None:
+            self.URM_all = select_k_cores(self.URM_all, k_value=k_cores)
 
         num_interactions = self.URM_all.nnz
 
