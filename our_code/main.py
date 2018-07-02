@@ -38,7 +38,7 @@ def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
     #data_reader = Movielens1MReader(train_test_split=0.8)
-    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular, delete_interactions=0.66)
+    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular, k_cores=50)
     #data_reader = BookCrossingReader(train_test_split=0.8)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -47,7 +47,7 @@ def run_recommender(normalized, popular):
     print('Data Loaded !')
     recommender = SLIM_RMSE_Cython(URM_train=URM_train, URM_validation=URM_test)
 
-    recommender.fit(epochs=5, similarity_matrix_normalized = normalized)
+    recommender.fit(epochs=5, similarity_matrix_normalized=normalized)
 
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')

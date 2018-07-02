@@ -2,7 +2,7 @@ import numpy as np
 import scipy.sparse as sps
 import os
 import pandas as pd
-#from Base.URM_Dense_K_Cores import select_k_cores
+from Base.URM_Dense_K_Cores import select_k_cores
 
 class Movielens10MReader(object):
     # TODO: aggiungere validation option.
@@ -102,10 +102,14 @@ class Movielens10MReader(object):
 
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
-        self.URM_all = self.URM_all.tocoo()
 
-        if k_cores != None:
-            self.URM_all = select_k_cores(self.URM_all, k_value=k_cores)
+        if k_cores is not None:
+            self.URM_all, removed_users, removed_items = select_k_cores(self.URM_all, k_value=k_cores)
+            print(removed_items, removed_users)
+            self.URM_all = self.URM_all.tocoo()
+            self.ratings = self.URM_all.data
+            self.users = self.URM_all.row
+            self.movies = self.URM_all.col
 
         num_interactions = self.URM_all.nnz
 
@@ -133,11 +137,3 @@ class Movielens10MReader(object):
         self.URM_test = sps.csr_matrix((self.ratings[test_mask], (self.users[test_mask], self.movies[test_mask])))
 
         self.URM_train = sps.csr_matrix((self.ratings[train_mask], (self.users[train_mask], self.movies[train_mask])))
-        print(self.URM_train.shape)
-        unique_movies = np.unique(self.movies)
-        print(len(unique_movies), max(unique_movies))
-        #self.URM_train = URM_train[0:, :]
-        #self.URM_test = URM_test[0:, :]
-
-
-
