@@ -110,7 +110,7 @@ cdef class SLIM_RMSE_Cython_Epoch_Normal:
         self.n_users = URM_train.shape[0]
         self.n_movies = URM_train.shape[1]
         self.URM_indices = URM_train.indices
-        self.URM_data = URM_train.data
+        self.URM_data =  np.float64(URM_train.data)
         self.URM_indptr = URM_train.indptr
         self.i_gamma = gamma
         self.alpha = learning_rate
@@ -126,7 +126,7 @@ cdef class SLIM_RMSE_Cython_Epoch_Normal:
         csc_URM_train = URM_train.tocsc()
         self.all_items_indptr = csc_URM_train.indptr
         self.all_items_indices = csc_URM_train.indices
-        self.all_items_data = csc_URM_train.data
+        self.all_items_data = np.float64(csc_URM_train.data)
 
 
         if self.similarity_matrix_normalized:

@@ -102,10 +102,10 @@ class Movielens10MReader(object):
 
         URM_all_partial = sps.csr_matrix((self.ratings, (self.users, self.movies)), dtype=np.float32)
         self.URM_all = URM_all_partial
+        self.URM_all = self.URM_all.tocoo()
 
         if k_cores is not None:
             self.URM_all, removed_users, removed_items = select_k_cores(self.URM_all, k_value=k_cores)
-            print(removed_items, removed_users)
             self.URM_all = self.URM_all.tocoo()
             self.ratings = self.URM_all.data
             self.users = self.URM_all.row
