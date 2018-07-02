@@ -38,7 +38,7 @@ def run_recommender(normalized, popular):
     #cython epoch only version
     print('Loading Data...')
     #data_reader = Movielens1MReader(train_test_split=0.8)
-    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular, k_cores=50)
+    data_reader = Movielens10MReader(train_test_split=0.8, delete_popular=popular, delete_interactions=0.66)
     #data_reader = BookCrossingReader(train_test_split=0.8)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
