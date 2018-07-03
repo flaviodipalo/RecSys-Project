@@ -52,17 +52,9 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
         self.batch_size = 1
 
         # Import compiled module
-        from SLIM_RMSE_Cython_Epoch_Normalized import SLIM_RMSE_Cython_Epoch_Normalized
         from SLIM_RMSE_Cython_Epoch_Normal import SLIM_RMSE_Cython_Epoch_Normal
 
-        # Select only positive interactions
-        M_train_positive = self.URM_train.copy()
-        #if similarity_matrix_normalized:
-         #   self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normalized(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
-        #else:
         self.cythonEpoch = SLIM_RMSE_Cython_Epoch_Normal(URM_train=self.URM_train,learning_rate = learning_rate, gamma=l1_penalty, beta=l2_penalty, iterations=1, gradient_option="adagrad",similarity_matrix_normalized=similarity_matrix_normalized, topK=100)
-
-
 
         if (topK != False and topK < 1):
             raise ValueError(

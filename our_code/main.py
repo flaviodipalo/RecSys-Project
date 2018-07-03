@@ -1,7 +1,6 @@
 import sys
 sys.path.append('/home/alexbacce/.local/lib/python3.6/site-packages')
 
-from SLIM_RMSE_Cython_Epoch import SLIM_RMSE_Cython_Epoch
 from SLIM_RMSE_Cython import SLIM_RMSE_Cython
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from data.book_crossing.BookCrossingReader import BookCrossingReader
