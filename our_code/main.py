@@ -8,7 +8,7 @@ from data.book_crossing.BookCrossingReader import BookCrossingReader
 from data.movielens_10m.Movielens10MReader import Movielens10MReader
 import argparse
 
-#from ParameterTuning import BayesianSearch
+from ParameterTuning import BayesianSearch
 from ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 #ssh -i /Users/flaviodipalo/Downloads/recsys-project.pem ubuntu@131.175.21.230
