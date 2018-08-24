@@ -150,7 +150,6 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
 
         self.get_S_incremental_and_set_W()
         results_run = self.evaluateRecommendations(URM_test_external)
-
         print("SLIM_RMSE_Cython: {}".format(results_run))
 
         if (logFile != None):
@@ -229,5 +228,3 @@ class SLIM_RMSE_Cython(Similarity_Matrix_Recommender, Recommender):
                 self.W_sparse = similarityMatrixTopK(self.S_incremental, k=self.topK)
             else:
                 self.W = self.S_incremental
-
-

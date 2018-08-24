@@ -128,7 +128,6 @@ cdef class SLIM_RMSE_Cython_Epoch_Normal:
         self.all_items_indices = csc_URM_train.indices
         self.all_items_data = np.float64(csc_URM_train.data)
 
-
         if self.similarity_matrix_normalized:
             np.random.seed(0)
             #self.S = np.random.normal(0, 5, (self.n_movies, self.n_movies))
