@@ -7,7 +7,7 @@ from data.book_crossing.BookCrossingReader import BookCrossingReader
 from data.movielens_10m.Movielens10MReader import Movielens10MReader
 import argparse
 
-from MatrixFactorization.MatrixFactorization_RMSE import FunkSVD
+from MatrixFactorization.Cython.MatrixFactorization_Cython import MatrixFactorization_Cython
 
 def run_recommender():
     #cython epoch only version
@@ -18,8 +18,8 @@ def run_recommender():
 
     print('Data Loaded !')
 
-    recommender = FunkSVD(URM_train)
+    recommender = MatrixFactorization_Cython(URM_train=URM_train,URM_validation = URM_test,algorithm = "FUNK_SVD")
     recommender.fit(epochs= 15)
-    print(recommender.evaluateRecommendations(URM_test))
+    #print(recommender.evaluateRecommendations(URM_test))
 
 run_recommender()
