@@ -45,6 +45,8 @@ cdef double[:,:] matrix_sum_row_to_1(matrix):
                     matrix[i,j] /= row_sum
             return matrix
 
+
+
 cdef class MatrixFactorization_Cython_Epoch:
 
     cdef int n_users, n_items, n_factors
@@ -73,7 +75,7 @@ cdef class MatrixFactorization_Cython_Epoch:
     cdef double beta_1, beta_2, beta_1_power_t, beta_2_power_t
     cdef double momentum_1, momentum_2
 
-
+    cdef bint normalized_algorithm
 
 
 
@@ -84,9 +86,10 @@ cdef class MatrixFactorization_Cython_Epoch:
         super(MatrixFactorization_Cython_Epoch, self).__init__()
 
         ###TODO:ADDED FOR NORMALIZATION (FLAVIO)
-        normalized_algorithm = True
+        self.normalized_algorithm = True
 
         URM_train = check_matrix(URM_train, 'csr')
+
 
         self.numPositiveIteractions = int(URM_train.nnz * 1)
         self.n_users = URM_train.shape[0]
@@ -109,7 +112,7 @@ cdef class MatrixFactorization_Cython_Epoch:
             self.USER_factors = np.random.random((self.n_users, self.n_factors))
             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
             #TODO:normalize the matrix in order to have row summing to 1
-            if normalized_algorithm ==True:
+            if self.normalized_algorithm == True:
                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
 
@@ -169,25 +172,31 @@ cdef class MatrixFactorization_Cython_Epoch:
                 "SGD_mode not valid. Acceptable values are: 'sgd', 'adagrad', 'rmsprop', 'adam'. Provided value was '{}'".format(
                     sgd_mode))
 
-
-
         self.learning_rate = learning_rate
         self.user_reg = user_reg
         self.positive_reg = positive_reg
         self.negative_reg = negative_reg
 
-
         if batch_size!=1:
             print("MiniBatch not implemented, reverting to default value 1")
         self.batch_size = 1
-
 
     # Using memoryview instead of the sparse matrix itself allows for much faster access
     cdef int[:] getSeenItems(self, long index):
         return self.URM_train_indices[self.URM_train_indptr[index]:self.URM_train_indptr[index + 1]]
 
+    #TODO: projected gradient computation see paper for details
+    cdef double compute_projected_gradient(self,double* gradient,int gradient_length,int index):
+        cdef double p_diagonal = 1 - 1/<double>self.n_factors
+        cdef double p_non_diagonal = -1/<double>self.n_factors
 
-
+        cdef double result = 0
+        for i in range(gradient_length):
+            if i == index:
+                result += p_diagonal*gradient[i]
+            else:
+                result += p_non_diagonal*gradient[i]
+        return result
 
     def epochIteration_Cython(self):
 
@@ -199,9 +208,6 @@ cdef class MatrixFactorization_Cython_Epoch:
 
         elif self.algorithm_is_BPR:
             self.epochIteration_Cython_BPR_SGD()
-
-
-
 
     def epochIteration_Cython_FUNK_SVD_SGD(self):
 
@@ -221,6 +227,9 @@ cdef class MatrixFactorization_Cython_Epoch:
         cdef long start_time_epoch = time.time()
         cdef long last_print_time = start_time_epoch
 
+        cdef double user_gradient_vector[10]
+        cdef double item_gradient_vector[10]
+
         for numCurrentBatch in range(totalNumberOfBatch):
 
             # Uniform user sampling with replacement
@@ -237,18 +246,32 @@ cdef class MatrixFactorization_Cython_Epoch:
             adaptive_gradient_item = self.adaptive_gradient_item(gradient, sample.item)
             adaptive_gradient_user = self.adaptive_gradient_user(gradient, sample.user)
 
+            #TODO: normalization here
+            if self.normalized_algorithm:
+                ##In case of the normalization for this algorithm we need to allocate two vectors that will
+                #store the gradients
 
-            for index in range(self.n_factors):
+                #import PyMem_Malloc
+                #user_gradient_vector = <double *>PyMem_Malloc(n_factors * sizeof(double ))
+                #item_gradient_vector = <double *>PyMem_Malloc(n_factors * sizeof(double ))
 
-                # Copy original value to avoid messing up the updates
-                H_i = self.ITEM_factors[sample.item, index]
-                W_u = self.USER_factors[sample.user, index]
+                for index in range(self.n_factors):
+                    H_i = self.ITEM_factors[sample.item, index]
+                    W_u = self.USER_factors[sample.user, index]
 
-                self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
-                self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
+                    user_gradient_vector[index] = (adaptive_gradient_user * H_i - self.user_reg * W_u)
+                    item_gradient_vector[index] = (adaptive_gradient_item * W_u - self.positive_reg * H_i)
 
-
-
+                for index in range(self.n_factors):
+                    self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)
+                    self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+            else :
+                for index in range(self.n_factors):
+                    # Copy original value to avoid messing up the updates
+                    H_i = self.ITEM_factors[sample.item, index]
+                    W_u = self.USER_factors[sample.user, index]
+                    self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
+                    self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
 
             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:
 
@@ -273,10 +296,6 @@ cdef class MatrixFactorization_Cython_Epoch:
 
                     sys.stdout.flush()
                     sys.stderr.flush()
-
-
-
-
 
     def epochIteration_Cython_ASY_SVD_SGD(self):
 

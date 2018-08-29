@@ -1107,8 +1107,8 @@ struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample {
   double rating;
 };
 
-/* "MatrixFactorization_Cython_Epoch.pyx":48
- *             return matrix
+/* "MatrixFactorization_Cython_Epoch.pyx":50
+ * 
  * 
  * cdef class MatrixFactorization_Cython_Epoch:             # <<<<<<<<<<<<<<
  * 
@@ -1150,6 +1150,7 @@ struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_E
   double beta_2_power_t;
   double momentum_1;
   double momentum_2;
+  int normalized_algorithm;
 };
 
 
@@ -1231,8 +1232,8 @@ struct __pyx_memoryviewslice_obj {
 
 
 
-/* "MatrixFactorization_Cython_Epoch.pyx":48
- *             return matrix
+/* "MatrixFactorization_Cython_Epoch.pyx":50
+ * 
  * 
  * cdef class MatrixFactorization_Cython_Epoch:             # <<<<<<<<<<<<<<
  * 
@@ -1241,6 +1242,7 @@ struct __pyx_memoryviewslice_obj {
 
 struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch {
   __Pyx_memviewslice (*getSeenItems)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, long);
+  double (*compute_projected_gradient)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double *, int, int);
   double (*adaptive_gradient_item)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double, long);
   double (*adaptive_gradient_user)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double, long);
   struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample (*sampleMSE_Cython)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *);
@@ -1540,6 +1542,11 @@ static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject 
 /* BufferIndexError.proto */
 static void __Pyx_RaiseBufferIndexError(int axis);
 
+/* WriteUnraisableException.proto */
+static void __Pyx_WriteUnraisable(const char *name, int clineno,
+                                  int lineno, const char *filename,
+                                  int full_traceback, int nogil);
+
 /* PyIntBinop.proto */
 #if !CYTHON_COMPILING_IN_PYPY
 static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, long intval, int inplace);
@@ -1557,11 +1564,6 @@ static CYTHON_INLINE Py_ssize_t __Pyx_div_Py_ssize_t(Py_ssize_t, Py_ssize_t);
 
 /* None.proto */
 static CYTHON_INLINE int __Pyx_div_int(int, int);
-
-/* WriteUnraisableException.proto */
-static void __Pyx_WriteUnraisable(const char *name, int clineno,
-                                  int lineno, const char *filename,
-                                  int full_traceback, int nogil);
 
 /* None.proto */
 static CYTHON_INLINE int __Pyx_mod_int(int, int);
@@ -1994,6 +1996,7 @@ static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 static __Pyx_memviewslice __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_getSeenItems(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, long __pyx_v_index); /* proto*/
+static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_compute_projected_gradient(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, double *__pyx_v_gradient, int __pyx_v_gradient_length, int __pyx_v_index); /* proto*/
 static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_adaptive_gradient_item(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, double __pyx_v_gradient, long __pyx_v_item_id); /* proto*/
 static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_adaptive_gradient_user(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, double __pyx_v_gradient, long __pyx_v_user_id); /* proto*/
 static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_sampleMSE_Cython(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self); /* proto*/
@@ -2246,8 +2249,8 @@ static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
 static const char __pyx_k_Empty_shape_tuple_for_cython_arr[] = "Empty shape tuple for cython.array";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x09[] = "Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))";
 static const char __pyx_k_Incompatible_checksums_s_vs_0xb0[] = "Incompatible checksums (%s vs 0xb068931 = (name))";
-static const char __pyx_k_Incompatible_checksums_s_vs_0xcf[] = "Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))";
 static const char __pyx_k_Indirect_dimensions_not_supporte[] = "Indirect dimensions not supported";
 static const char __pyx_k_Invalid_mode_expected_c_or_fortr[] = "Invalid mode, expected 'c' or 'fortran', got %s";
 static const char __pyx_k_MatrixFactorization_Cython_Epoch[] = "MatrixFactorization_Cython_Epoch";
@@ -2280,8 +2283,8 @@ static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_H_i;
 static PyObject *__pyx_n_s_ImportError;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x09;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xb0;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xcf;
 static PyObject *__pyx_n_s_IndexError;
 static PyObject *__pyx_kp_s_Indirect_dimensions_not_supporte;
 static PyObject *__pyx_kp_s_Invalid_mode_expected_c_or_fortr;
@@ -2497,8 +2500,8 @@ static PyObject *__pyx_int_0;
 static PyObject *__pyx_int_1;
 static PyObject *__pyx_int_10;
 static PyObject *__pyx_int_30;
+static PyObject *__pyx_int_9950469;
 static PyObject *__pyx_int_184977713;
-static PyObject *__pyx_int_217817936;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_slice_;
 static PyObject *__pyx_tuple__2;
@@ -2814,7 +2817,7 @@ static __Pyx_memviewslice __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_
  *                     matrix[i,j] /= row_sum
  *             return matrix             # <<<<<<<<<<<<<<
  * 
- * cdef class MatrixFactorization_Cython_Epoch:
+ * 
  */
   __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_v_matrix);
   if (unlikely(!__pyx_t_11.memview)) __PYX_ERR(0, 46, __pyx_L1_error)
@@ -2857,7 +2860,7 @@ static __Pyx_memviewslice __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":80
+/* "MatrixFactorization_Cython_Epoch.pyx":82
  * 
  * 
  *     def __init__(self, URM_train, n_factors = 10, algorithm = "FUNK_SVD",             # <<<<<<<<<<<<<<
@@ -3001,7 +3004,7 @@ static int __pyx_pw_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 80, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 82, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -3047,7 +3050,7 @@ static int __pyx_pw_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 12, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 80, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 12, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 82, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("MatrixFactorization_Cython_Epoch.MatrixFactorization_Cython_Epoch.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -3061,7 +3064,6 @@ static int __pyx_pw_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
 }
 
 static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch___init__(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, PyObject *__pyx_v_URM_train, PyObject *__pyx_v_n_factors, PyObject *__pyx_v_algorithm, PyObject *__pyx_v_learning_rate, PyObject *__pyx_v_user_reg, PyObject *__pyx_v_positive_reg, PyObject *__pyx_v_negative_reg, PyObject *__pyx_v_batch_size, PyObject *__pyx_v_sgd_mode, PyObject *__pyx_v_gamma, PyObject *__pyx_v_beta_1, PyObject *__pyx_v_beta_2) {
-  int __pyx_v_normalized_algorithm;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3079,14 +3081,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   __Pyx_RefNannySetupContext("__init__", 0);
   __Pyx_INCREF(__pyx_v_URM_train);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":84
+  /* "MatrixFactorization_Cython_Epoch.pyx":86
  *                  batch_size = 1, sgd_mode='sgd', gamma=0.995, beta_1=0.9, beta_2=0.999):
  * 
  *         super(MatrixFactorization_Cython_Epoch, self).__init__()             # <<<<<<<<<<<<<<
  * 
  *         ###TODO:ADDED FOR NORMALIZATION (FLAVIO)
  */
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(((PyObject *)__pyx_ptype_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch));
   __Pyx_GIVEREF(((PyObject *)__pyx_ptype_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch));
@@ -3094,10 +3096,10 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
   PyTuple_SET_ITEM(__pyx_t_2, 1, ((PyObject *)__pyx_v_self));
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_super, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_super, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_init); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_init); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -3111,32 +3113,32 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":87
+  /* "MatrixFactorization_Cython_Epoch.pyx":89
  * 
  *         ###TODO:ADDED FOR NORMALIZATION (FLAVIO)
- *         normalized_algorithm = True             # <<<<<<<<<<<<<<
+ *         self.normalized_algorithm = False             # <<<<<<<<<<<<<<
  * 
  *         URM_train = check_matrix(URM_train, 'csr')
  */
-  __pyx_v_normalized_algorithm = 1;
+  __pyx_v_self->normalized_algorithm = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":89
- *         normalized_algorithm = True
+  /* "MatrixFactorization_Cython_Epoch.pyx":91
+ *         self.normalized_algorithm = False
  * 
  *         URM_train = check_matrix(URM_train, 'csr')             # <<<<<<<<<<<<<<
  * 
- *         self.numPositiveIteractions = int(URM_train.nnz * 1)
+ * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_check_matrix); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_check_matrix); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -3153,7 +3155,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_URM_train, __pyx_n_s_csr};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -3161,13 +3163,13 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_URM_train, __pyx_n_s_csr};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 91, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_3) {
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -3178,7 +3180,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     __Pyx_INCREF(__pyx_n_s_csr);
     __Pyx_GIVEREF(__pyx_n_s_csr);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_n_s_csr);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -3186,143 +3188,143 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
   __Pyx_DECREF_SET(__pyx_v_URM_train, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":91
- *         URM_train = check_matrix(URM_train, 'csr')
+  /* "MatrixFactorization_Cython_Epoch.pyx":94
+ * 
  * 
  *         self.numPositiveIteractions = int(URM_train.nnz * 1)             # <<<<<<<<<<<<<<
  *         self.n_users = URM_train.shape[0]
  *         self.n_items = URM_train.shape[1]
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_nnz); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_nnz); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_int_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_int_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->numPositiveIteractions = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":92
+  /* "MatrixFactorization_Cython_Epoch.pyx":95
  * 
  *         self.numPositiveIteractions = int(URM_train.nnz * 1)
  *         self.n_users = URM_train.shape[0]             # <<<<<<<<<<<<<<
  *         self.n_items = URM_train.shape[1]
  *         self.n_factors = n_factors
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_self->n_users = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":93
+  /* "MatrixFactorization_Cython_Epoch.pyx":96
  *         self.numPositiveIteractions = int(URM_train.nnz * 1)
  *         self.n_users = URM_train.shape[0]
  *         self.n_items = URM_train.shape[1]             # <<<<<<<<<<<<<<
  *         self.n_factors = n_factors
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_shape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_shape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->n_items = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":94
+  /* "MatrixFactorization_Cython_Epoch.pyx":97
  *         self.n_users = URM_train.shape[0]
  *         self.n_items = URM_train.shape[1]
  *         self.n_factors = n_factors             # <<<<<<<<<<<<<<
  * 
  *         self.URM_train_indices = URM_train.indices
  */
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_n_factors); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_n_factors); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 97, __pyx_L1_error)
   __pyx_v_self->n_factors = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":96
+  /* "MatrixFactorization_Cython_Epoch.pyx":99
  *         self.n_factors = n_factors
  * 
  *         self.URM_train_indices = URM_train.indices             # <<<<<<<<<<<<<<
  *         self.URM_train_data = np.array(URM_train.data, dtype=np.float64)
  *         self.URM_train_indptr = URM_train.indptr
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_indices); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_indices); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_1);
-  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 96, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 99, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->URM_train_indices, 0);
   __pyx_v_self->URM_train_indices = __pyx_t_6;
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":97
+  /* "MatrixFactorization_Cython_Epoch.pyx":100
  * 
  *         self.URM_train_indices = URM_train.indices
  *         self.URM_train_data = np.array(URM_train.data, dtype=np.float64)             # <<<<<<<<<<<<<<
  *         self.URM_train_indptr = URM_train.indptr
  * 
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 97, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_7);
-  if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 97, __pyx_L1_error)
+  if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->URM_train_data, 0);
   __pyx_v_self->URM_train_data = __pyx_t_8;
   __pyx_t_8.memview = NULL;
   __pyx_t_8.data = NULL;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":98
+  /* "MatrixFactorization_Cython_Epoch.pyx":101
  *         self.URM_train_indices = URM_train.indices
  *         self.URM_train_data = np.array(URM_train.data, dtype=np.float64)
  *         self.URM_train_indptr = URM_train.indptr             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_indptr); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_URM_train, __pyx_n_s_indptr); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 101, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_int(__pyx_t_7);
-  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 98, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 101, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->URM_train_indptr, 0);
   __pyx_v_self->URM_train_indptr = __pyx_t_6;
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":101
+  /* "MatrixFactorization_Cython_Epoch.pyx":104
  * 
  * 
  *         self.algorithm_is_funk_svd = False             # <<<<<<<<<<<<<<
@@ -3331,7 +3333,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->algorithm_is_funk_svd = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":102
+  /* "MatrixFactorization_Cython_Epoch.pyx":105
  * 
  *         self.algorithm_is_funk_svd = False
  *         self.algorithm_is_asy_svd = False             # <<<<<<<<<<<<<<
@@ -3340,7 +3342,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->algorithm_is_asy_svd = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":103
+  /* "MatrixFactorization_Cython_Epoch.pyx":106
  *         self.algorithm_is_funk_svd = False
  *         self.algorithm_is_asy_svd = False
  *         self.algorithm_is_BPR = False             # <<<<<<<<<<<<<<
@@ -3349,17 +3351,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->algorithm_is_BPR = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":106
+  /* "MatrixFactorization_Cython_Epoch.pyx":109
  * 
  * 
  *         if algorithm == "FUNK_SVD":             # <<<<<<<<<<<<<<
  *             self.algorithm_is_funk_svd = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_FUNK_SVD, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_FUNK_SVD, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 109, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":107
+    /* "MatrixFactorization_Cython_Epoch.pyx":110
  * 
  *         if algorithm == "FUNK_SVD":
  *             self.algorithm_is_funk_svd = True             # <<<<<<<<<<<<<<
@@ -3368,26 +3370,26 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->algorithm_is_funk_svd = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":109
+    /* "MatrixFactorization_Cython_Epoch.pyx":112
  *             self.algorithm_is_funk_svd = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_users, self.n_factors))             # <<<<<<<<<<<<<<
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
- *             if normalized_algorithm ==True:
+ *             #TODO:normalize the matrix in order to have row summing to 1
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
@@ -3406,14 +3408,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_2) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3422,53 +3424,53 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 112, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 109, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->USER_factors, 0);
     __pyx_v_self->USER_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":110
+    /* "MatrixFactorization_Cython_Epoch.pyx":113
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_users, self.n_factors))
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))             # <<<<<<<<<<<<<<
- *             if normalized_algorithm ==True:
- *                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
+ *             #TODO:normalize the matrix in order to have row summing to 1
+ *             if self.normalized_algorithm == True:
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5);
@@ -3487,14 +3489,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_3) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 110, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 110, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3503,87 +3505,87 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 110, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 110, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
         __Pyx_GIVEREF(__pyx_t_2);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
         __pyx_t_2 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 110, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 110, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->ITEM_factors, 0);
     __pyx_v_self->ITEM_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":111
- *             self.USER_factors = np.random.random((self.n_users, self.n_factors))
+    /* "MatrixFactorization_Cython_Epoch.pyx":115
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
- *             if normalized_algorithm ==True:             # <<<<<<<<<<<<<<
+ *             #TODO:normalize the matrix in order to have row summing to 1
+ *             if self.normalized_algorithm == True:             # <<<<<<<<<<<<<<
  *                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
  */
-    __pyx_t_9 = ((__pyx_v_normalized_algorithm == 1) != 0);
+    __pyx_t_9 = ((__pyx_v_self->normalized_algorithm == 1) != 0);
     if (__pyx_t_9) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":112
- *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
- *             if normalized_algorithm ==True:
+      /* "MatrixFactorization_Cython_Epoch.pyx":116
+ *             #TODO:normalize the matrix in order to have row summing to 1
+ *             if self.normalized_algorithm == True:
  *                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)             # <<<<<<<<<<<<<<
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
  * 
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 112, __pyx_L1_error)}
-      __pyx_t_7 = __pyx_memoryview_fromslice(__pyx_v_self->USER_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
+      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 116, __pyx_L1_error)}
+      __pyx_t_7 = __pyx_memoryview_fromslice(__pyx_v_self->USER_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 116, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_10 = __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_row_to_1(__pyx_t_7); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 112, __pyx_L1_error)
+      __pyx_t_10 = __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_row_to_1(__pyx_t_7); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 116, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __PYX_XDEC_MEMVIEW(&__pyx_v_self->USER_factors, 0);
       __pyx_v_self->USER_factors = __pyx_t_10;
       __pyx_t_10.memview = NULL;
       __pyx_t_10.data = NULL;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":113
- *             if normalized_algorithm ==True:
+      /* "MatrixFactorization_Cython_Epoch.pyx":117
+ *             if self.normalized_algorithm == True:
  *                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)             # <<<<<<<<<<<<<<
  * 
  *         elif algorithm == "ASY_SVD":
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 113, __pyx_L1_error)}
-      __pyx_t_7 = __pyx_memoryview_fromslice(__pyx_v_self->ITEM_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 117, __pyx_L1_error)}
+      __pyx_t_7 = __pyx_memoryview_fromslice(__pyx_v_self->ITEM_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 117, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_10 = __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_row_to_1(__pyx_t_7); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 113, __pyx_L1_error)
+      __pyx_t_10 = __pyx_f_32MatrixFactorization_Cython_Epoch_matrix_sum_row_to_1(__pyx_t_7); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 117, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __PYX_XDEC_MEMVIEW(&__pyx_v_self->ITEM_factors, 0);
       __pyx_v_self->ITEM_factors = __pyx_t_10;
       __pyx_t_10.memview = NULL;
       __pyx_t_10.data = NULL;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":111
- *             self.USER_factors = np.random.random((self.n_users, self.n_factors))
+      /* "MatrixFactorization_Cython_Epoch.pyx":115
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
- *             if normalized_algorithm ==True:             # <<<<<<<<<<<<<<
+ *             #TODO:normalize the matrix in order to have row summing to 1
+ *             if self.normalized_algorithm == True:             # <<<<<<<<<<<<<<
  *                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
  */
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":106
+    /* "MatrixFactorization_Cython_Epoch.pyx":109
  * 
  * 
  *         if algorithm == "FUNK_SVD":             # <<<<<<<<<<<<<<
@@ -3593,17 +3595,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":115
+  /* "MatrixFactorization_Cython_Epoch.pyx":119
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
  * 
  *         elif algorithm == "ASY_SVD":             # <<<<<<<<<<<<<<
  *             self.algorithm_is_asy_svd = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_ASY_SVD, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_ASY_SVD, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":116
+    /* "MatrixFactorization_Cython_Epoch.pyx":120
  * 
  *         elif algorithm == "ASY_SVD":
  *             self.algorithm_is_asy_svd = True             # <<<<<<<<<<<<<<
@@ -3612,26 +3614,26 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->algorithm_is_asy_svd = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":118
+    /* "MatrixFactorization_Cython_Epoch.pyx":122
  *             self.algorithm_is_asy_svd = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_items, self.n_factors))             # <<<<<<<<<<<<<<
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
  * 
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
@@ -3650,14 +3652,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_2) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 122, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 118, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 122, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3666,53 +3668,53 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 118, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 122, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 118, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 118, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 122, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 118, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->USER_factors, 0);
     __pyx_v_self->USER_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":119
+    /* "MatrixFactorization_Cython_Epoch.pyx":123
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_items, self.n_factors))
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))             # <<<<<<<<<<<<<<
  * 
  *         elif algorithm == "MF_BPR":
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5);
@@ -3731,14 +3733,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_3) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3747,34 +3749,34 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
         __Pyx_GIVEREF(__pyx_t_2);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
         __pyx_t_2 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 119, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->ITEM_factors, 0);
     __pyx_v_self->ITEM_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":115
+    /* "MatrixFactorization_Cython_Epoch.pyx":119
  *                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
  * 
  *         elif algorithm == "ASY_SVD":             # <<<<<<<<<<<<<<
@@ -3784,17 +3786,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":121
+  /* "MatrixFactorization_Cython_Epoch.pyx":125
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
  * 
  *         elif algorithm == "MF_BPR":             # <<<<<<<<<<<<<<
  *             self.algorithm_is_BPR = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_MF_BPR, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_algorithm, __pyx_n_s_MF_BPR, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 125, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":122
+    /* "MatrixFactorization_Cython_Epoch.pyx":126
  * 
  *         elif algorithm == "MF_BPR":
  *             self.algorithm_is_BPR = True             # <<<<<<<<<<<<<<
@@ -3803,26 +3805,26 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->algorithm_is_BPR = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":124
+    /* "MatrixFactorization_Cython_Epoch.pyx":128
  *             self.algorithm_is_BPR = True
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_users, self.n_factors))             # <<<<<<<<<<<<<<
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
  * 
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
@@ -3841,14 +3843,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_2) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3857,53 +3859,53 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 124, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->USER_factors, 0);
     __pyx_v_self->USER_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":125
+    /* "MatrixFactorization_Cython_Epoch.pyx":129
  *             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
  *             self.USER_factors = np.random.random((self.n_users, self.n_factors))
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))             # <<<<<<<<<<<<<<
  * 
  *         else:
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5);
@@ -3922,14 +3924,14 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_3) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 129, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 129, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3938,34 +3940,34 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_t_2};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 129, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 125, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
         __Pyx_GIVEREF(__pyx_t_2);
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
         __pyx_t_2 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 129, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 125, __pyx_L1_error)
+    if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 129, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->ITEM_factors, 0);
     __pyx_v_self->ITEM_factors = __pyx_t_10;
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":121
+    /* "MatrixFactorization_Cython_Epoch.pyx":125
  *             self.ITEM_factors = np.random.random((self.n_items, self.n_factors))
  * 
  *         elif algorithm == "MF_BPR":             # <<<<<<<<<<<<<<
@@ -3975,7 +3977,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":128
+  /* "MatrixFactorization_Cython_Epoch.pyx":132
  * 
  *         else:
  *             raise ValueError("Loss value not recognized")             # <<<<<<<<<<<<<<
@@ -3983,15 +3985,15 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  *         self.useAdaGrad = False
  */
   /*else*/ {
-    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 132, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_Raise(__pyx_t_7, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __PYX_ERR(0, 128, __pyx_L1_error)
+    __PYX_ERR(0, 132, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":130
+  /* "MatrixFactorization_Cython_Epoch.pyx":134
  *             raise ValueError("Loss value not recognized")
  * 
  *         self.useAdaGrad = False             # <<<<<<<<<<<<<<
@@ -4000,7 +4002,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->useAdaGrad = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":131
+  /* "MatrixFactorization_Cython_Epoch.pyx":135
  * 
  *         self.useAdaGrad = False
  *         self.useRmsprop = False             # <<<<<<<<<<<<<<
@@ -4009,7 +4011,7 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->useRmsprop = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":132
+  /* "MatrixFactorization_Cython_Epoch.pyx":136
  *         self.useAdaGrad = False
  *         self.useRmsprop = False
  *         self.useAdam = False             # <<<<<<<<<<<<<<
@@ -4018,17 +4020,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   __pyx_v_self->useAdam = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":135
+  /* "MatrixFactorization_Cython_Epoch.pyx":139
  * 
  * 
  *         if sgd_mode=='adagrad':             # <<<<<<<<<<<<<<
  *             self.useAdaGrad = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_adagrad, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 135, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_adagrad, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 139, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":136
+    /* "MatrixFactorization_Cython_Epoch.pyx":140
  * 
  *         if sgd_mode=='adagrad':
  *             self.useAdaGrad = True             # <<<<<<<<<<<<<<
@@ -4037,91 +4039,91 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->useAdaGrad = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":137
+    /* "MatrixFactorization_Cython_Epoch.pyx":141
  *         if sgd_mode=='adagrad':
  *             self.useAdaGrad = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  * 
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 137, __pyx_L1_error)}
-    __pyx_t_7 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 141, __pyx_L1_error)}
+    __pyx_t_7 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_7);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_7);
     __pyx_t_7 = 0;
-    __pyx_t_7 = PyDict_New(); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_7 = PyDict_New(); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 137, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_3);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 137, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_I, 0);
     __pyx_v_self->sgd_cache_I = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":138
+    /* "MatrixFactorization_Cython_Epoch.pyx":142
  *             self.useAdaGrad = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *         elif sgd_mode=='rmsprop':
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 138, __pyx_L1_error)}
-    __pyx_t_3 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 142, __pyx_L1_error)}
+    __pyx_t_3 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) __PYX_ERR(0, 138, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_2);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 138, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_U, 0);
     __pyx_v_self->sgd_cache_U = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":135
+    /* "MatrixFactorization_Cython_Epoch.pyx":139
  * 
  * 
  *         if sgd_mode=='adagrad':             # <<<<<<<<<<<<<<
@@ -4131,17 +4133,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L5;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":140
+  /* "MatrixFactorization_Cython_Epoch.pyx":144
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  * 
  *         elif sgd_mode=='rmsprop':             # <<<<<<<<<<<<<<
  *             self.useRmsprop = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_rmsprop, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_rmsprop, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 144, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":141
+    /* "MatrixFactorization_Cython_Epoch.pyx":145
  * 
  *         elif sgd_mode=='rmsprop':
  *             self.useRmsprop = True             # <<<<<<<<<<<<<<
@@ -4150,101 +4152,101 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->useRmsprop = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":142
+    /* "MatrixFactorization_Cython_Epoch.pyx":146
  *         elif sgd_mode=='rmsprop':
  *             self.useRmsprop = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  * 
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 142, __pyx_L1_error)}
-    __pyx_t_2 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 146, __pyx_L1_error)}
+    __pyx_t_2 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 142, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 142, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_I, 0);
     __pyx_v_self->sgd_cache_I = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":143
+    /* "MatrixFactorization_Cython_Epoch.pyx":147
  *             self.useRmsprop = True
  *             self.sgd_cache_I = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *             # Gamma default value suggested by Hinton
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 143, __pyx_L1_error)}
-    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 147, __pyx_L1_error)}
+    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 143, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 143, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 143, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 147, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_U, 0);
     __pyx_v_self->sgd_cache_U = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":147
+    /* "MatrixFactorization_Cython_Epoch.pyx":151
  *             # Gamma default value suggested by Hinton
  *             # self.gamma = 0.9
  *             self.gamma = gamma             # <<<<<<<<<<<<<<
  * 
  *         elif sgd_mode=='adam':
  */
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_gamma); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_gamma); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 151, __pyx_L1_error)
     __pyx_v_self->gamma = __pyx_t_11;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":140
+    /* "MatrixFactorization_Cython_Epoch.pyx":144
  *             self.sgd_cache_U = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  * 
  *         elif sgd_mode=='rmsprop':             # <<<<<<<<<<<<<<
@@ -4254,17 +4256,17 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L5;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":149
+  /* "MatrixFactorization_Cython_Epoch.pyx":153
  *             self.gamma = gamma
  * 
  *         elif sgd_mode=='adam':             # <<<<<<<<<<<<<<
  *             self.useAdam = True
  *             self.sgd_cache_I_momentum_1 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_adam, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_adam, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 153, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":150
+    /* "MatrixFactorization_Cython_Epoch.pyx":154
  * 
  *         elif sgd_mode=='adam':
  *             self.useAdam = True             # <<<<<<<<<<<<<<
@@ -4273,215 +4275,215 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
     __pyx_v_self->useAdam = 1;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":151
+    /* "MatrixFactorization_Cython_Epoch.pyx":155
  *         elif sgd_mode=='adam':
  *             self.useAdam = True
  *             self.sgd_cache_I_momentum_1 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  *             self.sgd_cache_I_momentum_2 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  * 
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 151, __pyx_L1_error)}
-    __pyx_t_7 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 151, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 155, __pyx_L1_error)}
+    __pyx_t_7 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_7);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_7);
     __pyx_t_7 = 0;
-    __pyx_t_7 = PyDict_New(); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_7 = PyDict_New(); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 151, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_3);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 151, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_I_momentum_1, 0);
     __pyx_v_self->sgd_cache_I_momentum_1 = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":152
+    /* "MatrixFactorization_Cython_Epoch.pyx":156
  *             self.useAdam = True
  *             self.sgd_cache_I_momentum_1 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  *             self.sgd_cache_I_momentum_2 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *             self.sgd_cache_U_momentum_1 = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 152, __pyx_L1_error)}
-    __pyx_t_3 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 156, __pyx_L1_error)}
+    __pyx_t_3 = PyInt_FromSsize_t((__pyx_v_self->ITEM_factors.shape[0])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_2);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 152, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_I_momentum_2, 0);
     __pyx_v_self->sgd_cache_I_momentum_2 = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":154
+    /* "MatrixFactorization_Cython_Epoch.pyx":158
  *             self.sgd_cache_I_momentum_2 = np.zeros((self.ITEM_factors.shape[0]), dtype=np.float64)
  * 
  *             self.sgd_cache_U_momentum_1 = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  *             self.sgd_cache_U_momentum_2 = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  * 
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 154, __pyx_L1_error)}
-    __pyx_t_2 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 158, __pyx_L1_error)}
+    __pyx_t_2 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 154, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 154, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_U_momentum_1, 0);
     __pyx_v_self->sgd_cache_U_momentum_1 = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":155
+    /* "MatrixFactorization_Cython_Epoch.pyx":159
  * 
  *             self.sgd_cache_U_momentum_1 = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)
  *             self.sgd_cache_U_momentum_2 = np.zeros((self.USER_factors.shape[0]), dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *             # Default value suggested by the original paper
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 155, __pyx_L1_error)}
-    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+    if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 159, __pyx_L1_error)}
+    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_self->USER_factors.shape[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 155, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_7);
-    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 155, __pyx_L1_error)
+    if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XDEC_MEMVIEW(&__pyx_v_self->sgd_cache_U_momentum_2, 0);
     __pyx_v_self->sgd_cache_U_momentum_2 = __pyx_t_8;
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":159
+    /* "MatrixFactorization_Cython_Epoch.pyx":163
  *             # Default value suggested by the original paper
  *             # beta_1=0.9, beta_2=0.999
  *             self.beta_1 = beta_1             # <<<<<<<<<<<<<<
  *             self.beta_2 = beta_2
  *             self.beta_1_power_t = beta_1
  */
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L1_error)
     __pyx_v_self->beta_1 = __pyx_t_11;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":160
+    /* "MatrixFactorization_Cython_Epoch.pyx":164
  *             # beta_1=0.9, beta_2=0.999
  *             self.beta_1 = beta_1
  *             self.beta_2 = beta_2             # <<<<<<<<<<<<<<
  *             self.beta_1_power_t = beta_1
  *             self.beta_2_power_t = beta_2
  */
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 164, __pyx_L1_error)
     __pyx_v_self->beta_2 = __pyx_t_11;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":161
+    /* "MatrixFactorization_Cython_Epoch.pyx":165
  *             self.beta_1 = beta_1
  *             self.beta_2 = beta_2
  *             self.beta_1_power_t = beta_1             # <<<<<<<<<<<<<<
  *             self.beta_2_power_t = beta_2
  * 
  */
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 161, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 165, __pyx_L1_error)
     __pyx_v_self->beta_1_power_t = __pyx_t_11;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":162
+    /* "MatrixFactorization_Cython_Epoch.pyx":166
  *             self.beta_2 = beta_2
  *             self.beta_1_power_t = beta_1
  *             self.beta_2_power_t = beta_2             # <<<<<<<<<<<<<<
  * 
  *         elif sgd_mode=='sgd':
  */
-    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 162, __pyx_L1_error)
+    __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_v_beta_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 166, __pyx_L1_error)
     __pyx_v_self->beta_2_power_t = __pyx_t_11;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":149
+    /* "MatrixFactorization_Cython_Epoch.pyx":153
  *             self.gamma = gamma
  * 
  *         elif sgd_mode=='adam':             # <<<<<<<<<<<<<<
@@ -4491,19 +4493,19 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
     goto __pyx_L5;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":164
+  /* "MatrixFactorization_Cython_Epoch.pyx":168
  *             self.beta_2_power_t = beta_2
  * 
  *         elif sgd_mode=='sgd':             # <<<<<<<<<<<<<<
  *             pass
  *         else:
  */
-  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_sgd, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_t_9 = (__Pyx_PyString_Equals(__pyx_v_sgd_mode, __pyx_n_s_sgd, Py_EQ)); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 168, __pyx_L1_error)
   if (__pyx_t_9) {
     goto __pyx_L5;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":167
+  /* "MatrixFactorization_Cython_Epoch.pyx":171
  *             pass
  *         else:
  *             raise ValueError(             # <<<<<<<<<<<<<<
@@ -4512,22 +4514,22 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   /*else*/ {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":168
+    /* "MatrixFactorization_Cython_Epoch.pyx":172
  *         else:
  *             raise ValueError(
  *                 "SGD_mode not valid. Acceptable values are: 'sgd', 'adagrad', 'rmsprop', 'adam'. Provided value was '{}'".format(             # <<<<<<<<<<<<<<
  *                     sgd_mode))
  * 
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SGD_mode_not_valid_Acceptable_va, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SGD_mode_not_valid_Acceptable_va, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":169
+    /* "MatrixFactorization_Cython_Epoch.pyx":173
  *             raise ValueError(
  *                 "SGD_mode not valid. Acceptable values are: 'sgd', 'adagrad', 'rmsprop', 'adam'. Provided value was '{}'".format(
  *                     sgd_mode))             # <<<<<<<<<<<<<<
  * 
- * 
+ *         self.learning_rate = learning_rate
  */
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -4540,13 +4542,13 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_sgd_mode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_sgd_mode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 172, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_v_sgd_mode};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 172, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_7);
       } else
@@ -4554,109 +4556,109 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_v_sgd_mode};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 172, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_7);
       } else
       #endif
       {
-        __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 168, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_INCREF(__pyx_v_sgd_mode);
         __Pyx_GIVEREF(__pyx_v_sgd_mode);
         PyTuple_SET_ITEM(__pyx_t_2, 0+1, __pyx_v_sgd_mode);
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 172, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":167
+    /* "MatrixFactorization_Cython_Epoch.pyx":171
  *             pass
  *         else:
  *             raise ValueError(             # <<<<<<<<<<<<<<
  *                 "SGD_mode not valid. Acceptable values are: 'sgd', 'adagrad', 'rmsprop', 'adam'. Provided value was '{}'".format(
  *                     sgd_mode))
  */
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_7);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_7);
     __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 171, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_7, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __PYX_ERR(0, 167, __pyx_L1_error)
+    __PYX_ERR(0, 171, __pyx_L1_error)
   }
   __pyx_L5:;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":173
- * 
+  /* "MatrixFactorization_Cython_Epoch.pyx":175
+ *                     sgd_mode))
  * 
  *         self.learning_rate = learning_rate             # <<<<<<<<<<<<<<
  *         self.user_reg = user_reg
  *         self.positive_reg = positive_reg
  */
-  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_learning_rate); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
+  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_learning_rate); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 175, __pyx_L1_error)
   __pyx_v_self->learning_rate = __pyx_t_12;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":174
+  /* "MatrixFactorization_Cython_Epoch.pyx":176
  * 
  *         self.learning_rate = learning_rate
  *         self.user_reg = user_reg             # <<<<<<<<<<<<<<
  *         self.positive_reg = positive_reg
  *         self.negative_reg = negative_reg
  */
-  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_user_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_user_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
   __pyx_v_self->user_reg = __pyx_t_12;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":175
+  /* "MatrixFactorization_Cython_Epoch.pyx":177
  *         self.learning_rate = learning_rate
  *         self.user_reg = user_reg
  *         self.positive_reg = positive_reg             # <<<<<<<<<<<<<<
  *         self.negative_reg = negative_reg
  * 
  */
-  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_positive_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 175, __pyx_L1_error)
+  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_positive_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
   __pyx_v_self->positive_reg = __pyx_t_12;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":176
+  /* "MatrixFactorization_Cython_Epoch.pyx":178
  *         self.user_reg = user_reg
  *         self.positive_reg = positive_reg
  *         self.negative_reg = negative_reg             # <<<<<<<<<<<<<<
  * 
- * 
+ *         if batch_size!=1:
  */
-  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_negative_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
+  __pyx_t_12 = __pyx_PyFloat_AsFloat(__pyx_v_negative_reg); if (unlikely((__pyx_t_12 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L1_error)
   __pyx_v_self->negative_reg = __pyx_t_12;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":179
- * 
+  /* "MatrixFactorization_Cython_Epoch.pyx":180
+ *         self.negative_reg = negative_reg
  * 
  *         if batch_size!=1:             # <<<<<<<<<<<<<<
  *             print("MiniBatch not implemented, reverting to default value 1")
  *         self.batch_size = 1
  */
-  __pyx_t_7 = PyObject_RichCompare(__pyx_v_batch_size, __pyx_int_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
+  __pyx_t_7 = PyObject_RichCompare(__pyx_v_batch_size, __pyx_int_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 180, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   if (__pyx_t_9) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":180
+    /* "MatrixFactorization_Cython_Epoch.pyx":181
  * 
  *         if batch_size!=1:
  *             print("MiniBatch not implemented, reverting to default value 1")             # <<<<<<<<<<<<<<
  *         self.batch_size = 1
  * 
  */
-    if (__Pyx_PrintOne(0, __pyx_kp_s_MiniBatch_not_implemented_revert) < 0) __PYX_ERR(0, 180, __pyx_L1_error)
+    if (__Pyx_PrintOne(0, __pyx_kp_s_MiniBatch_not_implemented_revert) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":179
- * 
+    /* "MatrixFactorization_Cython_Epoch.pyx":180
+ *         self.negative_reg = negative_reg
  * 
  *         if batch_size!=1:             # <<<<<<<<<<<<<<
  *             print("MiniBatch not implemented, reverting to default value 1")
@@ -4664,16 +4666,16 @@ static int __pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cyt
  */
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":181
+  /* "MatrixFactorization_Cython_Epoch.pyx":182
  *         if batch_size!=1:
  *             print("MiniBatch not implemented, reverting to default value 1")
  *         self.batch_size = 1             # <<<<<<<<<<<<<<
  * 
- * 
+ *     # Using memoryview instead of the sparse matrix itself allows for much faster access
  */
   __pyx_v_self->batch_size = 1;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":80
+  /* "MatrixFactorization_Cython_Epoch.pyx":82
  * 
  * 
  *     def __init__(self, URM_train, n_factors = 10, algorithm = "FUNK_SVD",             # <<<<<<<<<<<<<<
@@ -4723,7 +4725,7 @@ static __Pyx_memviewslice __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFac
  *     cdef int[:] getSeenItems(self, long index):
  *         return self.URM_train_indices[self.URM_train_indptr[index]:self.URM_train_indptr[index + 1]]             # <<<<<<<<<<<<<<
  * 
- * 
+ *     #TODO: projected gradient computation see paper for details
  */
   if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 186, __pyx_L1_error)}
   if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 186, __pyx_L1_error)}
@@ -4799,8 +4801,143 @@ __pyx_r = __pyx_t_4;
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":191
+/* "MatrixFactorization_Cython_Epoch.pyx":189
  * 
+ *     #TODO: projected gradient computation see paper for details
+ *     cdef double compute_projected_gradient(self,double* gradient,int gradient_length,int index):             # <<<<<<<<<<<<<<
+ *         cdef double p_diagonal = 1 - 1/<double>self.n_factors
+ *         cdef double p_non_diagonal = -1/<double>self.n_factors
+ */
+
+static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_compute_projected_gradient(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v_self, double *__pyx_v_gradient, int __pyx_v_gradient_length, int __pyx_v_index) {
+  double __pyx_v_p_diagonal;
+  double __pyx_v_p_non_diagonal;
+  double __pyx_v_result;
+  int __pyx_v_i;
+  double __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  __Pyx_RefNannySetupContext("compute_projected_gradient", 0);
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":190
+ *     #TODO: projected gradient computation see paper for details
+ *     cdef double compute_projected_gradient(self,double* gradient,int gradient_length,int index):
+ *         cdef double p_diagonal = 1 - 1/<double>self.n_factors             # <<<<<<<<<<<<<<
+ *         cdef double p_non_diagonal = -1/<double>self.n_factors
+ * 
+ */
+  if (unlikely(((double)__pyx_v_self->n_factors) == 0)) {
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    __PYX_ERR(0, 190, __pyx_L1_error)
+  }
+  __pyx_v_p_diagonal = (1.0 - (1.0 / ((double)__pyx_v_self->n_factors)));
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":191
+ *     cdef double compute_projected_gradient(self,double* gradient,int gradient_length,int index):
+ *         cdef double p_diagonal = 1 - 1/<double>self.n_factors
+ *         cdef double p_non_diagonal = -1/<double>self.n_factors             # <<<<<<<<<<<<<<
+ * 
+ *         cdef double result = 0
+ */
+  if (unlikely(((double)__pyx_v_self->n_factors) == 0)) {
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    __PYX_ERR(0, 191, __pyx_L1_error)
+  }
+  __pyx_v_p_non_diagonal = (-1.0 / ((double)__pyx_v_self->n_factors));
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":193
+ *         cdef double p_non_diagonal = -1/<double>self.n_factors
+ * 
+ *         cdef double result = 0             # <<<<<<<<<<<<<<
+ *         for i in range(gradient_length):
+ *             if i == index:
+ */
+  __pyx_v_result = 0.0;
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":194
+ * 
+ *         cdef double result = 0
+ *         for i in range(gradient_length):             # <<<<<<<<<<<<<<
+ *             if i == index:
+ *                 result += p_diagonal*gradient[i]
+ */
+  __pyx_t_1 = __pyx_v_gradient_length;
+  for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
+    __pyx_v_i = __pyx_t_2;
+
+    /* "MatrixFactorization_Cython_Epoch.pyx":195
+ *         cdef double result = 0
+ *         for i in range(gradient_length):
+ *             if i == index:             # <<<<<<<<<<<<<<
+ *                 result += p_diagonal*gradient[i]
+ *             else:
+ */
+    __pyx_t_3 = ((__pyx_v_i == __pyx_v_index) != 0);
+    if (__pyx_t_3) {
+
+      /* "MatrixFactorization_Cython_Epoch.pyx":196
+ *         for i in range(gradient_length):
+ *             if i == index:
+ *                 result += p_diagonal*gradient[i]             # <<<<<<<<<<<<<<
+ *             else:
+ *                 result += p_non_diagonal*gradient[i]
+ */
+      __pyx_v_result = (__pyx_v_result + (__pyx_v_p_diagonal * (__pyx_v_gradient[__pyx_v_i])));
+
+      /* "MatrixFactorization_Cython_Epoch.pyx":195
+ *         cdef double result = 0
+ *         for i in range(gradient_length):
+ *             if i == index:             # <<<<<<<<<<<<<<
+ *                 result += p_diagonal*gradient[i]
+ *             else:
+ */
+      goto __pyx_L5;
+    }
+
+    /* "MatrixFactorization_Cython_Epoch.pyx":198
+ *                 result += p_diagonal*gradient[i]
+ *             else:
+ *                 result += p_non_diagonal*gradient[i]             # <<<<<<<<<<<<<<
+ *         return result
+ * 
+ */
+    /*else*/ {
+      __pyx_v_result = (__pyx_v_result + (__pyx_v_p_non_diagonal * (__pyx_v_gradient[__pyx_v_i])));
+    }
+    __pyx_L5:;
+  }
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":199
+ *             else:
+ *                 result += p_non_diagonal*gradient[i]
+ *         return result             # <<<<<<<<<<<<<<
+ * 
+ *     def epochIteration_Cython(self):
+ */
+  __pyx_r = __pyx_v_result;
+  goto __pyx_L0;
+
+  /* "MatrixFactorization_Cython_Epoch.pyx":189
+ * 
+ *     #TODO: projected gradient computation see paper for details
+ *     cdef double compute_projected_gradient(self,double* gradient,int gradient_length,int index):             # <<<<<<<<<<<<<<
+ *         cdef double p_diagonal = 1 - 1/<double>self.n_factors
+ *         cdef double p_non_diagonal = -1/<double>self.n_factors
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_WriteUnraisable("MatrixFactorization_Cython_Epoch.MatrixFactorization_Cython_Epoch.compute_projected_gradient", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "MatrixFactorization_Cython_Epoch.pyx":201
+ *         return result
  * 
  *     def epochIteration_Cython(self):             # <<<<<<<<<<<<<<
  * 
@@ -4829,7 +4966,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("epochIteration_Cython", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":193
+  /* "MatrixFactorization_Cython_Epoch.pyx":203
  *     def epochIteration_Cython(self):
  * 
  *         if self.algorithm_is_funk_svd:             # <<<<<<<<<<<<<<
@@ -4839,14 +4976,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_1 = (__pyx_v_self->algorithm_is_funk_svd != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":194
+    /* "MatrixFactorization_Cython_Epoch.pyx":204
  * 
  *         if self.algorithm_is_funk_svd:
  *             self.epochIteration_Cython_FUNK_SVD_SGD()             # <<<<<<<<<<<<<<
  * 
  *         elif self.algorithm_is_asy_svd:
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_FUNK_SVD_S); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_FUNK_SVD_S); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -4859,16 +4996,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":193
+    /* "MatrixFactorization_Cython_Epoch.pyx":203
  *     def epochIteration_Cython(self):
  * 
  *         if self.algorithm_is_funk_svd:             # <<<<<<<<<<<<<<
@@ -4878,7 +5015,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":196
+  /* "MatrixFactorization_Cython_Epoch.pyx":206
  *             self.epochIteration_Cython_FUNK_SVD_SGD()
  * 
  *         elif self.algorithm_is_asy_svd:             # <<<<<<<<<<<<<<
@@ -4888,14 +5025,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_1 = (__pyx_v_self->algorithm_is_asy_svd != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":197
+    /* "MatrixFactorization_Cython_Epoch.pyx":207
  * 
  *         elif self.algorithm_is_asy_svd:
  *             self.epochIteration_Cython_ASY_SVD_SGD()             # <<<<<<<<<<<<<<
  * 
  *         elif self.algorithm_is_BPR:
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_ASY_SVD_SG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 197, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_ASY_SVD_SG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -4908,16 +5045,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":196
+    /* "MatrixFactorization_Cython_Epoch.pyx":206
  *             self.epochIteration_Cython_FUNK_SVD_SGD()
  * 
  *         elif self.algorithm_is_asy_svd:             # <<<<<<<<<<<<<<
@@ -4927,7 +5064,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":199
+  /* "MatrixFactorization_Cython_Epoch.pyx":209
  *             self.epochIteration_Cython_ASY_SVD_SGD()
  * 
  *         elif self.algorithm_is_BPR:             # <<<<<<<<<<<<<<
@@ -4937,14 +5074,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_1 = (__pyx_v_self->algorithm_is_BPR != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":200
+    /* "MatrixFactorization_Cython_Epoch.pyx":210
  * 
  *         elif self.algorithm_is_BPR:
  *             self.epochIteration_Cython_BPR_SGD()             # <<<<<<<<<<<<<<
  * 
- * 
+ *     def epochIteration_Cython_FUNK_SVD_SGD(self):
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_BPR_SGD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_epochIteration_Cython_BPR_SGD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 210, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -4957,16 +5094,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":199
+    /* "MatrixFactorization_Cython_Epoch.pyx":209
  *             self.epochIteration_Cython_ASY_SVD_SGD()
  * 
  *         elif self.algorithm_is_BPR:             # <<<<<<<<<<<<<<
@@ -4976,8 +5113,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   }
   __pyx_L3:;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":191
- * 
+  /* "MatrixFactorization_Cython_Epoch.pyx":201
+ *         return result
  * 
  *     def epochIteration_Cython(self):             # <<<<<<<<<<<<<<
  * 
@@ -4999,8 +5136,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":205
- * 
+/* "MatrixFactorization_Cython_Epoch.pyx":212
+ *             self.epochIteration_Cython_BPR_SGD()
  * 
  *     def epochIteration_Cython_FUNK_SVD_SGD(self):             # <<<<<<<<<<<<<<
  * 
@@ -5036,6 +5173,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   double __pyx_v_cumulative_loss;
   long __pyx_v_start_time_epoch;
   long __pyx_v_last_print_time;
+  double __pyx_v_user_gradient_vector[10];
+  double __pyx_v_item_gradient_vector[10];
   PyObject *__pyx_v_current_time = NULL;
   PyObject *__pyx_v_samples_per_sec = NULL;
   PyObject *__pyx_r = NULL;
@@ -5053,7 +5192,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   int __pyx_t_11;
   Py_ssize_t __pyx_t_12;
   Py_ssize_t __pyx_t_13;
-  Py_ssize_t __pyx_t_14;
+  int __pyx_t_14;
   Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
@@ -5061,56 +5200,64 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   Py_ssize_t __pyx_t_19;
   Py_ssize_t __pyx_t_20;
   Py_ssize_t __pyx_t_21;
-  int __pyx_t_22;
-  int __pyx_t_23;
-  PyObject *__pyx_t_24 = NULL;
-  double __pyx_t_25;
-  PyObject *__pyx_t_26 = NULL;
-  PyObject *__pyx_t_27 = NULL;
-  PyObject *__pyx_t_28 = NULL;
-  PyObject *__pyx_t_29 = NULL;
-  PyObject *__pyx_t_30 = NULL;
-  PyObject *__pyx_t_31 = NULL;
+  Py_ssize_t __pyx_t_22;
+  Py_ssize_t __pyx_t_23;
+  Py_ssize_t __pyx_t_24;
+  Py_ssize_t __pyx_t_25;
+  Py_ssize_t __pyx_t_26;
+  Py_ssize_t __pyx_t_27;
+  Py_ssize_t __pyx_t_28;
+  Py_ssize_t __pyx_t_29;
+  Py_ssize_t __pyx_t_30;
+  int __pyx_t_31;
+  PyObject *__pyx_t_32 = NULL;
+  double __pyx_t_33;
+  PyObject *__pyx_t_34 = NULL;
+  PyObject *__pyx_t_35 = NULL;
+  PyObject *__pyx_t_36 = NULL;
+  PyObject *__pyx_t_37 = NULL;
+  PyObject *__pyx_t_38 = NULL;
+  PyObject *__pyx_t_39 = NULL;
   __Pyx_RefNannySetupContext("epochIteration_Cython_FUNK_SVD_SGD", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":208
+  /* "MatrixFactorization_Cython_Epoch.pyx":215
  * 
  *         # Get number of available interactions
  *         cdef long totalNumberOfBatch = int(len(self.URM_train_data) / self.batch_size) + 1             # <<<<<<<<<<<<<<
  * 
  *         cdef MSE_sample sample
  */
-  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 208, __pyx_L1_error)}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->URM_train_data, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 215, __pyx_L1_error)}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->URM_train_data, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_v_self->batch_size == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    __PYX_ERR(0, 208, __pyx_L1_error)
+    __PYX_ERR(0, 215, __pyx_L1_error)
   }
   else if (sizeof(Py_ssize_t) == sizeof(long) && (!(((int)-1) > 0)) && unlikely(__pyx_v_self->batch_size == (int)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_t_2))) {
     PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-    __PYX_ERR(0, 208, __pyx_L1_error)
+    __PYX_ERR(0, 215, __pyx_L1_error)
   }
-  __pyx_t_1 = PyInt_FromSsize_t(__Pyx_div_Py_ssize_t(__pyx_t_2, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__Pyx_div_Py_ssize_t(__pyx_t_2, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 215, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_totalNumberOfBatch = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":212
+  /* "MatrixFactorization_Cython_Epoch.pyx":219
  *         cdef MSE_sample sample
  *         cdef long u, i
  *         cdef long index, numCurrentBatch, processed_samples_last_print, print_block_size = 500             # <<<<<<<<<<<<<<
@@ -5119,7 +5266,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_print_block_size = 0x1F4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":218
+  /* "MatrixFactorization_Cython_Epoch.pyx":225
  * 
  * 
  *         cdef double H_i, W_u, cumulative_loss = 0.0             # <<<<<<<<<<<<<<
@@ -5128,16 +5275,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_cumulative_loss = 0.0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":220
+  /* "MatrixFactorization_Cython_Epoch.pyx":227
  *         cdef double H_i, W_u, cumulative_loss = 0.0
  * 
  *         cdef long start_time_epoch = time.time()             # <<<<<<<<<<<<<<
  *         cdef long last_print_time = start_time_epoch
  * 
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -5151,28 +5298,28 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
   if (__pyx_t_1) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
-    __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_start_time_epoch = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":221
+  /* "MatrixFactorization_Cython_Epoch.pyx":228
  * 
  *         cdef long start_time_epoch = time.time()
  *         cdef long last_print_time = start_time_epoch             # <<<<<<<<<<<<<<
  * 
- *         for numCurrentBatch in range(totalNumberOfBatch):
+ *         cdef double user_gradient_vector[10]
  */
   __pyx_v_last_print_time = __pyx_v_start_time_epoch;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":223
- *         cdef long last_print_time = start_time_epoch
+  /* "MatrixFactorization_Cython_Epoch.pyx":233
+ *         cdef double item_gradient_vector[10]
  * 
  *         for numCurrentBatch in range(totalNumberOfBatch):             # <<<<<<<<<<<<<<
  * 
@@ -5182,7 +5329,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_4; __pyx_t_6+=1) {
     __pyx_v_numCurrentBatch = __pyx_t_6;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":226
+    /* "MatrixFactorization_Cython_Epoch.pyx":236
  * 
  *             # Uniform user sampling with replacement
  *             sample = self.sampleMSE_Cython()             # <<<<<<<<<<<<<<
@@ -5191,7 +5338,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sample = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->sampleMSE_Cython(__pyx_v_self);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":228
+    /* "MatrixFactorization_Cython_Epoch.pyx":238
  *             sample = self.sampleMSE_Cython()
  * 
  *             prediction = 0.0             # <<<<<<<<<<<<<<
@@ -5200,7 +5347,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_prediction = 0.0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":230
+    /* "MatrixFactorization_Cython_Epoch.pyx":240
  *             prediction = 0.0
  * 
  *             for index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -5211,14 +5358,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_index = __pyx_t_8;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":231
+      /* "MatrixFactorization_Cython_Epoch.pyx":241
  * 
  *             for index in range(self.n_factors):
  *                 prediction = self.USER_factors[sample.user, index] * self.ITEM_factors[sample.item, index]             # <<<<<<<<<<<<<<
  * 
  *             gradient = sample.rating - prediction
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 231, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 241, __pyx_L1_error)}
       __pyx_t_9 = __pyx_v_sample.user;
       __pyx_t_10 = __pyx_v_index;
       __pyx_t_11 = -1;
@@ -5232,9 +5379,9 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_10 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
       if (unlikely(__pyx_t_11 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 231, __pyx_L1_error)
+        __PYX_ERR(0, 241, __pyx_L1_error)
       }
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 231, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 241, __pyx_L1_error)}
       __pyx_t_12 = __pyx_v_sample.item;
       __pyx_t_13 = __pyx_v_index;
       __pyx_t_11 = -1;
@@ -5248,12 +5395,12 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_13 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
       if (unlikely(__pyx_t_11 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 231, __pyx_L1_error)
+        __PYX_ERR(0, 241, __pyx_L1_error)
       }
       __pyx_v_prediction = ((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_9 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_10 * __pyx_v_self->USER_factors.strides[1]) ))) * (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_12 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_13 * __pyx_v_self->ITEM_factors.strides[1]) ))));
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":233
+    /* "MatrixFactorization_Cython_Epoch.pyx":243
  *                 prediction = self.USER_factors[sample.user, index] * self.ITEM_factors[sample.item, index]
  * 
  *             gradient = sample.rating - prediction             # <<<<<<<<<<<<<<
@@ -5262,7 +5409,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_gradient = (__pyx_v_sample.rating - __pyx_v_prediction);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":234
+    /* "MatrixFactorization_Cython_Epoch.pyx":244
  * 
  *             gradient = sample.rating - prediction
  *             cumulative_loss += gradient**2             # <<<<<<<<<<<<<<
@@ -5271,7 +5418,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_cumulative_loss = (__pyx_v_cumulative_loss + pow(__pyx_v_gradient, 2.0));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":236
+    /* "MatrixFactorization_Cython_Epoch.pyx":246
  *             cumulative_loss += gradient**2
  * 
  *             adaptive_gradient_item = self.adaptive_gradient_item(gradient, sample.item)             # <<<<<<<<<<<<<<
@@ -5280,155 +5427,320 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_adaptive_gradient_item = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_item(__pyx_v_self, __pyx_v_gradient, __pyx_v_sample.item);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":237
+    /* "MatrixFactorization_Cython_Epoch.pyx":247
  * 
  *             adaptive_gradient_item = self.adaptive_gradient_item(gradient, sample.item)
  *             adaptive_gradient_user = self.adaptive_gradient_user(gradient, sample.user)             # <<<<<<<<<<<<<<
  * 
- * 
+ *             #TODO: normalization here
  */
     __pyx_v_adaptive_gradient_user = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_user(__pyx_v_self, __pyx_v_gradient, __pyx_v_sample.user);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":240
+    /* "MatrixFactorization_Cython_Epoch.pyx":250
  * 
- * 
- *             for index in range(self.n_factors):             # <<<<<<<<<<<<<<
- * 
- *                 # Copy original value to avoid messing up the updates
+ *             #TODO: normalization here
+ *             if self.normalized_algorithm:             # <<<<<<<<<<<<<<
+ *                 ##In case of the normalization for this algorithm we need to allocate two vectors that will
+ *                 #store the gradients
  */
-    __pyx_t_7 = __pyx_v_self->n_factors;
-    for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-      __pyx_v_index = __pyx_t_8;
+    __pyx_t_14 = (__pyx_v_self->normalized_algorithm != 0);
+    if (__pyx_t_14) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":243
+      /* "MatrixFactorization_Cython_Epoch.pyx":258
+ *                 #item_gradient_vector = <double *>PyMem_Malloc(n_factors * sizeof(double ))
  * 
- *                 # Copy original value to avoid messing up the updates
- *                 H_i = self.ITEM_factors[sample.item, index]             # <<<<<<<<<<<<<<
- *                 W_u = self.USER_factors[sample.user, index]
- * 
+ *                 for index in range(self.n_factors):             # <<<<<<<<<<<<<<
+ *                     H_i = self.ITEM_factors[sample.item, index]
+ *                     W_u = self.USER_factors[sample.user, index]
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 243, __pyx_L1_error)}
-      __pyx_t_14 = __pyx_v_sample.item;
-      __pyx_t_15 = __pyx_v_index;
-      __pyx_t_11 = -1;
-      if (__pyx_t_14 < 0) {
-        __pyx_t_14 += __pyx_v_self->ITEM_factors.shape[0];
-        if (unlikely(__pyx_t_14 < 0)) __pyx_t_11 = 0;
-      } else if (unlikely(__pyx_t_14 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
-      if (__pyx_t_15 < 0) {
-        __pyx_t_15 += __pyx_v_self->ITEM_factors.shape[1];
-        if (unlikely(__pyx_t_15 < 0)) __pyx_t_11 = 1;
-      } else if (unlikely(__pyx_t_15 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
-      if (unlikely(__pyx_t_11 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 243, __pyx_L1_error)
-      }
-      __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_14 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_15 * __pyx_v_self->ITEM_factors.strides[1]) )));
+      __pyx_t_7 = __pyx_v_self->n_factors;
+      for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+        __pyx_v_index = __pyx_t_8;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":244
- *                 # Copy original value to avoid messing up the updates
- *                 H_i = self.ITEM_factors[sample.item, index]
- *                 W_u = self.USER_factors[sample.user, index]             # <<<<<<<<<<<<<<
+        /* "MatrixFactorization_Cython_Epoch.pyx":259
  * 
- *                 self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
+ *                 for index in range(self.n_factors):
+ *                     H_i = self.ITEM_factors[sample.item, index]             # <<<<<<<<<<<<<<
+ *                     W_u = self.USER_factors[sample.user, index]
+ * 
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 244, __pyx_L1_error)}
-      __pyx_t_16 = __pyx_v_sample.user;
-      __pyx_t_17 = __pyx_v_index;
-      __pyx_t_11 = -1;
-      if (__pyx_t_16 < 0) {
-        __pyx_t_16 += __pyx_v_self->USER_factors.shape[0];
-        if (unlikely(__pyx_t_16 < 0)) __pyx_t_11 = 0;
-      } else if (unlikely(__pyx_t_16 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
-      if (__pyx_t_17 < 0) {
-        __pyx_t_17 += __pyx_v_self->USER_factors.shape[1];
-        if (unlikely(__pyx_t_17 < 0)) __pyx_t_11 = 1;
-      } else if (unlikely(__pyx_t_17 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
-      if (unlikely(__pyx_t_11 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 244, __pyx_L1_error)
-      }
-      __pyx_v_W_u = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_16 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_17 * __pyx_v_self->USER_factors.strides[1]) )));
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 259, __pyx_L1_error)}
+        __pyx_t_15 = __pyx_v_sample.item;
+        __pyx_t_16 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_15 < 0) {
+          __pyx_t_15 += __pyx_v_self->ITEM_factors.shape[0];
+          if (unlikely(__pyx_t_15 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_15 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_16 < 0) {
+          __pyx_t_16 += __pyx_v_self->ITEM_factors.shape[1];
+          if (unlikely(__pyx_t_16 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_16 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 259, __pyx_L1_error)
+        }
+        __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_15 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_16 * __pyx_v_self->ITEM_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":246
- *                 W_u = self.USER_factors[sample.user, index]
+        /* "MatrixFactorization_Cython_Epoch.pyx":260
+ *                 for index in range(self.n_factors):
+ *                     H_i = self.ITEM_factors[sample.item, index]
+ *                     W_u = self.USER_factors[sample.user, index]             # <<<<<<<<<<<<<<
  * 
- *                 self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)             # <<<<<<<<<<<<<<
- *                 self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
- * 
+ *                     user_gradient_vector[index] = (adaptive_gradient_user * H_i - self.user_reg * W_u)
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 246, __pyx_L1_error)}
-      __pyx_t_18 = __pyx_v_sample.user;
-      __pyx_t_19 = __pyx_v_index;
-      __pyx_t_11 = -1;
-      if (__pyx_t_18 < 0) {
-        __pyx_t_18 += __pyx_v_self->USER_factors.shape[0];
-        if (unlikely(__pyx_t_18 < 0)) __pyx_t_11 = 0;
-      } else if (unlikely(__pyx_t_18 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
-      if (__pyx_t_19 < 0) {
-        __pyx_t_19 += __pyx_v_self->USER_factors.shape[1];
-        if (unlikely(__pyx_t_19 < 0)) __pyx_t_11 = 1;
-      } else if (unlikely(__pyx_t_19 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
-      if (unlikely(__pyx_t_11 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 246, __pyx_L1_error)
-      }
-      *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_18 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_19 * __pyx_v_self->USER_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_user * __pyx_v_H_i) - (__pyx_v_self->user_reg * __pyx_v_W_u)));
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 260, __pyx_L1_error)}
+        __pyx_t_17 = __pyx_v_sample.user;
+        __pyx_t_18 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_17 < 0) {
+          __pyx_t_17 += __pyx_v_self->USER_factors.shape[0];
+          if (unlikely(__pyx_t_17 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_17 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_18 < 0) {
+          __pyx_t_18 += __pyx_v_self->USER_factors.shape[1];
+          if (unlikely(__pyx_t_18 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_18 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 260, __pyx_L1_error)
+        }
+        __pyx_v_W_u = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_17 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_18 * __pyx_v_self->USER_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":247
+        /* "MatrixFactorization_Cython_Epoch.pyx":262
+ *                     W_u = self.USER_factors[sample.user, index]
  * 
- *                 self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
- *                 self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)             # <<<<<<<<<<<<<<
- * 
+ *                     user_gradient_vector[index] = (adaptive_gradient_user * H_i - self.user_reg * W_u)             # <<<<<<<<<<<<<<
+ *                     item_gradient_vector[index] = (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  * 
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 247, __pyx_L1_error)}
-      __pyx_t_20 = __pyx_v_sample.item;
-      __pyx_t_21 = __pyx_v_index;
-      __pyx_t_11 = -1;
-      if (__pyx_t_20 < 0) {
-        __pyx_t_20 += __pyx_v_self->ITEM_factors.shape[0];
-        if (unlikely(__pyx_t_20 < 0)) __pyx_t_11 = 0;
-      } else if (unlikely(__pyx_t_20 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
-      if (__pyx_t_21 < 0) {
-        __pyx_t_21 += __pyx_v_self->ITEM_factors.shape[1];
-        if (unlikely(__pyx_t_21 < 0)) __pyx_t_11 = 1;
-      } else if (unlikely(__pyx_t_21 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
-      if (unlikely(__pyx_t_11 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_11);
-        __PYX_ERR(0, 247, __pyx_L1_error)
+        (__pyx_v_user_gradient_vector[__pyx_v_index]) = ((__pyx_v_adaptive_gradient_user * __pyx_v_H_i) - (__pyx_v_self->user_reg * __pyx_v_W_u));
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":263
+ * 
+ *                     user_gradient_vector[index] = (adaptive_gradient_user * H_i - self.user_reg * W_u)
+ *                     item_gradient_vector[index] = (adaptive_gradient_item * W_u - self.positive_reg * H_i)             # <<<<<<<<<<<<<<
+ * 
+ *                 for index in range(self.n_factors):
+ */
+        (__pyx_v_item_gradient_vector[__pyx_v_index]) = ((__pyx_v_adaptive_gradient_item * __pyx_v_W_u) - (__pyx_v_self->positive_reg * __pyx_v_H_i));
       }
-      *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_20 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_21 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_item * __pyx_v_W_u) - (__pyx_v_self->positive_reg * __pyx_v_H_i)));
+
+      /* "MatrixFactorization_Cython_Epoch.pyx":265
+ *                     item_gradient_vector[index] = (adaptive_gradient_item * W_u - self.positive_reg * H_i)
+ * 
+ *                 for index in range(self.n_factors):             # <<<<<<<<<<<<<<
+ *                     self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)
+ *                     self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+ */
+      __pyx_t_7 = __pyx_v_self->n_factors;
+      for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+        __pyx_v_index = __pyx_t_8;
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":266
+ * 
+ *                 for index in range(self.n_factors):
+ *                     self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)             # <<<<<<<<<<<<<<
+ *                     self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+ *             else :
+ */
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 266, __pyx_L1_error)}
+        __pyx_t_19 = __pyx_v_sample.user;
+        __pyx_t_20 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_19 < 0) {
+          __pyx_t_19 += __pyx_v_self->USER_factors.shape[0];
+          if (unlikely(__pyx_t_19 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_19 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_20 < 0) {
+          __pyx_t_20 += __pyx_v_self->USER_factors.shape[1];
+          if (unlikely(__pyx_t_20 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_20 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 266, __pyx_L1_error)
+        }
+        *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_19 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_20 * __pyx_v_self->USER_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->compute_projected_gradient(__pyx_v_self, __pyx_v_user_gradient_vector, __pyx_v_self->n_factors, __pyx_v_index));
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":267
+ *                 for index in range(self.n_factors):
+ *                     self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)
+ *                     self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)             # <<<<<<<<<<<<<<
+ *             else :
+ *                 for index in range(self.n_factors):
+ */
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 267, __pyx_L1_error)}
+        __pyx_t_21 = __pyx_v_sample.user;
+        __pyx_t_22 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_21 < 0) {
+          __pyx_t_21 += __pyx_v_self->ITEM_factors.shape[0];
+          if (unlikely(__pyx_t_21 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_21 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_22 < 0) {
+          __pyx_t_22 += __pyx_v_self->ITEM_factors.shape[1];
+          if (unlikely(__pyx_t_22 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_22 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 267, __pyx_L1_error)
+        }
+        *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_21 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_22 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->compute_projected_gradient(__pyx_v_self, __pyx_v_item_gradient_vector, __pyx_v_self->n_factors, __pyx_v_index));
+      }
+
+      /* "MatrixFactorization_Cython_Epoch.pyx":250
+ * 
+ *             #TODO: normalization here
+ *             if self.normalized_algorithm:             # <<<<<<<<<<<<<<
+ *                 ##In case of the normalization for this algorithm we need to allocate two vectors that will
+ *                 #store the gradients
+ */
+      goto __pyx_L7;
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":252
+    /* "MatrixFactorization_Cython_Epoch.pyx":269
+ *                     self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+ *             else :
+ *                 for index in range(self.n_factors):             # <<<<<<<<<<<<<<
+ *                     # Copy original value to avoid messing up the updates
+ *                     H_i = self.ITEM_factors[sample.item, index]
+ */
+    /*else*/ {
+      __pyx_t_7 = __pyx_v_self->n_factors;
+      for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+        __pyx_v_index = __pyx_t_8;
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":271
+ *                 for index in range(self.n_factors):
+ *                     # Copy original value to avoid messing up the updates
+ *                     H_i = self.ITEM_factors[sample.item, index]             # <<<<<<<<<<<<<<
+ *                     W_u = self.USER_factors[sample.user, index]
+ *                     self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
+ */
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 271, __pyx_L1_error)}
+        __pyx_t_23 = __pyx_v_sample.item;
+        __pyx_t_24 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_23 < 0) {
+          __pyx_t_23 += __pyx_v_self->ITEM_factors.shape[0];
+          if (unlikely(__pyx_t_23 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_23 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_24 < 0) {
+          __pyx_t_24 += __pyx_v_self->ITEM_factors.shape[1];
+          if (unlikely(__pyx_t_24 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_24 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 271, __pyx_L1_error)
+        }
+        __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_23 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_24 * __pyx_v_self->ITEM_factors.strides[1]) )));
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":272
+ *                     # Copy original value to avoid messing up the updates
+ *                     H_i = self.ITEM_factors[sample.item, index]
+ *                     W_u = self.USER_factors[sample.user, index]             # <<<<<<<<<<<<<<
+ *                     self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
+ *                     self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
+ */
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 272, __pyx_L1_error)}
+        __pyx_t_25 = __pyx_v_sample.user;
+        __pyx_t_26 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_25 < 0) {
+          __pyx_t_25 += __pyx_v_self->USER_factors.shape[0];
+          if (unlikely(__pyx_t_25 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_25 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_26 < 0) {
+          __pyx_t_26 += __pyx_v_self->USER_factors.shape[1];
+          if (unlikely(__pyx_t_26 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_26 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 272, __pyx_L1_error)
+        }
+        __pyx_v_W_u = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_25 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_26 * __pyx_v_self->USER_factors.strides[1]) )));
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":273
+ *                     H_i = self.ITEM_factors[sample.item, index]
+ *                     W_u = self.USER_factors[sample.user, index]
+ *                     self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)             # <<<<<<<<<<<<<<
+ *                     self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  * 
+ */
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 273, __pyx_L1_error)}
+        __pyx_t_27 = __pyx_v_sample.user;
+        __pyx_t_28 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_27 < 0) {
+          __pyx_t_27 += __pyx_v_self->USER_factors.shape[0];
+          if (unlikely(__pyx_t_27 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_27 >= __pyx_v_self->USER_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_28 < 0) {
+          __pyx_t_28 += __pyx_v_self->USER_factors.shape[1];
+          if (unlikely(__pyx_t_28 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_28 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 273, __pyx_L1_error)
+        }
+        *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_27 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_28 * __pyx_v_self->USER_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_user * __pyx_v_H_i) - (__pyx_v_self->user_reg * __pyx_v_W_u)));
+
+        /* "MatrixFactorization_Cython_Epoch.pyx":274
+ *                     W_u = self.USER_factors[sample.user, index]
+ *                     self.USER_factors[sample.user, index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)
+ *                     self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)             # <<<<<<<<<<<<<<
+ * 
+ *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:
+ */
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 274, __pyx_L1_error)}
+        __pyx_t_29 = __pyx_v_sample.item;
+        __pyx_t_30 = __pyx_v_index;
+        __pyx_t_11 = -1;
+        if (__pyx_t_29 < 0) {
+          __pyx_t_29 += __pyx_v_self->ITEM_factors.shape[0];
+          if (unlikely(__pyx_t_29 < 0)) __pyx_t_11 = 0;
+        } else if (unlikely(__pyx_t_29 >= __pyx_v_self->ITEM_factors.shape[0])) __pyx_t_11 = 0;
+        if (__pyx_t_30 < 0) {
+          __pyx_t_30 += __pyx_v_self->ITEM_factors.shape[1];
+          if (unlikely(__pyx_t_30 < 0)) __pyx_t_11 = 1;
+        } else if (unlikely(__pyx_t_30 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_11 = 1;
+        if (unlikely(__pyx_t_11 != -1)) {
+          __Pyx_RaiseBufferIndexError(__pyx_t_11);
+          __PYX_ERR(0, 274, __pyx_L1_error)
+        }
+        *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_29 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_30 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_item * __pyx_v_W_u) - (__pyx_v_self->positive_reg * __pyx_v_H_i)));
+      }
+    }
+    __pyx_L7:;
+
+    /* "MatrixFactorization_Cython_Epoch.pyx":276
+ *                     self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
  * 
  *                 current_time = time.time()
  */
-    __pyx_t_23 = ((__pyx_v_processed_samples_last_print >= __pyx_v_print_block_size) != 0);
-    if (!__pyx_t_23) {
+    __pyx_t_31 = ((__pyx_v_processed_samples_last_print >= __pyx_v_print_block_size) != 0);
+    if (!__pyx_t_31) {
     } else {
-      __pyx_t_22 = __pyx_t_23;
-      goto __pyx_L10_bool_binop_done;
+      __pyx_t_14 = __pyx_t_31;
+      goto __pyx_L15_bool_binop_done;
     }
-    __pyx_t_23 = ((__pyx_v_numCurrentBatch == (__pyx_v_totalNumberOfBatch - 1)) != 0);
-    __pyx_t_22 = __pyx_t_23;
-    __pyx_L10_bool_binop_done:;
-    if (__pyx_t_22) {
+    __pyx_t_31 = ((__pyx_v_numCurrentBatch == (__pyx_v_totalNumberOfBatch - 1)) != 0);
+    __pyx_t_14 = __pyx_t_31;
+    __pyx_L15_bool_binop_done:;
+    if (__pyx_t_14) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":254
+      /* "MatrixFactorization_Cython_Epoch.pyx":278
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                 current_time = time.time()             # <<<<<<<<<<<<<<
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  */
-      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 254, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 278, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 254, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_5 = NULL;
@@ -5442,176 +5754,176 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (__pyx_t_5) {
-        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else {
-        __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_current_time, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":257
+      /* "MatrixFactorization_Cython_Epoch.pyx":281
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)             # <<<<<<<<<<<<<<
  * 
  *                 print_block_size = int(samples_per_sec*30)
  */
-      __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 257, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 281, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_time); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 257, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_24);
+      __pyx_t_32 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_time); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 281, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_32);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_5 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_24))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_24);
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_32))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_32);
         if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_24);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_32);
           __Pyx_INCREF(__pyx_t_5);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_24, function);
+          __Pyx_DECREF_SET(__pyx_t_32, function);
         }
       }
       if (__pyx_t_5) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_24, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_32, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else {
-        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_24); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_32); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-      __pyx_t_24 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 257, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_24);
-      __pyx_t_5 = PyNumber_Subtract(__pyx_t_1, __pyx_t_24); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 257, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+      __pyx_t_32 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 281, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_32);
+      __pyx_t_5 = PyNumber_Subtract(__pyx_t_1, __pyx_t_32); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 281, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-      __pyx_t_24 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 257, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_24);
+      __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+      __pyx_t_32 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 281, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_32);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_samples_per_sec, __pyx_t_24);
-      __pyx_t_24 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_samples_per_sec, __pyx_t_32);
+      __pyx_t_32 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":259
+      /* "MatrixFactorization_Cython_Epoch.pyx":283
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)
  * 
  *                 print_block_size = int(samples_per_sec*30)             # <<<<<<<<<<<<<<
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  */
-      __pyx_t_24 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 259, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_24);
-      __pyx_t_5 = __Pyx_PyNumber_Int(__pyx_t_24); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 259, __pyx_L1_error)
+      __pyx_t_32 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 283, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_32);
+      __pyx_t_5 = __Pyx_PyNumber_Int(__pyx_t_32); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 283, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-      __pyx_t_8 = __Pyx_PyInt_As_long(__pyx_t_5); if (unlikely((__pyx_t_8 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 259, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+      __pyx_t_8 = __Pyx_PyInt_As_long(__pyx_t_5); if (unlikely((__pyx_t_8 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_print_block_size = __pyx_t_8;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":261
+      /* "MatrixFactorization_Cython_Epoch.pyx":285
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  */
-      __pyx_t_5 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 261, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 285, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_24 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_5); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 261, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_24);
+      __pyx_t_32 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_5); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 285, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_32);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = PyObject_RichCompare(__pyx_t_24, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 261, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-      __pyx_t_23 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_23 < 0)) __PYX_ERR(0, 261, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_t_32, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 285, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+      __pyx_t_31 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_31 < 0)) __PYX_ERR(0, 285, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (!__pyx_t_23) {
+      if (!__pyx_t_31) {
       } else {
-        __pyx_t_22 = __pyx_t_23;
-        goto __pyx_L13_bool_binop_done;
+        __pyx_t_14 = __pyx_t_31;
+        goto __pyx_L18_bool_binop_done;
       }
-      __pyx_t_23 = ((__pyx_v_numCurrentBatch == (__pyx_v_totalNumberOfBatch - 1)) != 0);
-      __pyx_t_22 = __pyx_t_23;
-      __pyx_L13_bool_binop_done:;
-      if (__pyx_t_22) {
+      __pyx_t_31 = ((__pyx_v_numCurrentBatch == (__pyx_v_totalNumberOfBatch - 1)) != 0);
+      __pyx_t_14 = __pyx_t_31;
+      __pyx_L18_bool_binop_done:;
+      if (__pyx_t_14) {
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":263
+        /* "MatrixFactorization_Cython_Epoch.pyx":287
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(             # <<<<<<<<<<<<<<
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  */
-        __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_MSE_l, __pyx_n_s_format); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 263, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_24);
+        __pyx_t_32 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_MSE_l, __pyx_n_s_format); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 287, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_32);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":264
+        /* "MatrixFactorization_Cython_Epoch.pyx":288
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,             # <<<<<<<<<<<<<<
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  */
-        __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 264, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 288, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":265
+        /* "MatrixFactorization_Cython_Epoch.pyx":289
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,             # <<<<<<<<<<<<<<
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  */
-        __pyx_t_25 = (100.0 * __pyx_v_numCurrentBatch);
+        __pyx_t_33 = (100.0 * __pyx_v_numCurrentBatch);
         if (unlikely(__pyx_v_totalNumberOfBatch == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 265, __pyx_L1_error)
+          __PYX_ERR(0, 289, __pyx_L1_error)
         }
-        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_25 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 265, __pyx_L1_error)
+        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_33 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":266
+        /* "MatrixFactorization_Cython_Epoch.pyx":290
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,             # <<<<<<<<<<<<<<
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  */
-        __pyx_t_27 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_27)) __PYX_ERR(0, 266, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_27);
-        __pyx_t_28 = __Pyx_PyObject_GetAttrStr(__pyx_t_27, __pyx_n_s_time); if (unlikely(!__pyx_t_28)) __PYX_ERR(0, 266, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_28);
-        __Pyx_DECREF(__pyx_t_27); __pyx_t_27 = 0;
-        __pyx_t_27 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_28))) {
-          __pyx_t_27 = PyMethod_GET_SELF(__pyx_t_28);
-          if (likely(__pyx_t_27)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_28);
-            __Pyx_INCREF(__pyx_t_27);
+        __pyx_t_35 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_35);
+        __pyx_t_36 = __Pyx_PyObject_GetAttrStr(__pyx_t_35, __pyx_n_s_time); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_36);
+        __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
+        __pyx_t_35 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_36))) {
+          __pyx_t_35 = PyMethod_GET_SELF(__pyx_t_36);
+          if (likely(__pyx_t_35)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_36);
+            __Pyx_INCREF(__pyx_t_35);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_28, function);
+            __Pyx_DECREF_SET(__pyx_t_36, function);
           }
         }
-        if (__pyx_t_27) {
-          __pyx_t_26 = __Pyx_PyObject_CallOneArg(__pyx_t_28, __pyx_t_27); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 266, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_27); __pyx_t_27 = 0;
+        if (__pyx_t_35) {
+          __pyx_t_34 = __Pyx_PyObject_CallOneArg(__pyx_t_36, __pyx_t_35); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 290, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
         } else {
-          __pyx_t_26 = __Pyx_PyObject_CallNoArg(__pyx_t_28); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 266, __pyx_L1_error)
+          __pyx_t_34 = __Pyx_PyObject_CallNoArg(__pyx_t_36); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 290, __pyx_L1_error)
         }
-        __Pyx_GOTREF(__pyx_t_26);
-        __Pyx_DECREF(__pyx_t_28); __pyx_t_28 = 0;
-        __pyx_t_28 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_28)) __PYX_ERR(0, 266, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_28);
-        __pyx_t_27 = PyNumber_Subtract(__pyx_t_26, __pyx_t_28); if (unlikely(!__pyx_t_27)) __PYX_ERR(0, 266, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_27);
-        __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
-        __Pyx_DECREF(__pyx_t_28); __pyx_t_28 = 0;
+        __Pyx_GOTREF(__pyx_t_34);
+        __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
+        __pyx_t_36 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_36);
+        __pyx_t_35 = PyNumber_Subtract(__pyx_t_34, __pyx_t_36); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_35);
+        __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
+        __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":267
+        /* "MatrixFactorization_Cython_Epoch.pyx":291
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),             # <<<<<<<<<<<<<<
@@ -5621,131 +5933,131 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         __pyx_t_8 = ((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1);
         if (unlikely(__pyx_t_8 == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 267, __pyx_L1_error)
+          __PYX_ERR(0, 291, __pyx_L1_error)
         }
-        __pyx_t_28 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_8)); if (unlikely(!__pyx_t_28)) __PYX_ERR(0, 267, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_28);
+        __pyx_t_36 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_8)); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 291, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_36);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":268
+        /* "MatrixFactorization_Cython_Epoch.pyx":292
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))             # <<<<<<<<<<<<<<
  * 
  *                     last_print_time = current_time
  */
-        __pyx_t_26 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_26);
-        __pyx_t_30 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_30);
-        __pyx_t_31 = __Pyx_PyObject_GetAttrStr(__pyx_t_30, __pyx_n_s_time); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_31);
-        __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-        __pyx_t_30 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_31))) {
-          __pyx_t_30 = PyMethod_GET_SELF(__pyx_t_31);
-          if (likely(__pyx_t_30)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_31);
-            __Pyx_INCREF(__pyx_t_30);
+        __pyx_t_34 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_34);
+        __pyx_t_38 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_38)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_38);
+        __pyx_t_39 = __Pyx_PyObject_GetAttrStr(__pyx_t_38, __pyx_n_s_time); if (unlikely(!__pyx_t_39)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_39);
+        __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
+        __pyx_t_38 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_39))) {
+          __pyx_t_38 = PyMethod_GET_SELF(__pyx_t_39);
+          if (likely(__pyx_t_38)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_39);
+            __Pyx_INCREF(__pyx_t_38);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_31, function);
+            __Pyx_DECREF_SET(__pyx_t_39, function);
           }
         }
-        if (__pyx_t_30) {
-          __pyx_t_29 = __Pyx_PyObject_CallOneArg(__pyx_t_31, __pyx_t_30); if (unlikely(!__pyx_t_29)) __PYX_ERR(0, 268, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
+        if (__pyx_t_38) {
+          __pyx_t_37 = __Pyx_PyObject_CallOneArg(__pyx_t_39, __pyx_t_38); if (unlikely(!__pyx_t_37)) __PYX_ERR(0, 292, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
         } else {
-          __pyx_t_29 = __Pyx_PyObject_CallNoArg(__pyx_t_31); if (unlikely(!__pyx_t_29)) __PYX_ERR(0, 268, __pyx_L1_error)
+          __pyx_t_37 = __Pyx_PyObject_CallNoArg(__pyx_t_39); if (unlikely(!__pyx_t_37)) __PYX_ERR(0, 292, __pyx_L1_error)
         }
-        __Pyx_GOTREF(__pyx_t_29);
-        __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
-        __pyx_t_31 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_31);
-        __pyx_t_30 = PyNumber_Subtract(__pyx_t_29, __pyx_t_31); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_30);
-        __Pyx_DECREF(__pyx_t_29); __pyx_t_29 = 0;
-        __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
-        __pyx_t_31 = __Pyx_PyNumber_Divide(__pyx_t_26, __pyx_t_30); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 268, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_31);
-        __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
-        __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-        __pyx_t_30 = NULL;
+        __Pyx_GOTREF(__pyx_t_37);
+        __Pyx_DECREF(__pyx_t_39); __pyx_t_39 = 0;
+        __pyx_t_39 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_39)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_39);
+        __pyx_t_38 = PyNumber_Subtract(__pyx_t_37, __pyx_t_39); if (unlikely(!__pyx_t_38)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_38);
+        __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
+        __Pyx_DECREF(__pyx_t_39); __pyx_t_39 = 0;
+        __pyx_t_39 = __Pyx_PyNumber_Divide(__pyx_t_34, __pyx_t_38); if (unlikely(!__pyx_t_39)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_39);
+        __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
+        __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
+        __pyx_t_38 = NULL;
         __pyx_t_7 = 0;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_24))) {
-          __pyx_t_30 = PyMethod_GET_SELF(__pyx_t_24);
-          if (likely(__pyx_t_30)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_24);
-            __Pyx_INCREF(__pyx_t_30);
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_32))) {
+          __pyx_t_38 = PyMethod_GET_SELF(__pyx_t_32);
+          if (likely(__pyx_t_38)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_32);
+            __Pyx_INCREF(__pyx_t_38);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_24, function);
+            __Pyx_DECREF_SET(__pyx_t_32, function);
             __pyx_t_7 = 1;
           }
         }
         #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_24)) {
-          PyObject *__pyx_temp[6] = {__pyx_t_30, __pyx_t_3, __pyx_t_1, __pyx_t_27, __pyx_t_28, __pyx_t_31};
-          __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_24, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_30); __pyx_t_30 = 0;
+        if (PyFunction_Check(__pyx_t_32)) {
+          PyObject *__pyx_temp[6] = {__pyx_t_38, __pyx_t_3, __pyx_t_1, __pyx_t_35, __pyx_t_36, __pyx_t_39};
+          __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_32, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 287, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_38); __pyx_t_38 = 0;
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __Pyx_DECREF(__pyx_t_27); __pyx_t_27 = 0;
-          __Pyx_DECREF(__pyx_t_28); __pyx_t_28 = 0;
-          __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
+          __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
+          __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
+          __Pyx_DECREF(__pyx_t_39); __pyx_t_39 = 0;
         } else
         #endif
         #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_24)) {
-          PyObject *__pyx_temp[6] = {__pyx_t_30, __pyx_t_3, __pyx_t_1, __pyx_t_27, __pyx_t_28, __pyx_t_31};
-          __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_24, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_30); __pyx_t_30 = 0;
+        if (__Pyx_PyFastCFunction_Check(__pyx_t_32)) {
+          PyObject *__pyx_temp[6] = {__pyx_t_38, __pyx_t_3, __pyx_t_1, __pyx_t_35, __pyx_t_36, __pyx_t_39};
+          __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_32, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 287, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_38); __pyx_t_38 = 0;
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __Pyx_DECREF(__pyx_t_27); __pyx_t_27 = 0;
-          __Pyx_DECREF(__pyx_t_28); __pyx_t_28 = 0;
-          __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
+          __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
+          __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
+          __Pyx_DECREF(__pyx_t_39); __pyx_t_39 = 0;
         } else
         #endif
         {
-          __pyx_t_26 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 263, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_26);
-          if (__pyx_t_30) {
-            __Pyx_GIVEREF(__pyx_t_30); PyTuple_SET_ITEM(__pyx_t_26, 0, __pyx_t_30); __pyx_t_30 = NULL;
+          __pyx_t_34 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 287, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_34);
+          if (__pyx_t_38) {
+            __Pyx_GIVEREF(__pyx_t_38); PyTuple_SET_ITEM(__pyx_t_34, 0, __pyx_t_38); __pyx_t_38 = NULL;
           }
           __Pyx_GIVEREF(__pyx_t_3);
-          PyTuple_SET_ITEM(__pyx_t_26, 0+__pyx_t_7, __pyx_t_3);
+          PyTuple_SET_ITEM(__pyx_t_34, 0+__pyx_t_7, __pyx_t_3);
           __Pyx_GIVEREF(__pyx_t_1);
-          PyTuple_SET_ITEM(__pyx_t_26, 1+__pyx_t_7, __pyx_t_1);
-          __Pyx_GIVEREF(__pyx_t_27);
-          PyTuple_SET_ITEM(__pyx_t_26, 2+__pyx_t_7, __pyx_t_27);
-          __Pyx_GIVEREF(__pyx_t_28);
-          PyTuple_SET_ITEM(__pyx_t_26, 3+__pyx_t_7, __pyx_t_28);
-          __Pyx_GIVEREF(__pyx_t_31);
-          PyTuple_SET_ITEM(__pyx_t_26, 4+__pyx_t_7, __pyx_t_31);
+          PyTuple_SET_ITEM(__pyx_t_34, 1+__pyx_t_7, __pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_35);
+          PyTuple_SET_ITEM(__pyx_t_34, 2+__pyx_t_7, __pyx_t_35);
+          __Pyx_GIVEREF(__pyx_t_36);
+          PyTuple_SET_ITEM(__pyx_t_34, 3+__pyx_t_7, __pyx_t_36);
+          __Pyx_GIVEREF(__pyx_t_39);
+          PyTuple_SET_ITEM(__pyx_t_34, 4+__pyx_t_7, __pyx_t_39);
           __pyx_t_3 = 0;
           __pyx_t_1 = 0;
-          __pyx_t_27 = 0;
-          __pyx_t_28 = 0;
-          __pyx_t_31 = 0;
-          __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_24, __pyx_t_26, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
+          __pyx_t_35 = 0;
+          __pyx_t_36 = 0;
+          __pyx_t_39 = 0;
+          __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_32, __pyx_t_34, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 287, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
-          __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
+          __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
         }
-        __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-        if (__Pyx_PrintOne(0, __pyx_t_5) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+        if (__Pyx_PrintOne(0, __pyx_t_5) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":270
+        /* "MatrixFactorization_Cython_Epoch.pyx":294
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  * 
  *                     last_print_time = current_time             # <<<<<<<<<<<<<<
  *                     processed_samples_last_print = 0
  * 
  */
-        __pyx_t_8 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_8 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 270, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_8 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 294, __pyx_L1_error)
         __pyx_v_last_print_time = __pyx_t_8;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":271
+        /* "MatrixFactorization_Cython_Epoch.pyx":295
  * 
  *                     last_print_time = current_time
  *                     processed_samples_last_print = 0             # <<<<<<<<<<<<<<
@@ -5754,77 +6066,77 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
         __pyx_v_processed_samples_last_print = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":273
+        /* "MatrixFactorization_Cython_Epoch.pyx":297
  *                     processed_samples_last_print = 0
  * 
  *                     sys.stdout.flush()             # <<<<<<<<<<<<<<
  *                     sys.stderr.flush()
  * 
  */
-        __pyx_t_24 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_24);
-        __pyx_t_26 = __Pyx_PyObject_GetAttrStr(__pyx_t_24, __pyx_n_s_stdout); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_26);
-        __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-        __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_t_26, __pyx_n_s_flush); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_24);
-        __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
-        __pyx_t_26 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_24))) {
-          __pyx_t_26 = PyMethod_GET_SELF(__pyx_t_24);
-          if (likely(__pyx_t_26)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_24);
-            __Pyx_INCREF(__pyx_t_26);
+        __pyx_t_32 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 297, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_32);
+        __pyx_t_34 = __Pyx_PyObject_GetAttrStr(__pyx_t_32, __pyx_n_s_stdout); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 297, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_34);
+        __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+        __pyx_t_32 = __Pyx_PyObject_GetAttrStr(__pyx_t_34, __pyx_n_s_flush); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 297, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_32);
+        __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
+        __pyx_t_34 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_32))) {
+          __pyx_t_34 = PyMethod_GET_SELF(__pyx_t_32);
+          if (likely(__pyx_t_34)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_32);
+            __Pyx_INCREF(__pyx_t_34);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_24, function);
+            __Pyx_DECREF_SET(__pyx_t_32, function);
           }
         }
-        if (__pyx_t_26) {
-          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_24, __pyx_t_26); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
+        if (__pyx_t_34) {
+          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_32, __pyx_t_34); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 297, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
         } else {
-          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_24); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_32); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 297, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
+        __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":274
+        /* "MatrixFactorization_Cython_Epoch.pyx":298
  * 
  *                     sys.stdout.flush()
  *                     sys.stderr.flush()             # <<<<<<<<<<<<<<
  * 
- * 
+ *     def epochIteration_Cython_ASY_SVD_SGD(self):
  */
-        __pyx_t_24 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 274, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_24);
-        __pyx_t_26 = __Pyx_PyObject_GetAttrStr(__pyx_t_24, __pyx_n_s_stderr); if (unlikely(!__pyx_t_26)) __PYX_ERR(0, 274, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_26);
-        __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
-        __pyx_t_24 = __Pyx_PyObject_GetAttrStr(__pyx_t_26, __pyx_n_s_flush); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 274, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_24);
-        __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
-        __pyx_t_26 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_24))) {
-          __pyx_t_26 = PyMethod_GET_SELF(__pyx_t_24);
-          if (likely(__pyx_t_26)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_24);
-            __Pyx_INCREF(__pyx_t_26);
+        __pyx_t_32 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 298, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_32);
+        __pyx_t_34 = __Pyx_PyObject_GetAttrStr(__pyx_t_32, __pyx_n_s_stderr); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 298, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_34);
+        __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
+        __pyx_t_32 = __Pyx_PyObject_GetAttrStr(__pyx_t_34, __pyx_n_s_flush); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 298, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_32);
+        __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
+        __pyx_t_34 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_32))) {
+          __pyx_t_34 = PyMethod_GET_SELF(__pyx_t_32);
+          if (likely(__pyx_t_34)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_32);
+            __Pyx_INCREF(__pyx_t_34);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_24, function);
+            __Pyx_DECREF_SET(__pyx_t_32, function);
           }
         }
-        if (__pyx_t_26) {
-          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_24, __pyx_t_26); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 274, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_26); __pyx_t_26 = 0;
+        if (__pyx_t_34) {
+          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_32, __pyx_t_34); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 298, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
         } else {
-          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_24); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 274, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_32); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 298, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
+        __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":261
+        /* "MatrixFactorization_Cython_Epoch.pyx":285
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -5833,8 +6145,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
       }
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":252
- * 
+      /* "MatrixFactorization_Cython_Epoch.pyx":276
+ *                     self.ITEM_factors[sample.item, index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
  * 
@@ -5843,8 +6155,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":205
- * 
+  /* "MatrixFactorization_Cython_Epoch.pyx":212
+ *             self.epochIteration_Cython_BPR_SGD()
  * 
  *     def epochIteration_Cython_FUNK_SVD_SGD(self):             # <<<<<<<<<<<<<<
  * 
@@ -5858,13 +6170,13 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_24);
-  __Pyx_XDECREF(__pyx_t_26);
-  __Pyx_XDECREF(__pyx_t_27);
-  __Pyx_XDECREF(__pyx_t_28);
-  __Pyx_XDECREF(__pyx_t_29);
-  __Pyx_XDECREF(__pyx_t_30);
-  __Pyx_XDECREF(__pyx_t_31);
+  __Pyx_XDECREF(__pyx_t_32);
+  __Pyx_XDECREF(__pyx_t_34);
+  __Pyx_XDECREF(__pyx_t_35);
+  __Pyx_XDECREF(__pyx_t_36);
+  __Pyx_XDECREF(__pyx_t_37);
+  __Pyx_XDECREF(__pyx_t_38);
+  __Pyx_XDECREF(__pyx_t_39);
   __Pyx_AddTraceback("MatrixFactorization_Cython_Epoch.MatrixFactorization_Cython_Epoch.epochIteration_Cython_FUNK_SVD_SGD", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -5875,8 +6187,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":280
- * 
+/* "MatrixFactorization_Cython_Epoch.pyx":300
+ *                     sys.stderr.flush()
  * 
  *     def epochIteration_Cython_ASY_SVD_SGD(self):             # <<<<<<<<<<<<<<
  * 
@@ -5972,44 +6284,44 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_48 = NULL;
   __Pyx_RefNannySetupContext("epochIteration_Cython_ASY_SVD_SGD", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":283
+  /* "MatrixFactorization_Cython_Epoch.pyx":303
  * 
  *         # Get number of available interactions
  *         cdef long totalNumberOfBatch = int(len(self.URM_train_data) / self.batch_size) + 1             # <<<<<<<<<<<<<<
  * 
  *         cdef MSE_sample sample
  */
-  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 283, __pyx_L1_error)}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->URM_train_data, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 303, __pyx_L1_error)}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->URM_train_data, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (unlikely(__pyx_v_self->batch_size == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    __PYX_ERR(0, 283, __pyx_L1_error)
+    __PYX_ERR(0, 303, __pyx_L1_error)
   }
   else if (sizeof(Py_ssize_t) == sizeof(long) && (!(((int)-1) > 0)) && unlikely(__pyx_v_self->batch_size == (int)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_t_2))) {
     PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-    __PYX_ERR(0, 283, __pyx_L1_error)
+    __PYX_ERR(0, 303, __pyx_L1_error)
   }
-  __pyx_t_1 = PyInt_FromSsize_t(__Pyx_div_Py_ssize_t(__pyx_t_2, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__Pyx_div_Py_ssize_t(__pyx_t_2, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_3); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 303, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_totalNumberOfBatch = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":287
+  /* "MatrixFactorization_Cython_Epoch.pyx":307
  *         cdef MSE_sample sample
  *         cdef long u, i
  *         cdef long index, numCurrentBatch, processed_samples_last_print, print_block_size = 500             # <<<<<<<<<<<<<<
@@ -6018,47 +6330,47 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_print_block_size = 0x1F4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":292
+  /* "MatrixFactorization_Cython_Epoch.pyx":312
  *         cdef int numSeenItems
  * 
  *         cdef double[:] user_factors_accumulated = np.zeros(self.n_factors, dtype=np.float64)             # <<<<<<<<<<<<<<
  *         cdef long start_pos_seen_items, end_pos_seen_items, item_id, factor_index, item_index
  * 
  */
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->n_factors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_7);
-  if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 292, __pyx_L1_error)
+  if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_user_factors_accumulated = __pyx_t_8;
   __pyx_t_8.memview = NULL;
   __pyx_t_8.data = NULL;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":295
+  /* "MatrixFactorization_Cython_Epoch.pyx":315
  *         cdef long start_pos_seen_items, end_pos_seen_items, item_id, factor_index, item_index
  * 
  *         cdef double H_i, W_u, cumulative_loss = 0.0, denominator             # <<<<<<<<<<<<<<
@@ -6067,16 +6379,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_cumulative_loss = 0.0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":298
+  /* "MatrixFactorization_Cython_Epoch.pyx":318
  * 
  * 
  *         cdef long start_time_epoch = time.time()             # <<<<<<<<<<<<<<
  *         cdef long last_print_time = start_time_epoch
  * 
  */
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 318, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 298, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_time); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 318, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -6090,18 +6402,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 298, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 318, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 298, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 318, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_7); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 298, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_long(__pyx_t_7); if (unlikely((__pyx_t_4 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 318, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_start_time_epoch = __pyx_t_4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":299
+  /* "MatrixFactorization_Cython_Epoch.pyx":319
  * 
  *         cdef long start_time_epoch = time.time()
  *         cdef long last_print_time = start_time_epoch             # <<<<<<<<<<<<<<
@@ -6110,7 +6422,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_last_print_time = __pyx_v_start_time_epoch;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":302
+  /* "MatrixFactorization_Cython_Epoch.pyx":322
  * 
  * 
  *         for numCurrentBatch in range(totalNumberOfBatch):             # <<<<<<<<<<<<<<
@@ -6121,7 +6433,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_4; __pyx_t_9+=1) {
     __pyx_v_numCurrentBatch = __pyx_t_9;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":305
+    /* "MatrixFactorization_Cython_Epoch.pyx":325
  * 
  *             # Uniform user sampling with replacement
  *             sample = self.sampleMSE_Cython()             # <<<<<<<<<<<<<<
@@ -6130,7 +6442,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sample = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->sampleMSE_Cython(__pyx_v_self);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":307
+    /* "MatrixFactorization_Cython_Epoch.pyx":327
  *             sample = self.sampleMSE_Cython()
  * 
  *             prediction = 0.0             # <<<<<<<<<<<<<<
@@ -6139,7 +6451,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_prediction = 0.0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":309
+    /* "MatrixFactorization_Cython_Epoch.pyx":329
  *             prediction = 0.0
  * 
  *             for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6150,7 +6462,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
       __pyx_v_factor_index = __pyx_t_11;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":310
+      /* "MatrixFactorization_Cython_Epoch.pyx":330
  * 
  *             for factor_index in range(self.n_factors):
  *                 user_factors_accumulated[factor_index] = 0.0             # <<<<<<<<<<<<<<
@@ -6165,19 +6477,19 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_12 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 310, __pyx_L1_error)
+        __PYX_ERR(0, 330, __pyx_L1_error)
       }
       *((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_12 * __pyx_v_user_factors_accumulated.strides[0]) )) = 0.0;
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":314
+    /* "MatrixFactorization_Cython_Epoch.pyx":334
  * 
  *             # Accumulate latent factors of rated items
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]             # <<<<<<<<<<<<<<
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 314, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 334, __pyx_L1_error)}
     __pyx_t_14 = __pyx_v_sample.user;
     __pyx_t_10 = -1;
     if (__pyx_t_14 < 0) {
@@ -6186,18 +6498,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     } else if (unlikely(__pyx_t_14 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_10 = 0;
     if (unlikely(__pyx_t_10 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_10);
-      __PYX_ERR(0, 314, __pyx_L1_error)
+      __PYX_ERR(0, 334, __pyx_L1_error)
     }
     __pyx_v_start_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_14 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":315
+    /* "MatrixFactorization_Cython_Epoch.pyx":335
  *             # Accumulate latent factors of rated items
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]             # <<<<<<<<<<<<<<
  * 
  *             for item_index in range(start_pos_seen_items, end_pos_seen_items):
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 315, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 335, __pyx_L1_error)}
     __pyx_t_15 = (__pyx_v_sample.user + 1);
     __pyx_t_10 = -1;
     if (__pyx_t_15 < 0) {
@@ -6206,11 +6518,11 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     } else if (unlikely(__pyx_t_15 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_10 = 0;
     if (unlikely(__pyx_t_10 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_10);
-      __PYX_ERR(0, 315, __pyx_L1_error)
+      __PYX_ERR(0, 335, __pyx_L1_error)
     }
     __pyx_v_end_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_15 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":317
+    /* "MatrixFactorization_Cython_Epoch.pyx":337
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  *             for item_index in range(start_pos_seen_items, end_pos_seen_items):             # <<<<<<<<<<<<<<
@@ -6221,14 +6533,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_16 = __pyx_v_start_pos_seen_items; __pyx_t_16 < __pyx_t_11; __pyx_t_16+=1) {
       __pyx_v_item_index = __pyx_t_16;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":318
+      /* "MatrixFactorization_Cython_Epoch.pyx":338
  * 
  *             for item_index in range(start_pos_seen_items, end_pos_seen_items):
  *                 item_id = self.URM_train_indices[item_index]             # <<<<<<<<<<<<<<
  * 
  *                 for factor_index in range(self.n_factors):
  */
-      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 318, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 338, __pyx_L1_error)}
       __pyx_t_17 = __pyx_v_item_index;
       __pyx_t_10 = -1;
       if (__pyx_t_17 < 0) {
@@ -6237,11 +6549,11 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_17 >= __pyx_v_self->URM_train_indices.shape[0])) __pyx_t_10 = 0;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 318, __pyx_L1_error)
+        __PYX_ERR(0, 338, __pyx_L1_error)
       }
       __pyx_v_item_id = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indices.data + __pyx_t_17 * __pyx_v_self->URM_train_indices.strides[0]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":320
+      /* "MatrixFactorization_Cython_Epoch.pyx":340
  *                 item_id = self.URM_train_indices[item_index]
  * 
  *                 for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6252,14 +6564,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_10; __pyx_t_18+=1) {
         __pyx_v_factor_index = __pyx_t_18;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":321
+        /* "MatrixFactorization_Cython_Epoch.pyx":341
  * 
  *                 for factor_index in range(self.n_factors):
  *                     user_factors_accumulated[factor_index] = self.USER_factors[item_id, factor_index]             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 321, __pyx_L1_error)}
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 341, __pyx_L1_error)}
         __pyx_t_19 = __pyx_v_item_id;
         __pyx_t_20 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6273,7 +6585,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_20 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_13 = 1;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 321, __pyx_L1_error)
+          __PYX_ERR(0, 341, __pyx_L1_error)
         }
         __pyx_t_21 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6283,13 +6595,13 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_21 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 321, __pyx_L1_error)
+          __PYX_ERR(0, 341, __pyx_L1_error)
         }
         *((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_21 * __pyx_v_user_factors_accumulated.strides[0]) )) = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_19 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_20 * __pyx_v_self->USER_factors.strides[1]) )));
       }
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":324
+    /* "MatrixFactorization_Cython_Epoch.pyx":344
  * 
  * 
  *             denominator = sqrt(end_pos_seen_items-start_pos_seen_items)             # <<<<<<<<<<<<<<
@@ -6298,7 +6610,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_denominator = sqrt((__pyx_v_end_pos_seen_items - __pyx_v_start_pos_seen_items));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":327
+    /* "MatrixFactorization_Cython_Epoch.pyx":347
  * 
  * 
  *             for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6309,7 +6621,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
       __pyx_v_factor_index = __pyx_t_11;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":329
+      /* "MatrixFactorization_Cython_Epoch.pyx":349
  *             for factor_index in range(self.n_factors):
  *                 #print("user_factors_accumulated[factor_index] " + str(user_factors_accumulated[factor_index]))
  *                 user_factors_accumulated[factor_index] /= denominator             # <<<<<<<<<<<<<<
@@ -6324,12 +6636,12 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_22 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 329, __pyx_L1_error)
+        __PYX_ERR(0, 349, __pyx_L1_error)
       }
       *((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_22 * __pyx_v_user_factors_accumulated.strides[0]) )) /= __pyx_v_denominator;
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":339
+    /* "MatrixFactorization_Cython_Epoch.pyx":359
  * 
  *             # Compute prediction
  *             for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6340,7 +6652,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
       __pyx_v_factor_index = __pyx_t_11;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":340
+      /* "MatrixFactorization_Cython_Epoch.pyx":360
  *             # Compute prediction
  *             for factor_index in range(self.n_factors):
  *                 prediction = user_factors_accumulated[factor_index] * self.ITEM_factors[sample.item, factor_index]             # <<<<<<<<<<<<<<
@@ -6355,9 +6667,9 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_23 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 340, __pyx_L1_error)
+        __PYX_ERR(0, 360, __pyx_L1_error)
       }
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 340, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 360, __pyx_L1_error)}
       __pyx_t_24 = __pyx_v_sample.item;
       __pyx_t_25 = __pyx_v_factor_index;
       __pyx_t_13 = -1;
@@ -6371,23 +6683,23 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_25 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_13 = 1;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 340, __pyx_L1_error)
+        __PYX_ERR(0, 360, __pyx_L1_error)
       }
       __pyx_v_prediction = ((*((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_23 * __pyx_v_user_factors_accumulated.strides[0]) ))) * (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_24 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_25 * __pyx_v_self->ITEM_factors.strides[1]) ))));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":341
+      /* "MatrixFactorization_Cython_Epoch.pyx":361
  *             for factor_index in range(self.n_factors):
  *                 prediction = user_factors_accumulated[factor_index] * self.ITEM_factors[sample.item, factor_index]
  *                 if np.isnan(prediction):             # <<<<<<<<<<<<<<
  *                     print("user_factors_accumulated[factor_index] " + str(user_factors_accumulated[factor_index]))
  *                     print("self.ITEM_factors[sample.item, factor_index] " + str(self.ITEM_factors[sample.item, factor_index]))
  */
-      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 341, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 361, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_isnan); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 341, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_isnan); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 361, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_prediction); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 341, __pyx_L1_error)
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_prediction); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 361, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_1 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -6400,14 +6712,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (!__pyx_t_1) {
-        __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 341, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 361, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_7);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_t_5};
-          __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 341, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 361, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -6416,30 +6728,30 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_t_5};
-          __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 341, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 361, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         } else
         #endif
         {
-          __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 341, __pyx_L1_error)
+          __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 361, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_1); __pyx_t_1 = NULL;
           __Pyx_GIVEREF(__pyx_t_5);
           PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_5);
           __pyx_t_5 = 0;
-          __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 341, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 361, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         }
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_26 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_26 < 0)) __PYX_ERR(0, 341, __pyx_L1_error)
+      __pyx_t_26 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_26 < 0)) __PYX_ERR(0, 361, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       if (__pyx_t_26) {
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":342
+        /* "MatrixFactorization_Cython_Epoch.pyx":362
  *                 prediction = user_factors_accumulated[factor_index] * self.ITEM_factors[sample.item, factor_index]
  *                 if np.isnan(prediction):
  *                     print("user_factors_accumulated[factor_index] " + str(user_factors_accumulated[factor_index]))             # <<<<<<<<<<<<<<
@@ -6454,32 +6766,32 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_27 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 342, __pyx_L1_error)
+          __PYX_ERR(0, 362, __pyx_L1_error)
         }
-        __pyx_t_7 = PyFloat_FromDouble((*((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_27 * __pyx_v_user_factors_accumulated.strides[0]) )))); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __pyx_t_7 = PyFloat_FromDouble((*((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_27 * __pyx_v_user_factors_accumulated.strides[0]) )))); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 362, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 362, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_7);
         __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 362, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = PyNumber_Add(__pyx_kp_s_user_factors_accumulated_factor, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __pyx_t_3 = PyNumber_Add(__pyx_kp_s_user_factors_accumulated_factor, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 362, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 342, __pyx_L1_error)
+        if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 362, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":343
+        /* "MatrixFactorization_Cython_Epoch.pyx":363
  *                 if np.isnan(prediction):
  *                     print("user_factors_accumulated[factor_index] " + str(user_factors_accumulated[factor_index]))
  *                     print("self.ITEM_factors[sample.item, factor_index] " + str(self.ITEM_factors[sample.item, factor_index]))             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 343, __pyx_L1_error)}
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 363, __pyx_L1_error)}
         __pyx_t_28 = __pyx_v_sample.item;
         __pyx_t_29 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6493,25 +6805,25 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_29 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_13 = 1;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 343, __pyx_L1_error)
+          __PYX_ERR(0, 363, __pyx_L1_error)
         }
-        __pyx_t_3 = PyFloat_FromDouble((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_28 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_29 * __pyx_v_self->ITEM_factors.strides[1]) )))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 343, __pyx_L1_error)
+        __pyx_t_3 = PyFloat_FromDouble((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_28 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_29 * __pyx_v_self->ITEM_factors.strides[1]) )))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 363, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 343, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 363, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 343, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 363, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = PyNumber_Add(__pyx_kp_s_self_ITEM_factors_sample_item_fa, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 343, __pyx_L1_error)
+        __pyx_t_7 = PyNumber_Add(__pyx_kp_s_self_ITEM_factors_sample_item_fa, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 363, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 343, __pyx_L1_error)
+        if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 363, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":341
+        /* "MatrixFactorization_Cython_Epoch.pyx":361
  *             for factor_index in range(self.n_factors):
  *                 prediction = user_factors_accumulated[factor_index] * self.ITEM_factors[sample.item, factor_index]
  *                 if np.isnan(prediction):             # <<<<<<<<<<<<<<
@@ -6521,7 +6833,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       }
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":346
+    /* "MatrixFactorization_Cython_Epoch.pyx":366
  * 
  * 
  *             gradient = sample.rating - prediction             # <<<<<<<<<<<<<<
@@ -6530,7 +6842,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_gradient = (__pyx_v_sample.rating - __pyx_v_prediction);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":347
+    /* "MatrixFactorization_Cython_Epoch.pyx":367
  * 
  *             gradient = sample.rating - prediction
  *             cumulative_loss += gradient**2             # <<<<<<<<<<<<<<
@@ -6539,19 +6851,19 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_cumulative_loss = (__pyx_v_cumulative_loss + pow(__pyx_v_gradient, 2.0));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":349
+    /* "MatrixFactorization_Cython_Epoch.pyx":369
  *             cumulative_loss += gradient**2
  * 
  *             if np.isnan(cumulative_loss):             # <<<<<<<<<<<<<<
  *                 print("sample.rating " + str(sample.rating))
  *                 print("prediction " + str(prediction))
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 349, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 369, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_isnan); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 349, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_isnan); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 369, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_cumulative_loss); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 349, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_cumulative_loss); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 369, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -6564,14 +6876,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 349, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 369, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_7);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 349, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 369, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6580,87 +6892,87 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 349, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 369, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 349, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 369, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_1, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 349, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 369, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       }
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_26 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_26 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
+    __pyx_t_26 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_26 < 0)) __PYX_ERR(0, 369, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     if (__pyx_t_26) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":350
+      /* "MatrixFactorization_Cython_Epoch.pyx":370
  * 
  *             if np.isnan(cumulative_loss):
  *                 print("sample.rating " + str(sample.rating))             # <<<<<<<<<<<<<<
  *                 print("prediction " + str(prediction))
  *                 input()
  */
-      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_sample.rating); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 350, __pyx_L1_error)
+      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_sample.rating); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 370, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 350, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 370, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_7);
       PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7);
       __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 350, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 370, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyNumber_Add(__pyx_kp_s_sample_rating, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 350, __pyx_L1_error)
+      __pyx_t_6 = PyNumber_Add(__pyx_kp_s_sample_rating, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 370, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 350, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 370, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":351
+      /* "MatrixFactorization_Cython_Epoch.pyx":371
  *             if np.isnan(cumulative_loss):
  *                 print("sample.rating " + str(sample.rating))
  *                 print("prediction " + str(prediction))             # <<<<<<<<<<<<<<
  *                 input()
  *             # print(cumulative_loss/(numCurrentBatch*self.batch_size + 1))
  */
-      __pyx_t_6 = PyFloat_FromDouble(__pyx_v_prediction); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 351, __pyx_L1_error)
+      __pyx_t_6 = PyFloat_FromDouble(__pyx_v_prediction); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 371, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 351, __pyx_L1_error)
+      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 371, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6);
       __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 351, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 371, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = PyNumber_Add(__pyx_kp_s_prediction, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 351, __pyx_L1_error)
+      __pyx_t_7 = PyNumber_Add(__pyx_kp_s_prediction, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 371, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 351, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 371, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":352
+      /* "MatrixFactorization_Cython_Epoch.pyx":372
  *                 print("sample.rating " + str(sample.rating))
  *                 print("prediction " + str(prediction))
  *                 input()             # <<<<<<<<<<<<<<
  *             # print(cumulative_loss/(numCurrentBatch*self.batch_size + 1))
  *             # input()
  */
-      __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_builtin_input); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 352, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_builtin_input); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 372, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":349
+      /* "MatrixFactorization_Cython_Epoch.pyx":369
  *             cumulative_loss += gradient**2
  * 
  *             if np.isnan(cumulative_loss):             # <<<<<<<<<<<<<<
@@ -6669,7 +6981,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":357
+    /* "MatrixFactorization_Cython_Epoch.pyx":377
  * 
  * 
  *             adaptive_gradient_item = self.adaptive_gradient_item(gradient, sample.item)             # <<<<<<<<<<<<<<
@@ -6678,7 +6990,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_adaptive_gradient_item = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_item(__pyx_v_self, __pyx_v_gradient, __pyx_v_sample.item);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":358
+    /* "MatrixFactorization_Cython_Epoch.pyx":378
  * 
  *             adaptive_gradient_item = self.adaptive_gradient_item(gradient, sample.item)
  *             adaptive_gradient_user = self.adaptive_gradient_user(gradient, sample.user)             # <<<<<<<<<<<<<<
@@ -6687,7 +6999,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_adaptive_gradient_user = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_user(__pyx_v_self, __pyx_v_gradient, __pyx_v_sample.user);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":362
+    /* "MatrixFactorization_Cython_Epoch.pyx":382
  * 
  *             # Update USER factors, therefore all item factors for seen items
  *             for item_index in range(start_pos_seen_items, end_pos_seen_items):             # <<<<<<<<<<<<<<
@@ -6698,14 +7010,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_16 = __pyx_v_start_pos_seen_items; __pyx_t_16 < __pyx_t_11; __pyx_t_16+=1) {
       __pyx_v_item_index = __pyx_t_16;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":363
+      /* "MatrixFactorization_Cython_Epoch.pyx":383
  *             # Update USER factors, therefore all item factors for seen items
  *             for item_index in range(start_pos_seen_items, end_pos_seen_items):
  *                 item_id = self.URM_train_indices[item_index]             # <<<<<<<<<<<<<<
  * 
  *                 for factor_index in range(self.n_factors):
  */
-      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 363, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 383, __pyx_L1_error)}
       __pyx_t_30 = __pyx_v_item_index;
       __pyx_t_10 = -1;
       if (__pyx_t_30 < 0) {
@@ -6714,11 +7026,11 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_30 >= __pyx_v_self->URM_train_indices.shape[0])) __pyx_t_10 = 0;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 363, __pyx_L1_error)
+        __PYX_ERR(0, 383, __pyx_L1_error)
       }
       __pyx_v_item_id = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indices.data + __pyx_t_30 * __pyx_v_self->URM_train_indices.strides[0]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":365
+      /* "MatrixFactorization_Cython_Epoch.pyx":385
  *                 item_id = self.URM_train_indices[item_index]
  * 
  *                 for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6729,14 +7041,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_10; __pyx_t_18+=1) {
         __pyx_v_factor_index = __pyx_t_18;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":367
+        /* "MatrixFactorization_Cython_Epoch.pyx":387
  *                 for factor_index in range(self.n_factors):
  * 
  *                     H_i = self.ITEM_factors[sample.item, factor_index]             # <<<<<<<<<<<<<<
  *                     W_u = self.USER_factors[item_id, factor_index]
  * 
  */
-        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 367, __pyx_L1_error)}
+        if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 387, __pyx_L1_error)}
         __pyx_t_31 = __pyx_v_sample.item;
         __pyx_t_32 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6750,18 +7062,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_32 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_13 = 1;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 367, __pyx_L1_error)
+          __PYX_ERR(0, 387, __pyx_L1_error)
         }
         __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_31 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_32 * __pyx_v_self->ITEM_factors.strides[1]) )));
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":368
+        /* "MatrixFactorization_Cython_Epoch.pyx":388
  * 
  *                     H_i = self.ITEM_factors[sample.item, factor_index]
  *                     W_u = self.USER_factors[item_id, factor_index]             # <<<<<<<<<<<<<<
  * 
  *                     # print(H_i)
  */
-        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 368, __pyx_L1_error)}
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 388, __pyx_L1_error)}
         __pyx_t_33 = __pyx_v_item_id;
         __pyx_t_34 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6775,18 +7087,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_34 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_13 = 1;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 368, __pyx_L1_error)
+          __PYX_ERR(0, 388, __pyx_L1_error)
         }
         __pyx_v_W_u = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_33 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_34 * __pyx_v_self->USER_factors.strides[1]) )));
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":373
+        /* "MatrixFactorization_Cython_Epoch.pyx":393
  *                     # print(W_u)
  * 
  *                     self.USER_factors[item_id, factor_index] += self.learning_rate * (adaptive_gradient_user * H_i - self.user_reg * W_u)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 373, __pyx_L1_error)}
+        if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 393, __pyx_L1_error)}
         __pyx_t_35 = __pyx_v_item_id;
         __pyx_t_36 = __pyx_v_factor_index;
         __pyx_t_13 = -1;
@@ -6800,13 +7112,13 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else if (unlikely(__pyx_t_36 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_13 = 1;
         if (unlikely(__pyx_t_13 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 373, __pyx_L1_error)
+          __PYX_ERR(0, 393, __pyx_L1_error)
         }
         *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_35 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_36 * __pyx_v_self->USER_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_user * __pyx_v_H_i) - (__pyx_v_self->user_reg * __pyx_v_W_u)));
       }
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":377
+    /* "MatrixFactorization_Cython_Epoch.pyx":397
  * 
  *             # Update ITEM factors
  *             for factor_index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -6817,14 +7129,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
       __pyx_v_factor_index = __pyx_t_11;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":380
+      /* "MatrixFactorization_Cython_Epoch.pyx":400
  * 
  *                 # Copy original value to avoid messing up the updates
  *                 H_i = self.ITEM_factors[sample.item, factor_index]             # <<<<<<<<<<<<<<
  *                 W_u = user_factors_accumulated[factor_index]
  *                 print("H_i" + str(H_i))
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 380, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 400, __pyx_L1_error)}
       __pyx_t_37 = __pyx_v_sample.item;
       __pyx_t_38 = __pyx_v_factor_index;
       __pyx_t_13 = -1;
@@ -6838,11 +7150,11 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_38 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_13 = 1;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 380, __pyx_L1_error)
+        __PYX_ERR(0, 400, __pyx_L1_error)
       }
       __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_37 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_38 * __pyx_v_self->ITEM_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":381
+      /* "MatrixFactorization_Cython_Epoch.pyx":401
  *                 # Copy original value to avoid messing up the updates
  *                 H_i = self.ITEM_factors[sample.item, factor_index]
  *                 W_u = user_factors_accumulated[factor_index]             # <<<<<<<<<<<<<<
@@ -6857,64 +7169,64 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_39 >= __pyx_v_user_factors_accumulated.shape[0])) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 381, __pyx_L1_error)
+        __PYX_ERR(0, 401, __pyx_L1_error)
       }
       __pyx_v_W_u = (*((double *) ( /* dim=0 */ (__pyx_v_user_factors_accumulated.data + __pyx_t_39 * __pyx_v_user_factors_accumulated.strides[0]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":382
+      /* "MatrixFactorization_Cython_Epoch.pyx":402
  *                 H_i = self.ITEM_factors[sample.item, factor_index]
  *                 W_u = user_factors_accumulated[factor_index]
  *                 print("H_i" + str(H_i))             # <<<<<<<<<<<<<<
  *                 print("W_u" + str(W_u))
  *                 self.ITEM_factors[sample.item, factor_index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  */
-      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_H_i); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 382, __pyx_L1_error)
+      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_H_i); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 402, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 382, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 402, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_7);
       PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7);
       __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 382, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 402, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyNumber_Add(__pyx_n_s_H_i, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 382, __pyx_L1_error)
+      __pyx_t_6 = PyNumber_Add(__pyx_n_s_H_i, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 402, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 382, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 402, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":383
+      /* "MatrixFactorization_Cython_Epoch.pyx":403
  *                 W_u = user_factors_accumulated[factor_index]
  *                 print("H_i" + str(H_i))
  *                 print("W_u" + str(W_u))             # <<<<<<<<<<<<<<
  *                 self.ITEM_factors[sample.item, factor_index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)
  * 
  */
-      __pyx_t_6 = PyFloat_FromDouble(__pyx_v_W_u); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_6 = PyFloat_FromDouble(__pyx_v_W_u); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6);
       __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = PyNumber_Add(__pyx_n_s_W_u, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_7 = PyNumber_Add(__pyx_n_s_W_u, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 383, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(0, 403, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":384
+      /* "MatrixFactorization_Cython_Epoch.pyx":404
  *                 print("H_i" + str(H_i))
  *                 print("W_u" + str(W_u))
  *                 self.ITEM_factors[sample.item, factor_index] += self.learning_rate * (adaptive_gradient_item * W_u - self.positive_reg * H_i)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 384, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 404, __pyx_L1_error)}
       __pyx_t_40 = __pyx_v_sample.item;
       __pyx_t_41 = __pyx_v_factor_index;
       __pyx_t_13 = -1;
@@ -6928,12 +7240,12 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_41 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_13 = 1;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 384, __pyx_L1_error)
+        __PYX_ERR(0, 404, __pyx_L1_error)
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_40 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_41 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_adaptive_gradient_item * __pyx_v_W_u) - (__pyx_v_self->positive_reg * __pyx_v_H_i)));
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":390
+    /* "MatrixFactorization_Cython_Epoch.pyx":410
  * 
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -6951,16 +7263,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_L24_bool_binop_done:;
     if (__pyx_t_26) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":392
+      /* "MatrixFactorization_Cython_Epoch.pyx":412
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                 current_time = time.time()             # <<<<<<<<<<<<<<
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  */
-      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 392, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 412, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 412, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -6974,28 +7286,28 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (__pyx_t_6) {
-        __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 392, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 412, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else {
-        __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 392, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 412, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_current_time, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":395
+      /* "MatrixFactorization_Cython_Epoch.pyx":415
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)             # <<<<<<<<<<<<<<
  * 
  *                 print_block_size = int(samples_per_sec*30)
  */
-      __pyx_t_7 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -7009,57 +7321,57 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (__pyx_t_6) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else {
-        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_6 = PyNumber_Subtract(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_6 = PyNumber_Subtract(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_XDECREF_SET(__pyx_v_samples_per_sec, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":397
+      /* "MatrixFactorization_Cython_Epoch.pyx":417
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)
  * 
  *                 print_block_size = int(samples_per_sec*30)             # <<<<<<<<<<<<<<
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  */
-      __pyx_t_3 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 397, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 417, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 397, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 417, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_11 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_11 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 397, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_11 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 417, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_print_block_size = __pyx_t_11;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":399
+      /* "MatrixFactorization_Cython_Epoch.pyx":419
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  */
-      __pyx_t_6 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 399, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 399, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyObject_RichCompare(__pyx_t_3, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 399, __pyx_L1_error)
+      __pyx_t_6 = PyObject_RichCompare(__pyx_t_3, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_42 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_42 < 0)) __PYX_ERR(0, 399, __pyx_L1_error)
+      __pyx_t_42 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_42 < 0)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       if (!__pyx_t_42) {
       } else {
@@ -7071,27 +7383,27 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       __pyx_L27_bool_binop_done:;
       if (__pyx_t_26) {
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":401
+        /* "MatrixFactorization_Cython_Epoch.pyx":421
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(             # <<<<<<<<<<<<<<
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  */
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_MSE_l, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 401, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_MSE_l, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 421, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":402
+        /* "MatrixFactorization_Cython_Epoch.pyx":422
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,             # <<<<<<<<<<<<<<
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  */
-        __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 422, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":403
+        /* "MatrixFactorization_Cython_Epoch.pyx":423
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. MSE loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,             # <<<<<<<<<<<<<<
@@ -7101,21 +7413,21 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         __pyx_t_43 = (100.0 * __pyx_v_numCurrentBatch);
         if (unlikely(__pyx_v_totalNumberOfBatch == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 403, __pyx_L1_error)
+          __PYX_ERR(0, 423, __pyx_L1_error)
         }
-        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_43 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 403, __pyx_L1_error)
+        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_43 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":404
+        /* "MatrixFactorization_Cython_Epoch.pyx":424
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,             # <<<<<<<<<<<<<<
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  */
-        __pyx_t_44 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_44)) __PYX_ERR(0, 404, __pyx_L1_error)
+        __pyx_t_44 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_44)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_44);
-        __pyx_t_45 = __Pyx_PyObject_GetAttrStr(__pyx_t_44, __pyx_n_s_time); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 404, __pyx_L1_error)
+        __pyx_t_45 = __Pyx_PyObject_GetAttrStr(__pyx_t_44, __pyx_n_s_time); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_45);
         __Pyx_DECREF(__pyx_t_44); __pyx_t_44 = 0;
         __pyx_t_44 = NULL;
@@ -7129,21 +7441,21 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_44) {
-          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_45, __pyx_t_44); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 404, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_45, __pyx_t_44); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 424, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_44); __pyx_t_44 = 0;
         } else {
-          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_45); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 404, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_45); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 424, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_45); __pyx_t_45 = 0;
-        __pyx_t_45 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 404, __pyx_L1_error)
+        __pyx_t_45 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_45);
-        __pyx_t_44 = PyNumber_Subtract(__pyx_t_5, __pyx_t_45); if (unlikely(!__pyx_t_44)) __PYX_ERR(0, 404, __pyx_L1_error)
+        __pyx_t_44 = PyNumber_Subtract(__pyx_t_5, __pyx_t_45); if (unlikely(!__pyx_t_44)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_44);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_45); __pyx_t_45 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":405
+        /* "MatrixFactorization_Cython_Epoch.pyx":425
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),             # <<<<<<<<<<<<<<
@@ -7153,23 +7465,23 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         __pyx_t_11 = ((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1);
         if (unlikely(__pyx_t_11 == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 405, __pyx_L1_error)
+          __PYX_ERR(0, 425, __pyx_L1_error)
         }
-        __pyx_t_45 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_11)); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 405, __pyx_L1_error)
+        __pyx_t_45 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_11)); if (unlikely(!__pyx_t_45)) __PYX_ERR(0, 425, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_45);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":406
+        /* "MatrixFactorization_Cython_Epoch.pyx":426
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))             # <<<<<<<<<<<<<<
  * 
  *                     last_print_time = current_time
  */
-        __pyx_t_5 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_5 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_47 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_47)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_47 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_47)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_47);
-        __pyx_t_48 = __Pyx_PyObject_GetAttrStr(__pyx_t_47, __pyx_n_s_time); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_48 = __Pyx_PyObject_GetAttrStr(__pyx_t_47, __pyx_n_s_time); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_48);
         __Pyx_DECREF(__pyx_t_47); __pyx_t_47 = 0;
         __pyx_t_47 = NULL;
@@ -7183,20 +7495,20 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_47) {
-          __pyx_t_46 = __Pyx_PyObject_CallOneArg(__pyx_t_48, __pyx_t_47); if (unlikely(!__pyx_t_46)) __PYX_ERR(0, 406, __pyx_L1_error)
+          __pyx_t_46 = __Pyx_PyObject_CallOneArg(__pyx_t_48, __pyx_t_47); if (unlikely(!__pyx_t_46)) __PYX_ERR(0, 426, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_47); __pyx_t_47 = 0;
         } else {
-          __pyx_t_46 = __Pyx_PyObject_CallNoArg(__pyx_t_48); if (unlikely(!__pyx_t_46)) __PYX_ERR(0, 406, __pyx_L1_error)
+          __pyx_t_46 = __Pyx_PyObject_CallNoArg(__pyx_t_48); if (unlikely(!__pyx_t_46)) __PYX_ERR(0, 426, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_46);
         __Pyx_DECREF(__pyx_t_48); __pyx_t_48 = 0;
-        __pyx_t_48 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_48 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_48);
-        __pyx_t_47 = PyNumber_Subtract(__pyx_t_46, __pyx_t_48); if (unlikely(!__pyx_t_47)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_47 = PyNumber_Subtract(__pyx_t_46, __pyx_t_48); if (unlikely(!__pyx_t_47)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_47);
         __Pyx_DECREF(__pyx_t_46); __pyx_t_46 = 0;
         __Pyx_DECREF(__pyx_t_48); __pyx_t_48 = 0;
-        __pyx_t_48 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_47); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 406, __pyx_L1_error)
+        __pyx_t_48 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_47); if (unlikely(!__pyx_t_48)) __PYX_ERR(0, 426, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_48);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_47); __pyx_t_47 = 0;
@@ -7215,7 +7527,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[6] = {__pyx_t_47, __pyx_t_7, __pyx_t_1, __pyx_t_44, __pyx_t_45, __pyx_t_48};
-          __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 401, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 421, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_47); __pyx_t_47 = 0;
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -7228,7 +7540,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[6] = {__pyx_t_47, __pyx_t_7, __pyx_t_1, __pyx_t_44, __pyx_t_45, __pyx_t_48};
-          __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 401, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 421, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_47); __pyx_t_47 = 0;
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -7239,7 +7551,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else
         #endif
         {
-          __pyx_t_5 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 401, __pyx_L1_error)
+          __pyx_t_5 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 421, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           if (__pyx_t_47) {
             __Pyx_GIVEREF(__pyx_t_47); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_47); __pyx_t_47 = NULL;
@@ -7259,25 +7571,25 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           __pyx_t_44 = 0;
           __pyx_t_45 = 0;
           __pyx_t_48 = 0;
-          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 401, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 421, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 401, __pyx_L1_error)
+        if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 421, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":408
+        /* "MatrixFactorization_Cython_Epoch.pyx":428
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  * 
  *                     last_print_time = current_time             # <<<<<<<<<<<<<<
  *                     processed_samples_last_print = 0
  * 
  */
-        __pyx_t_11 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_11 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_11 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 428, __pyx_L1_error)
         __pyx_v_last_print_time = __pyx_t_11;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":409
+        /* "MatrixFactorization_Cython_Epoch.pyx":429
  * 
  *                     last_print_time = current_time
  *                     processed_samples_last_print = 0             # <<<<<<<<<<<<<<
@@ -7286,19 +7598,19 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
         __pyx_v_processed_samples_last_print = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":411
+        /* "MatrixFactorization_Cython_Epoch.pyx":431
  *                     processed_samples_last_print = 0
  * 
  *                     sys.stdout.flush()             # <<<<<<<<<<<<<<
  *                     sys.stderr.flush()
  * 
  */
-        __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stdout); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 411, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stdout); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 431, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_flush); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_flush); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_5 = NULL;
@@ -7312,28 +7624,28 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_5) {
-          __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 411, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 431, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         } else {
-          __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 411, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 431, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":412
+        /* "MatrixFactorization_Cython_Epoch.pyx":432
  * 
  *                     sys.stdout.flush()
  *                     sys.stderr.flush()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 412, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 432, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stderr); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 412, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stderr); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 432, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_flush); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 412, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_flush); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 432, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_5 = NULL;
@@ -7347,16 +7659,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_5) {
-          __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 412, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 432, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         } else {
-          __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 412, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 432, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":399
+        /* "MatrixFactorization_Cython_Epoch.pyx":419
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -7365,7 +7677,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
       }
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":390
+      /* "MatrixFactorization_Cython_Epoch.pyx":410
  * 
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -7375,8 +7687,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":280
- * 
+  /* "MatrixFactorization_Cython_Epoch.pyx":300
+ *                     sys.stderr.flush()
  * 
  *     def epochIteration_Cython_ASY_SVD_SGD(self):             # <<<<<<<<<<<<<<
  * 
@@ -7409,7 +7721,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":417
+/* "MatrixFactorization_Cython_Epoch.pyx":437
  * 
  * 
  *     def epochIteration_Cython_BPR_SGD(self):             # <<<<<<<<<<<<<<
@@ -7493,7 +7805,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_36 = NULL;
   __Pyx_RefNannySetupContext("epochIteration_Cython_BPR_SGD", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":420
+  /* "MatrixFactorization_Cython_Epoch.pyx":440
  * 
  *         # Get number of available interactions
  *         cdef long totalNumberOfBatch = int(self.n_users / self.batch_size) + 1             # <<<<<<<<<<<<<<
@@ -7502,30 +7814,30 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   if (unlikely(__pyx_v_self->batch_size == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    __PYX_ERR(0, 420, __pyx_L1_error)
+    __PYX_ERR(0, 440, __pyx_L1_error)
   }
   else if (sizeof(int) == sizeof(long) && (!(((int)-1) > 0)) && unlikely(__pyx_v_self->batch_size == (int)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_v_self->n_users))) {
     PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-    __PYX_ERR(0, 420, __pyx_L1_error)
+    __PYX_ERR(0, 440, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyInt_From_int(__Pyx_div_int(__pyx_v_self->n_users, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__Pyx_div_int(__pyx_v_self->n_users, __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyInt_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_3 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_3 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_totalNumberOfBatch = __pyx_t_3;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":425
+  /* "MatrixFactorization_Cython_Epoch.pyx":445
  *         cdef BPR_sample sample
  *         cdef long u, i, j
  *         cdef long index, numCurrentBatch, processed_samples_last_print, print_block_size = 500             # <<<<<<<<<<<<<<
@@ -7534,7 +7846,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_print_block_size = 0x1F4;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":431
+  /* "MatrixFactorization_Cython_Epoch.pyx":451
  * 
  * 
  *         cdef double H_i, H_j, W_u, cumulative_loss = 0.0             # <<<<<<<<<<<<<<
@@ -7543,16 +7855,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_cumulative_loss = 0.0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":434
+  /* "MatrixFactorization_Cython_Epoch.pyx":454
  * 
  * 
  *         cdef long start_time_epoch = time.time()             # <<<<<<<<<<<<<<
  *         cdef long last_print_time = start_time_epoch
  * 
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 434, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 434, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -7566,18 +7878,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
   if (__pyx_t_1) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 434, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 434, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_3 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 434, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_long(__pyx_t_2); if (unlikely((__pyx_t_3 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_start_time_epoch = __pyx_t_3;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":435
+  /* "MatrixFactorization_Cython_Epoch.pyx":455
  * 
  *         cdef long start_time_epoch = time.time()
  *         cdef long last_print_time = start_time_epoch             # <<<<<<<<<<<<<<
@@ -7586,7 +7898,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
   __pyx_v_last_print_time = __pyx_v_start_time_epoch;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":437
+  /* "MatrixFactorization_Cython_Epoch.pyx":457
  *         cdef long last_print_time = start_time_epoch
  * 
  *         for numCurrentBatch in range(totalNumberOfBatch):             # <<<<<<<<<<<<<<
@@ -7597,7 +7909,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_3; __pyx_t_5+=1) {
     __pyx_v_numCurrentBatch = __pyx_t_5;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":440
+    /* "MatrixFactorization_Cython_Epoch.pyx":460
  * 
  *             # Uniform user sampling with replacement
  *             sample = self.sampleBPR_Cython()             # <<<<<<<<<<<<<<
@@ -7606,7 +7918,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sample = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->sampleBPR_Cython(__pyx_v_self);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":442
+    /* "MatrixFactorization_Cython_Epoch.pyx":462
  *             sample = self.sampleBPR_Cython()
  * 
  *             u = sample.user             # <<<<<<<<<<<<<<
@@ -7616,7 +7928,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_t_6 = __pyx_v_sample.user;
     __pyx_v_u = __pyx_t_6;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":443
+    /* "MatrixFactorization_Cython_Epoch.pyx":463
  * 
  *             u = sample.user
  *             i = sample.pos_item             # <<<<<<<<<<<<<<
@@ -7626,7 +7938,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_t_6 = __pyx_v_sample.pos_item;
     __pyx_v_i = __pyx_t_6;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":444
+    /* "MatrixFactorization_Cython_Epoch.pyx":464
  *             u = sample.user
  *             i = sample.pos_item
  *             j = sample.neg_item             # <<<<<<<<<<<<<<
@@ -7636,7 +7948,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_t_6 = __pyx_v_sample.neg_item;
     __pyx_v_j = __pyx_t_6;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":446
+    /* "MatrixFactorization_Cython_Epoch.pyx":466
  *             j = sample.neg_item
  * 
  *             x_uij = 0.0             # <<<<<<<<<<<<<<
@@ -7645,7 +7957,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_x_uij = 0.0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":448
+    /* "MatrixFactorization_Cython_Epoch.pyx":468
  *             x_uij = 0.0
  * 
  *             for index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -7656,14 +7968,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_7; __pyx_t_6+=1) {
       __pyx_v_index = __pyx_t_6;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":449
+      /* "MatrixFactorization_Cython_Epoch.pyx":469
  * 
  *             for index in range(self.n_factors):
  *                 x_uij = self.USER_factors[u,index] * (self.ITEM_factors[i,index] - self.ITEM_factors[j,index])             # <<<<<<<<<<<<<<
  * 
  *             # Use gradient of log(sigm(-x_uij))
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 449, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 469, __pyx_L1_error)}
       __pyx_t_8 = __pyx_v_u;
       __pyx_t_9 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7677,9 +7989,9 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_9 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 449, __pyx_L1_error)
+        __PYX_ERR(0, 469, __pyx_L1_error)
       }
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 449, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 469, __pyx_L1_error)}
       __pyx_t_11 = __pyx_v_i;
       __pyx_t_12 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7693,9 +8005,9 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_12 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 449, __pyx_L1_error)
+        __PYX_ERR(0, 469, __pyx_L1_error)
       }
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 449, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 469, __pyx_L1_error)}
       __pyx_t_13 = __pyx_v_j;
       __pyx_t_14 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7709,12 +8021,12 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_14 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 449, __pyx_L1_error)
+        __PYX_ERR(0, 469, __pyx_L1_error)
       }
       __pyx_v_x_uij = ((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_8 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_9 * __pyx_v_self->USER_factors.strides[1]) ))) * ((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_11 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_12 * __pyx_v_self->ITEM_factors.strides[1]) ))) - (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_13 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_14 * __pyx_v_self->ITEM_factors.strides[1]) )))));
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":452
+    /* "MatrixFactorization_Cython_Epoch.pyx":472
  * 
  *             # Use gradient of log(sigm(-x_uij))
  *             sigmoid_item = 1 / (1 + exp(x_uij))             # <<<<<<<<<<<<<<
@@ -7724,11 +8036,11 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_t_15 = (1.0 + exp(__pyx_v_x_uij));
     if (unlikely(__pyx_t_15 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 452, __pyx_L1_error)
+      __PYX_ERR(0, 472, __pyx_L1_error)
     }
     __pyx_v_sigmoid_item = (1.0 / __pyx_t_15);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":453
+    /* "MatrixFactorization_Cython_Epoch.pyx":473
  *             # Use gradient of log(sigm(-x_uij))
  *             sigmoid_item = 1 / (1 + exp(x_uij))
  *             sigmoid_user = sigmoid_item             # <<<<<<<<<<<<<<
@@ -7737,7 +8049,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sigmoid_user = __pyx_v_sigmoid_item;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":455
+    /* "MatrixFactorization_Cython_Epoch.pyx":475
  *             sigmoid_user = sigmoid_item
  * 
  *             cumulative_loss += x_uij**2             # <<<<<<<<<<<<<<
@@ -7746,7 +8058,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_cumulative_loss = (__pyx_v_cumulative_loss + pow(__pyx_v_x_uij, 2.0));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":457
+    /* "MatrixFactorization_Cython_Epoch.pyx":477
  *             cumulative_loss += x_uij**2
  * 
  *             sigmoid_item_i = self.adaptive_gradient_item(sigmoid_item, i)             # <<<<<<<<<<<<<<
@@ -7755,7 +8067,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sigmoid_item_i = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_item(__pyx_v_self, __pyx_v_sigmoid_item, __pyx_v_i);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":458
+    /* "MatrixFactorization_Cython_Epoch.pyx":478
  * 
  *             sigmoid_item_i = self.adaptive_gradient_item(sigmoid_item, i)
  *             sigmoid_item_j = self.adaptive_gradient_item(sigmoid_item, j)             # <<<<<<<<<<<<<<
@@ -7764,7 +8076,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sigmoid_item_j = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_item(__pyx_v_self, __pyx_v_sigmoid_item, __pyx_v_j);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":460
+    /* "MatrixFactorization_Cython_Epoch.pyx":480
  *             sigmoid_item_j = self.adaptive_gradient_item(sigmoid_item, j)
  * 
  *             sigmoid_user = self.adaptive_gradient_user(sigmoid_user, u)             # <<<<<<<<<<<<<<
@@ -7773,7 +8085,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
     __pyx_v_sigmoid_user = ((struct __pyx_vtabstruct_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *)__pyx_v_self->__pyx_vtab)->adaptive_gradient_user(__pyx_v_self, __pyx_v_sigmoid_user, __pyx_v_u);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":465
+    /* "MatrixFactorization_Cython_Epoch.pyx":485
  * 
  * 
  *             for index in range(self.n_factors):             # <<<<<<<<<<<<<<
@@ -7784,14 +8096,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_7; __pyx_t_6+=1) {
       __pyx_v_index = __pyx_t_6;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":468
+      /* "MatrixFactorization_Cython_Epoch.pyx":488
  * 
  *                 # Copy original value to avoid messing up the updates
  *                 H_i = self.ITEM_factors[i, index]             # <<<<<<<<<<<<<<
  *                 H_j = self.ITEM_factors[j, index]
  *                 W_u = self.USER_factors[u, index]
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 468, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 488, __pyx_L1_error)}
       __pyx_t_16 = __pyx_v_i;
       __pyx_t_17 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7805,18 +8117,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_17 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 468, __pyx_L1_error)
+        __PYX_ERR(0, 488, __pyx_L1_error)
       }
       __pyx_v_H_i = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_16 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_17 * __pyx_v_self->ITEM_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":469
+      /* "MatrixFactorization_Cython_Epoch.pyx":489
  *                 # Copy original value to avoid messing up the updates
  *                 H_i = self.ITEM_factors[i, index]
  *                 H_j = self.ITEM_factors[j, index]             # <<<<<<<<<<<<<<
  *                 W_u = self.USER_factors[u, index]
  * 
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 469, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 489, __pyx_L1_error)}
       __pyx_t_18 = __pyx_v_j;
       __pyx_t_19 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7830,18 +8142,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_19 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 469, __pyx_L1_error)
+        __PYX_ERR(0, 489, __pyx_L1_error)
       }
       __pyx_v_H_j = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_18 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_19 * __pyx_v_self->ITEM_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":470
+      /* "MatrixFactorization_Cython_Epoch.pyx":490
  *                 H_i = self.ITEM_factors[i, index]
  *                 H_j = self.ITEM_factors[j, index]
  *                 W_u = self.USER_factors[u, index]             # <<<<<<<<<<<<<<
  * 
  *                 self.USER_factors[u, index] += self.learning_rate * (sigmoid_user * ( H_i - H_j ) - self.user_reg * W_u)
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 470, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 490, __pyx_L1_error)}
       __pyx_t_20 = __pyx_v_u;
       __pyx_t_21 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7855,18 +8167,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_21 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 470, __pyx_L1_error)
+        __PYX_ERR(0, 490, __pyx_L1_error)
       }
       __pyx_v_W_u = (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_20 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_21 * __pyx_v_self->USER_factors.strides[1]) )));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":472
+      /* "MatrixFactorization_Cython_Epoch.pyx":492
  *                 W_u = self.USER_factors[u, index]
  * 
  *                 self.USER_factors[u, index] += self.learning_rate * (sigmoid_user * ( H_i - H_j ) - self.user_reg * W_u)             # <<<<<<<<<<<<<<
  *                 self.ITEM_factors[i, index] += self.learning_rate * (sigmoid_item_i * ( W_u ) - self.positive_reg * H_i)
  *                 self.ITEM_factors[j, index] += self.learning_rate * (sigmoid_item_j * (-W_u ) - self.negative_reg * H_j)
  */
-      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 472, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 492, __pyx_L1_error)}
       __pyx_t_22 = __pyx_v_u;
       __pyx_t_23 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7880,18 +8192,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_23 >= __pyx_v_self->USER_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 472, __pyx_L1_error)
+        __PYX_ERR(0, 492, __pyx_L1_error)
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->USER_factors.data + __pyx_t_22 * __pyx_v_self->USER_factors.strides[0]) ) + __pyx_t_23 * __pyx_v_self->USER_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_sigmoid_user * (__pyx_v_H_i - __pyx_v_H_j)) - (__pyx_v_self->user_reg * __pyx_v_W_u)));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":473
+      /* "MatrixFactorization_Cython_Epoch.pyx":493
  * 
  *                 self.USER_factors[u, index] += self.learning_rate * (sigmoid_user * ( H_i - H_j ) - self.user_reg * W_u)
  *                 self.ITEM_factors[i, index] += self.learning_rate * (sigmoid_item_i * ( W_u ) - self.positive_reg * H_i)             # <<<<<<<<<<<<<<
  *                 self.ITEM_factors[j, index] += self.learning_rate * (sigmoid_item_j * (-W_u ) - self.negative_reg * H_j)
  * 
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 473, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 493, __pyx_L1_error)}
       __pyx_t_24 = __pyx_v_i;
       __pyx_t_25 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7905,18 +8217,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_25 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 473, __pyx_L1_error)
+        __PYX_ERR(0, 493, __pyx_L1_error)
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_24 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_25 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_sigmoid_item_i * __pyx_v_W_u) - (__pyx_v_self->positive_reg * __pyx_v_H_i)));
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":474
+      /* "MatrixFactorization_Cython_Epoch.pyx":494
  *                 self.USER_factors[u, index] += self.learning_rate * (sigmoid_user * ( H_i - H_j ) - self.user_reg * W_u)
  *                 self.ITEM_factors[i, index] += self.learning_rate * (sigmoid_item_i * ( W_u ) - self.positive_reg * H_i)
  *                 self.ITEM_factors[j, index] += self.learning_rate * (sigmoid_item_j * (-W_u ) - self.negative_reg * H_j)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 474, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 494, __pyx_L1_error)}
       __pyx_t_26 = __pyx_v_j;
       __pyx_t_27 = __pyx_v_index;
       __pyx_t_10 = -1;
@@ -7930,12 +8242,12 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       } else if (unlikely(__pyx_t_27 >= __pyx_v_self->ITEM_factors.shape[1])) __pyx_t_10 = 1;
       if (unlikely(__pyx_t_10 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_10);
-        __PYX_ERR(0, 474, __pyx_L1_error)
+        __PYX_ERR(0, 494, __pyx_L1_error)
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_self->ITEM_factors.data + __pyx_t_26 * __pyx_v_self->ITEM_factors.strides[0]) ) + __pyx_t_27 * __pyx_v_self->ITEM_factors.strides[1]) )) += (__pyx_v_self->learning_rate * ((__pyx_v_sigmoid_item_j * (-__pyx_v_W_u)) - (__pyx_v_self->negative_reg * __pyx_v_H_j)));
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":480
+    /* "MatrixFactorization_Cython_Epoch.pyx":500
  * 
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -7953,16 +8265,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_L10_bool_binop_done:;
     if (__pyx_t_28) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":482
+      /* "MatrixFactorization_Cython_Epoch.pyx":502
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                 current_time = time.time()             # <<<<<<<<<<<<<<
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  */
-      __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 482, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 502, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 482, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 502, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
@@ -7976,28 +8288,28 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 482, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 502, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 482, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 502, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_current_time, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":485
+      /* "MatrixFactorization_Cython_Epoch.pyx":505
  * 
  *                 # Set block size to the number of items necessary in order to print every 30 seconds
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)             # <<<<<<<<<<<<<<
  * 
  *                 print_block_size = int(samples_per_sec*30)
  */
-      __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_numCurrentBatch); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_time); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_time); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_30);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
@@ -8011,57 +8323,57 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 485, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 485, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-      __pyx_t_30 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_30 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_30);
-      __pyx_t_4 = PyNumber_Subtract(__pyx_t_1, __pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Subtract(__pyx_t_1, __pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-      __pyx_t_30 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 485, __pyx_L1_error)
+      __pyx_t_30 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_30);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_XDECREF_SET(__pyx_v_samples_per_sec, __pyx_t_30);
       __pyx_t_30 = 0;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":487
+      /* "MatrixFactorization_Cython_Epoch.pyx":507
  *                 samples_per_sec = numCurrentBatch/(time.time() - start_time_epoch)
  * 
  *                 print_block_size = int(samples_per_sec*30)             # <<<<<<<<<<<<<<
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  */
-      __pyx_t_30 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 487, __pyx_L1_error)
+      __pyx_t_30 = PyNumber_Multiply(__pyx_v_samples_per_sec, __pyx_int_30); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_30);
-      __pyx_t_4 = __Pyx_PyNumber_Int(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 487, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyNumber_Int(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-      __pyx_t_6 = __Pyx_PyInt_As_long(__pyx_t_4); if (unlikely((__pyx_t_6 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 487, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyInt_As_long(__pyx_t_4); if (unlikely((__pyx_t_6 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_print_block_size = __pyx_t_6;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":489
+      /* "MatrixFactorization_Cython_Epoch.pyx":509
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. BPR loss {:.2E}. Sample per second: {:.0f}".format(
  */
-      __pyx_t_4 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 489, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 509, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_30 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_4); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 489, __pyx_L1_error)
+      __pyx_t_30 = PyNumber_Subtract(__pyx_v_current_time, __pyx_t_4); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 509, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_30);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyObject_RichCompare(__pyx_t_30, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 489, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_t_30, __pyx_int_30, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 509, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-      __pyx_t_29 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_29 < 0)) __PYX_ERR(0, 489, __pyx_L1_error)
+      __pyx_t_29 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_29 < 0)) __PYX_ERR(0, 509, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_29) {
       } else {
@@ -8073,27 +8385,27 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
       __pyx_L13_bool_binop_done:;
       if (__pyx_t_28) {
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":491
+        /* "MatrixFactorization_Cython_Epoch.pyx":511
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. BPR loss {:.2E}. Sample per second: {:.0f}".format(             # <<<<<<<<<<<<<<
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  */
-        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_BPR_l, __pyx_n_s_format); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 491, __pyx_L1_error)
+        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Processed_2f_in_2f_seconds_BPR_l, __pyx_n_s_format); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 511, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_30);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":492
+        /* "MatrixFactorization_Cython_Epoch.pyx":512
  * 
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. BPR loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,             # <<<<<<<<<<<<<<
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  */
-        __pyx_t_2 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 492, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyInt_From_long((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 512, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":493
+        /* "MatrixFactorization_Cython_Epoch.pyx":513
  *                     print("Processed {} ( {:.2f}% ) in {:.2f} seconds. BPR loss {:.2E}. Sample per second: {:.0f}".format(
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,             # <<<<<<<<<<<<<<
@@ -8103,21 +8415,21 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         __pyx_t_15 = (100.0 * __pyx_v_numCurrentBatch);
         if (unlikely(__pyx_v_totalNumberOfBatch == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 493, __pyx_L1_error)
+          __PYX_ERR(0, 513, __pyx_L1_error)
         }
-        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_15 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
+        __pyx_t_1 = PyFloat_FromDouble((__pyx_t_15 / __pyx_v_totalNumberOfBatch)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":494
+        /* "MatrixFactorization_Cython_Epoch.pyx":514
  *                         numCurrentBatch*self.batch_size,
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,             # <<<<<<<<<<<<<<
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  */
-        __pyx_t_32 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 494, __pyx_L1_error)
+        __pyx_t_32 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 514, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_32);
-        __pyx_t_33 = __Pyx_PyObject_GetAttrStr(__pyx_t_32, __pyx_n_s_time); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 494, __pyx_L1_error)
+        __pyx_t_33 = __Pyx_PyObject_GetAttrStr(__pyx_t_32, __pyx_n_s_time); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 514, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_33);
         __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
         __pyx_t_32 = NULL;
@@ -8131,21 +8443,21 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_32) {
-          __pyx_t_31 = __Pyx_PyObject_CallOneArg(__pyx_t_33, __pyx_t_32); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 494, __pyx_L1_error)
+          __pyx_t_31 = __Pyx_PyObject_CallOneArg(__pyx_t_33, __pyx_t_32); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 514, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_32); __pyx_t_32 = 0;
         } else {
-          __pyx_t_31 = __Pyx_PyObject_CallNoArg(__pyx_t_33); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 494, __pyx_L1_error)
+          __pyx_t_31 = __Pyx_PyObject_CallNoArg(__pyx_t_33); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 514, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_31);
         __Pyx_DECREF(__pyx_t_33); __pyx_t_33 = 0;
-        __pyx_t_33 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 494, __pyx_L1_error)
+        __pyx_t_33 = __Pyx_PyInt_From_long(__pyx_v_last_print_time); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 514, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_33);
-        __pyx_t_32 = PyNumber_Subtract(__pyx_t_31, __pyx_t_33); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 494, __pyx_L1_error)
+        __pyx_t_32 = PyNumber_Subtract(__pyx_t_31, __pyx_t_33); if (unlikely(!__pyx_t_32)) __PYX_ERR(0, 514, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_32);
         __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         __Pyx_DECREF(__pyx_t_33); __pyx_t_33 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":495
+        /* "MatrixFactorization_Cython_Epoch.pyx":515
  *                         100.0* numCurrentBatch/totalNumberOfBatch,
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),             # <<<<<<<<<<<<<<
@@ -8155,23 +8467,23 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         __pyx_t_6 = ((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1);
         if (unlikely(__pyx_t_6 == 0)) {
           PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-          __PYX_ERR(0, 495, __pyx_L1_error)
+          __PYX_ERR(0, 515, __pyx_L1_error)
         }
-        __pyx_t_33 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_6)); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 495, __pyx_L1_error)
+        __pyx_t_33 = PyFloat_FromDouble((__pyx_v_cumulative_loss / __pyx_t_6)); if (unlikely(!__pyx_t_33)) __PYX_ERR(0, 515, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_33);
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":496
+        /* "MatrixFactorization_Cython_Epoch.pyx":516
  *                         time.time() - last_print_time,
  *                         cumulative_loss/(numCurrentBatch*self.batch_size + 1),
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))             # <<<<<<<<<<<<<<
  * 
  *                     last_print_time = current_time
  */
-        __pyx_t_31 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_31 = PyFloat_FromDouble(((double)((__pyx_v_numCurrentBatch * __pyx_v_self->batch_size) + 1))); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_31);
-        __pyx_t_35 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_35 = __Pyx_GetModuleGlobalName(__pyx_n_s_time); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_35);
-        __pyx_t_36 = __Pyx_PyObject_GetAttrStr(__pyx_t_35, __pyx_n_s_time); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_36 = __Pyx_PyObject_GetAttrStr(__pyx_t_35, __pyx_n_s_time); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_36);
         __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
         __pyx_t_35 = NULL;
@@ -8185,20 +8497,20 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_35) {
-          __pyx_t_34 = __Pyx_PyObject_CallOneArg(__pyx_t_36, __pyx_t_35); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 496, __pyx_L1_error)
+          __pyx_t_34 = __Pyx_PyObject_CallOneArg(__pyx_t_36, __pyx_t_35); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 516, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
         } else {
-          __pyx_t_34 = __Pyx_PyObject_CallNoArg(__pyx_t_36); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 496, __pyx_L1_error)
+          __pyx_t_34 = __Pyx_PyObject_CallNoArg(__pyx_t_36); if (unlikely(!__pyx_t_34)) __PYX_ERR(0, 516, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_34);
         __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
-        __pyx_t_36 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_36 = __Pyx_PyInt_From_long(__pyx_v_start_time_epoch); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_36);
-        __pyx_t_35 = PyNumber_Subtract(__pyx_t_34, __pyx_t_36); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_35 = PyNumber_Subtract(__pyx_t_34, __pyx_t_36); if (unlikely(!__pyx_t_35)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_35);
         __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
         __Pyx_DECREF(__pyx_t_36); __pyx_t_36 = 0;
-        __pyx_t_36 = __Pyx_PyNumber_Divide(__pyx_t_31, __pyx_t_35); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 496, __pyx_L1_error)
+        __pyx_t_36 = __Pyx_PyNumber_Divide(__pyx_t_31, __pyx_t_35); if (unlikely(!__pyx_t_36)) __PYX_ERR(0, 516, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_36);
         __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
@@ -8217,7 +8529,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_30)) {
           PyObject *__pyx_temp[6] = {__pyx_t_35, __pyx_t_2, __pyx_t_1, __pyx_t_32, __pyx_t_33, __pyx_t_36};
-          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_30, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 491, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_30, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 511, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_35); __pyx_t_35 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -8230,7 +8542,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_30)) {
           PyObject *__pyx_temp[6] = {__pyx_t_35, __pyx_t_2, __pyx_t_1, __pyx_t_32, __pyx_t_33, __pyx_t_36};
-          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_30, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 491, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_30, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 511, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_35); __pyx_t_35 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -8241,7 +8553,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
         } else
         #endif
         {
-          __pyx_t_31 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 491, __pyx_L1_error)
+          __pyx_t_31 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 511, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_31);
           if (__pyx_t_35) {
             __Pyx_GIVEREF(__pyx_t_35); PyTuple_SET_ITEM(__pyx_t_31, 0, __pyx_t_35); __pyx_t_35 = NULL;
@@ -8261,25 +8573,25 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           __pyx_t_32 = 0;
           __pyx_t_33 = 0;
           __pyx_t_36 = 0;
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_30, __pyx_t_31, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 491, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_30, __pyx_t_31, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 511, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         }
         __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-        if (__Pyx_PrintOne(0, __pyx_t_4) < 0) __PYX_ERR(0, 491, __pyx_L1_error)
+        if (__Pyx_PrintOne(0, __pyx_t_4) < 0) __PYX_ERR(0, 511, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":498
+        /* "MatrixFactorization_Cython_Epoch.pyx":518
  *                         float(numCurrentBatch*self.batch_size + 1) / (time.time() - start_time_epoch)))
  * 
  *                     last_print_time = current_time             # <<<<<<<<<<<<<<
  *                     processed_samples_last_print = 0
  * 
  */
-        __pyx_t_6 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_6 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 498, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyInt_As_long(__pyx_v_current_time); if (unlikely((__pyx_t_6 == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 518, __pyx_L1_error)
         __pyx_v_last_print_time = __pyx_t_6;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":499
+        /* "MatrixFactorization_Cython_Epoch.pyx":519
  * 
  *                     last_print_time = current_time
  *                     processed_samples_last_print = 0             # <<<<<<<<<<<<<<
@@ -8288,19 +8600,19 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
         __pyx_v_processed_samples_last_print = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":501
+        /* "MatrixFactorization_Cython_Epoch.pyx":521
  *                     processed_samples_last_print = 0
  * 
  *                     sys.stdout.flush()             # <<<<<<<<<<<<<<
  *                     sys.stderr.flush()
  * 
  */
-        __pyx_t_30 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_30 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 521, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_30);
-        __pyx_t_31 = __Pyx_PyObject_GetAttrStr(__pyx_t_30, __pyx_n_s_stdout); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_31 = __Pyx_PyObject_GetAttrStr(__pyx_t_30, __pyx_n_s_stdout); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 521, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_31);
         __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_31, __pyx_n_s_flush); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_31, __pyx_n_s_flush); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 521, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_30);
         __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         __pyx_t_31 = NULL;
@@ -8314,28 +8626,28 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_31) {
-          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_31); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 501, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_31); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 521, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         } else {
-          __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 501, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 521, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":502
+        /* "MatrixFactorization_Cython_Epoch.pyx":522
  * 
  *                     sys.stdout.flush()
  *                     sys.stderr.flush()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_30 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 502, __pyx_L1_error)
+        __pyx_t_30 = __Pyx_GetModuleGlobalName(__pyx_n_s_sys); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 522, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_30);
-        __pyx_t_31 = __Pyx_PyObject_GetAttrStr(__pyx_t_30, __pyx_n_s_stderr); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 502, __pyx_L1_error)
+        __pyx_t_31 = __Pyx_PyObject_GetAttrStr(__pyx_t_30, __pyx_n_s_stderr); if (unlikely(!__pyx_t_31)) __PYX_ERR(0, 522, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_31);
         __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
-        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_31, __pyx_n_s_flush); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 502, __pyx_L1_error)
+        __pyx_t_30 = __Pyx_PyObject_GetAttrStr(__pyx_t_31, __pyx_n_s_flush); if (unlikely(!__pyx_t_30)) __PYX_ERR(0, 522, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_30);
         __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         __pyx_t_31 = NULL;
@@ -8349,16 +8661,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
           }
         }
         if (__pyx_t_31) {
-          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_31); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 502, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_30, __pyx_t_31); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 522, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_31); __pyx_t_31 = 0;
         } else {
-          __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 502, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_30); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 522, __pyx_L1_error)
         }
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_30); __pyx_t_30 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "MatrixFactorization_Cython_Epoch.pyx":489
+        /* "MatrixFactorization_Cython_Epoch.pyx":509
  *                 print_block_size = int(samples_per_sec*30)
  * 
  *                 if current_time - last_print_time > 30 or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -8367,7 +8679,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  */
       }
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":480
+      /* "MatrixFactorization_Cython_Epoch.pyx":500
  * 
  * 
  *             if processed_samples_last_print >= print_block_size or numCurrentBatch == totalNumberOfBatch-1:             # <<<<<<<<<<<<<<
@@ -8377,7 +8689,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":417
+  /* "MatrixFactorization_Cython_Epoch.pyx":437
  * 
  * 
  *     def epochIteration_Cython_BPR_SGD(self):             # <<<<<<<<<<<<<<
@@ -8409,7 +8721,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":512
+/* "MatrixFactorization_Cython_Epoch.pyx":532
  * 
  * 
  *     def get_W(self):             # <<<<<<<<<<<<<<
@@ -8440,7 +8752,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("get_W", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":513
+  /* "MatrixFactorization_Cython_Epoch.pyx":533
  * 
  *     def get_W(self):
  *         return np.array(self.USER_factors)             # <<<<<<<<<<<<<<
@@ -8448,13 +8760,13 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 513, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 533, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 513, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 533, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 513, __pyx_L1_error)}
-  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_self->USER_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 513, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->USER_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 533, __pyx_L1_error)}
+  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_self->USER_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 533, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -8467,14 +8779,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_2};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -8483,20 +8795,20 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_2};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 513, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 533, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_2);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
       __pyx_t_2 = 0;
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
@@ -8506,7 +8818,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":512
+  /* "MatrixFactorization_Cython_Epoch.pyx":532
  * 
  * 
  *     def get_W(self):             # <<<<<<<<<<<<<<
@@ -8529,7 +8841,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":516
+/* "MatrixFactorization_Cython_Epoch.pyx":536
  * 
  * 
  *     def get_H(self):             # <<<<<<<<<<<<<<
@@ -8560,7 +8872,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("get_H", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":517
+  /* "MatrixFactorization_Cython_Epoch.pyx":537
  * 
  *     def get_H(self):
  *         return np.array(self.ITEM_factors)             # <<<<<<<<<<<<<<
@@ -8568,13 +8880,13 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 517, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 517, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 517, __pyx_L1_error)}
-  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_self->ITEM_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 517, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->ITEM_factors.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 537, __pyx_L1_error)}
+  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_self->ITEM_factors, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -8587,14 +8899,14 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_2};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -8603,20 +8915,20 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_2};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 517, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_2);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
       __pyx_t_2 = 0;
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
@@ -8626,7 +8938,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":516
+  /* "MatrixFactorization_Cython_Epoch.pyx":536
  * 
  * 
  *     def get_H(self):             # <<<<<<<<<<<<<<
@@ -8649,7 +8961,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":521
+/* "MatrixFactorization_Cython_Epoch.pyx":541
  * 
  * 
  *     cdef double adaptive_gradient_item(self, double gradient, long item_id):             # <<<<<<<<<<<<<<
@@ -8678,7 +8990,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   Py_ssize_t __pyx_t_15;
   __Pyx_RefNannySetupContext("adaptive_gradient_item", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":527
+  /* "MatrixFactorization_Cython_Epoch.pyx":547
  * 
  * 
  *         if self.useAdaGrad:             # <<<<<<<<<<<<<<
@@ -8688,14 +9000,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useAdaGrad != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":528
+    /* "MatrixFactorization_Cython_Epoch.pyx":548
  * 
  *         if self.useAdaGrad:
  *             self.sgd_cache_I[item_id] += gradient ** 2             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_I[item_id]) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 528, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 548, __pyx_L1_error)}
     __pyx_t_2 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_2 < 0) {
@@ -8704,18 +9016,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_2 >= __pyx_v_self->sgd_cache_I.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 528, __pyx_L1_error)
+      __PYX_ERR(0, 548, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I.data + __pyx_t_2 * __pyx_v_self->sgd_cache_I.strides[0]) )) += pow(__pyx_v_gradient, 2.0);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":530
+    /* "MatrixFactorization_Cython_Epoch.pyx":550
  *             self.sgd_cache_I[item_id] += gradient ** 2
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_I[item_id]) + 1e-8)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 530, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 550, __pyx_L1_error)}
     __pyx_t_4 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_4 < 0) {
@@ -8724,16 +9036,16 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_4 >= __pyx_v_self->sgd_cache_I.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 530, __pyx_L1_error)
+      __PYX_ERR(0, 550, __pyx_L1_error)
     }
     __pyx_t_5 = (sqrt((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I.data + __pyx_t_4 * __pyx_v_self->sgd_cache_I.strides[0]) )))) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 530, __pyx_L1_error)
+      __PYX_ERR(0, 550, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_gradient / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":527
+    /* "MatrixFactorization_Cython_Epoch.pyx":547
  * 
  * 
  *         if self.useAdaGrad:             # <<<<<<<<<<<<<<
@@ -8743,7 +9055,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":533
+  /* "MatrixFactorization_Cython_Epoch.pyx":553
  * 
  * 
  *         elif self.useRmsprop:             # <<<<<<<<<<<<<<
@@ -8753,14 +9065,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useRmsprop != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":534
+    /* "MatrixFactorization_Cython_Epoch.pyx":554
  * 
  *         elif self.useRmsprop:
  *             self.sgd_cache_I[item_id] = self.sgd_cache_I[item_id] * self.gamma + (1 - self.gamma) * gradient ** 2             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_I[item_id]) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 534, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 554, __pyx_L1_error)}
     __pyx_t_6 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_6 < 0) {
@@ -8769,9 +9081,9 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_6 >= __pyx_v_self->sgd_cache_I.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 534, __pyx_L1_error)
+      __PYX_ERR(0, 554, __pyx_L1_error)
     }
-    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 534, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 554, __pyx_L1_error)}
     __pyx_t_7 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_7 < 0) {
@@ -8780,18 +9092,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_7 >= __pyx_v_self->sgd_cache_I.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 534, __pyx_L1_error)
+      __PYX_ERR(0, 554, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I.data + __pyx_t_7 * __pyx_v_self->sgd_cache_I.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I.data + __pyx_t_6 * __pyx_v_self->sgd_cache_I.strides[0]) ))) * __pyx_v_self->gamma) + ((1.0 - __pyx_v_self->gamma) * pow(__pyx_v_gradient, 2.0)));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":536
+    /* "MatrixFactorization_Cython_Epoch.pyx":556
  *             self.sgd_cache_I[item_id] = self.sgd_cache_I[item_id] * self.gamma + (1 - self.gamma) * gradient ** 2
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_I[item_id]) + 1e-8)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 536, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 556, __pyx_L1_error)}
     __pyx_t_8 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_8 < 0) {
@@ -8800,16 +9112,16 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_8 >= __pyx_v_self->sgd_cache_I.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 536, __pyx_L1_error)
+      __PYX_ERR(0, 556, __pyx_L1_error)
     }
     __pyx_t_5 = (sqrt((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I.data + __pyx_t_8 * __pyx_v_self->sgd_cache_I.strides[0]) )))) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 536, __pyx_L1_error)
+      __PYX_ERR(0, 556, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_gradient / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":533
+    /* "MatrixFactorization_Cython_Epoch.pyx":553
  * 
  * 
  *         elif self.useRmsprop:             # <<<<<<<<<<<<<<
@@ -8819,7 +9131,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":539
+  /* "MatrixFactorization_Cython_Epoch.pyx":559
  * 
  * 
  *         elif self.useAdam:             # <<<<<<<<<<<<<<
@@ -8829,14 +9141,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useAdam != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":542
+    /* "MatrixFactorization_Cython_Epoch.pyx":562
  * 
  *             self.sgd_cache_I_momentum_1[item_id] = \
  *                 self.sgd_cache_I_momentum_1[item_id] * self.beta_1 + (1 - self.beta_1) * gradient             # <<<<<<<<<<<<<<
  * 
  *             self.sgd_cache_I_momentum_2[item_id] = \
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 542, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 562, __pyx_L1_error)}
     __pyx_t_9 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_9 < 0) {
@@ -8845,17 +9157,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_9 >= __pyx_v_self->sgd_cache_I_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 542, __pyx_L1_error)
+      __PYX_ERR(0, 562, __pyx_L1_error)
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":541
+    /* "MatrixFactorization_Cython_Epoch.pyx":561
  *         elif self.useAdam:
  * 
  *             self.sgd_cache_I_momentum_1[item_id] = \             # <<<<<<<<<<<<<<
  *                 self.sgd_cache_I_momentum_1[item_id] * self.beta_1 + (1 - self.beta_1) * gradient
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 541, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 561, __pyx_L1_error)}
     __pyx_t_10 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_10 < 0) {
@@ -8864,18 +9176,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_10 >= __pyx_v_self->sgd_cache_I_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 541, __pyx_L1_error)
+      __PYX_ERR(0, 561, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_1.data + __pyx_t_10 * __pyx_v_self->sgd_cache_I_momentum_1.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_1.data + __pyx_t_9 * __pyx_v_self->sgd_cache_I_momentum_1.strides[0]) ))) * __pyx_v_self->beta_1) + ((1.0 - __pyx_v_self->beta_1) * __pyx_v_gradient));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":545
+    /* "MatrixFactorization_Cython_Epoch.pyx":565
  * 
  *             self.sgd_cache_I_momentum_2[item_id] = \
  *                 self.sgd_cache_I_momentum_2[item_id] * self.beta_2 + (1 - self.beta_2) * gradient**2             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 545, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 565, __pyx_L1_error)}
     __pyx_t_11 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_11 < 0) {
@@ -8884,17 +9196,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_11 >= __pyx_v_self->sgd_cache_I_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 545, __pyx_L1_error)
+      __PYX_ERR(0, 565, __pyx_L1_error)
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":544
+    /* "MatrixFactorization_Cython_Epoch.pyx":564
  *                 self.sgd_cache_I_momentum_1[item_id] * self.beta_1 + (1 - self.beta_1) * gradient
  * 
  *             self.sgd_cache_I_momentum_2[item_id] = \             # <<<<<<<<<<<<<<
  *                 self.sgd_cache_I_momentum_2[item_id] * self.beta_2 + (1 - self.beta_2) * gradient**2
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 544, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 564, __pyx_L1_error)}
     __pyx_t_12 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_12 < 0) {
@@ -8903,18 +9215,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_12 >= __pyx_v_self->sgd_cache_I_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 544, __pyx_L1_error)
+      __PYX_ERR(0, 564, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_2.data + __pyx_t_12 * __pyx_v_self->sgd_cache_I_momentum_2.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_2.data + __pyx_t_11 * __pyx_v_self->sgd_cache_I_momentum_2.strides[0]) ))) * __pyx_v_self->beta_2) + ((1.0 - __pyx_v_self->beta_2) * pow(__pyx_v_gradient, 2.0)));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":548
+    /* "MatrixFactorization_Cython_Epoch.pyx":568
  * 
  * 
  *             self.momentum_1 = self.sgd_cache_I_momentum_1[item_id]/ (1 - self.beta_1_power_t)             # <<<<<<<<<<<<<<
  *             self.momentum_2 = self.sgd_cache_I_momentum_2[item_id]/ (1 - self.beta_2_power_t)
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 548, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 568, __pyx_L1_error)}
     __pyx_t_13 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_13 < 0) {
@@ -8923,24 +9235,24 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_13 >= __pyx_v_self->sgd_cache_I_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 548, __pyx_L1_error)
+      __PYX_ERR(0, 568, __pyx_L1_error)
     }
     __pyx_t_5 = (*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_1.data + __pyx_t_13 * __pyx_v_self->sgd_cache_I_momentum_1.strides[0]) )));
     __pyx_t_14 = (1.0 - __pyx_v_self->beta_1_power_t);
     if (unlikely(__pyx_t_14 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 548, __pyx_L1_error)
+      __PYX_ERR(0, 568, __pyx_L1_error)
     }
     __pyx_v_self->momentum_1 = (__pyx_t_5 / __pyx_t_14);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":549
+    /* "MatrixFactorization_Cython_Epoch.pyx":569
  * 
  *             self.momentum_1 = self.sgd_cache_I_momentum_1[item_id]/ (1 - self.beta_1_power_t)
  *             self.momentum_2 = self.sgd_cache_I_momentum_2[item_id]/ (1 - self.beta_2_power_t)             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = self.momentum_1/ (sqrt(self.momentum_2) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 549, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 569, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_item_id;
     __pyx_t_3 = -1;
     if (__pyx_t_15 < 0) {
@@ -8949,17 +9261,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_15 >= __pyx_v_self->sgd_cache_I_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 549, __pyx_L1_error)
+      __PYX_ERR(0, 569, __pyx_L1_error)
     }
     __pyx_t_14 = (*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_I_momentum_2.data + __pyx_t_15 * __pyx_v_self->sgd_cache_I_momentum_2.strides[0]) )));
     __pyx_t_5 = (1.0 - __pyx_v_self->beta_2_power_t);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 549, __pyx_L1_error)
+      __PYX_ERR(0, 569, __pyx_L1_error)
     }
     __pyx_v_self->momentum_2 = (__pyx_t_14 / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":551
+    /* "MatrixFactorization_Cython_Epoch.pyx":571
  *             self.momentum_2 = self.sgd_cache_I_momentum_2[item_id]/ (1 - self.beta_2_power_t)
  * 
  *             gradient_update = self.momentum_1/ (sqrt(self.momentum_2) + 1e-8)             # <<<<<<<<<<<<<<
@@ -8969,11 +9281,11 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     __pyx_t_5 = (sqrt(__pyx_v_self->momentum_2) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 551, __pyx_L1_error)
+      __PYX_ERR(0, 571, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_self->momentum_1 / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":539
+    /* "MatrixFactorization_Cython_Epoch.pyx":559
  * 
  * 
  *         elif self.useAdam:             # <<<<<<<<<<<<<<
@@ -8983,7 +9295,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":556
+  /* "MatrixFactorization_Cython_Epoch.pyx":576
  *         else:
  * 
  *             gradient_update = gradient             # <<<<<<<<<<<<<<
@@ -8995,7 +9307,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   }
   __pyx_L3:;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":559
+  /* "MatrixFactorization_Cython_Epoch.pyx":579
  * 
  * 
  *         return gradient_update             # <<<<<<<<<<<<<<
@@ -9005,7 +9317,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_r = __pyx_v_gradient_update;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":521
+  /* "MatrixFactorization_Cython_Epoch.pyx":541
  * 
  * 
  *     cdef double adaptive_gradient_item(self, double gradient, long item_id):             # <<<<<<<<<<<<<<
@@ -9022,7 +9334,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":563
+/* "MatrixFactorization_Cython_Epoch.pyx":583
  * 
  * 
  *     cdef double adaptive_gradient_user(self, double gradient, long user_id):             # <<<<<<<<<<<<<<
@@ -9051,7 +9363,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   Py_ssize_t __pyx_t_15;
   __Pyx_RefNannySetupContext("adaptive_gradient_user", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":568
+  /* "MatrixFactorization_Cython_Epoch.pyx":588
  *         cdef double gradient_update
  * 
  *         if self.useAdaGrad:             # <<<<<<<<<<<<<<
@@ -9061,14 +9373,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useAdaGrad != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":569
+    /* "MatrixFactorization_Cython_Epoch.pyx":589
  * 
  *         if self.useAdaGrad:
  *             self.sgd_cache_U[user_id] += gradient ** 2             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_U[user_id]) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 569, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 589, __pyx_L1_error)}
     __pyx_t_2 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_2 < 0) {
@@ -9077,18 +9389,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_2 >= __pyx_v_self->sgd_cache_U.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 569, __pyx_L1_error)
+      __PYX_ERR(0, 589, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U.data + __pyx_t_2 * __pyx_v_self->sgd_cache_U.strides[0]) )) += pow(__pyx_v_gradient, 2.0);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":571
+    /* "MatrixFactorization_Cython_Epoch.pyx":591
  *             self.sgd_cache_U[user_id] += gradient ** 2
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_U[user_id]) + 1e-8)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 571, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 591, __pyx_L1_error)}
     __pyx_t_4 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_4 < 0) {
@@ -9097,16 +9409,16 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_4 >= __pyx_v_self->sgd_cache_U.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 571, __pyx_L1_error)
+      __PYX_ERR(0, 591, __pyx_L1_error)
     }
     __pyx_t_5 = (sqrt((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U.data + __pyx_t_4 * __pyx_v_self->sgd_cache_U.strides[0]) )))) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 571, __pyx_L1_error)
+      __PYX_ERR(0, 591, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_gradient / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":568
+    /* "MatrixFactorization_Cython_Epoch.pyx":588
  *         cdef double gradient_update
  * 
  *         if self.useAdaGrad:             # <<<<<<<<<<<<<<
@@ -9116,7 +9428,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":574
+  /* "MatrixFactorization_Cython_Epoch.pyx":594
  * 
  * 
  *         elif self.useRmsprop:             # <<<<<<<<<<<<<<
@@ -9126,14 +9438,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useRmsprop != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":575
+    /* "MatrixFactorization_Cython_Epoch.pyx":595
  * 
  *         elif self.useRmsprop:
  *             self.sgd_cache_U[user_id] = self.sgd_cache_U[user_id] * self.gamma + (1 - self.gamma) * gradient ** 2             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_U[user_id]) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 575, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 595, __pyx_L1_error)}
     __pyx_t_6 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_6 < 0) {
@@ -9142,9 +9454,9 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_6 >= __pyx_v_self->sgd_cache_U.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 575, __pyx_L1_error)
+      __PYX_ERR(0, 595, __pyx_L1_error)
     }
-    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 575, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 595, __pyx_L1_error)}
     __pyx_t_7 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_7 < 0) {
@@ -9153,18 +9465,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_7 >= __pyx_v_self->sgd_cache_U.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 575, __pyx_L1_error)
+      __PYX_ERR(0, 595, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U.data + __pyx_t_7 * __pyx_v_self->sgd_cache_U.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U.data + __pyx_t_6 * __pyx_v_self->sgd_cache_U.strides[0]) ))) * __pyx_v_self->gamma) + ((1.0 - __pyx_v_self->gamma) * pow(__pyx_v_gradient, 2.0)));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":577
+    /* "MatrixFactorization_Cython_Epoch.pyx":597
  *             self.sgd_cache_U[user_id] = self.sgd_cache_U[user_id] * self.gamma + (1 - self.gamma) * gradient ** 2
  * 
  *             gradient_update = gradient / (sqrt(self.sgd_cache_U[user_id]) + 1e-8)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 577, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 597, __pyx_L1_error)}
     __pyx_t_8 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_8 < 0) {
@@ -9173,16 +9485,16 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_8 >= __pyx_v_self->sgd_cache_U.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 577, __pyx_L1_error)
+      __PYX_ERR(0, 597, __pyx_L1_error)
     }
     __pyx_t_5 = (sqrt((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U.data + __pyx_t_8 * __pyx_v_self->sgd_cache_U.strides[0]) )))) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 577, __pyx_L1_error)
+      __PYX_ERR(0, 597, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_gradient / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":574
+    /* "MatrixFactorization_Cython_Epoch.pyx":594
  * 
  * 
  *         elif self.useRmsprop:             # <<<<<<<<<<<<<<
@@ -9192,7 +9504,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":580
+  /* "MatrixFactorization_Cython_Epoch.pyx":600
  * 
  * 
  *         elif self.useAdam:             # <<<<<<<<<<<<<<
@@ -9202,14 +9514,14 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_t_1 = (__pyx_v_self->useAdam != 0);
   if (__pyx_t_1) {
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":583
+    /* "MatrixFactorization_Cython_Epoch.pyx":603
  * 
  *             self.sgd_cache_U_momentum_1[user_id] = \
  *                 self.sgd_cache_U_momentum_1[user_id] * self.beta_1 + (1 - self.beta_1) * gradient             # <<<<<<<<<<<<<<
  * 
  *             self.sgd_cache_U_momentum_2[user_id] = \
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 583, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 603, __pyx_L1_error)}
     __pyx_t_9 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_9 < 0) {
@@ -9218,17 +9530,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_9 >= __pyx_v_self->sgd_cache_U_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 583, __pyx_L1_error)
+      __PYX_ERR(0, 603, __pyx_L1_error)
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":582
+    /* "MatrixFactorization_Cython_Epoch.pyx":602
  *         elif self.useAdam:
  * 
  *             self.sgd_cache_U_momentum_1[user_id] = \             # <<<<<<<<<<<<<<
  *                 self.sgd_cache_U_momentum_1[user_id] * self.beta_1 + (1 - self.beta_1) * gradient
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 582, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 602, __pyx_L1_error)}
     __pyx_t_10 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_10 < 0) {
@@ -9237,18 +9549,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_10 >= __pyx_v_self->sgd_cache_U_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 582, __pyx_L1_error)
+      __PYX_ERR(0, 602, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_1.data + __pyx_t_10 * __pyx_v_self->sgd_cache_U_momentum_1.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_1.data + __pyx_t_9 * __pyx_v_self->sgd_cache_U_momentum_1.strides[0]) ))) * __pyx_v_self->beta_1) + ((1.0 - __pyx_v_self->beta_1) * __pyx_v_gradient));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":586
+    /* "MatrixFactorization_Cython_Epoch.pyx":606
  * 
  *             self.sgd_cache_U_momentum_2[user_id] = \
  *                 self.sgd_cache_U_momentum_2[user_id] * self.beta_2 + (1 - self.beta_2) * gradient**2             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 586, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 606, __pyx_L1_error)}
     __pyx_t_11 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_11 < 0) {
@@ -9257,17 +9569,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_11 >= __pyx_v_self->sgd_cache_U_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 586, __pyx_L1_error)
+      __PYX_ERR(0, 606, __pyx_L1_error)
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":585
+    /* "MatrixFactorization_Cython_Epoch.pyx":605
  *                 self.sgd_cache_U_momentum_1[user_id] * self.beta_1 + (1 - self.beta_1) * gradient
  * 
  *             self.sgd_cache_U_momentum_2[user_id] = \             # <<<<<<<<<<<<<<
  *                 self.sgd_cache_U_momentum_2[user_id] * self.beta_2 + (1 - self.beta_2) * gradient**2
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 585, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 605, __pyx_L1_error)}
     __pyx_t_12 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_12 < 0) {
@@ -9276,18 +9588,18 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_12 >= __pyx_v_self->sgd_cache_U_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 585, __pyx_L1_error)
+      __PYX_ERR(0, 605, __pyx_L1_error)
     }
     *((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_2.data + __pyx_t_12 * __pyx_v_self->sgd_cache_U_momentum_2.strides[0]) )) = (((*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_2.data + __pyx_t_11 * __pyx_v_self->sgd_cache_U_momentum_2.strides[0]) ))) * __pyx_v_self->beta_2) + ((1.0 - __pyx_v_self->beta_2) * pow(__pyx_v_gradient, 2.0)));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":589
+    /* "MatrixFactorization_Cython_Epoch.pyx":609
  * 
  * 
  *             self.momentum_1 = self.sgd_cache_U_momentum_1[user_id]/ (1 - self.beta_1_power_t)             # <<<<<<<<<<<<<<
  *             self.momentum_2 = self.sgd_cache_U_momentum_2[user_id]/ (1 - self.beta_2_power_t)
  * 
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 589, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 609, __pyx_L1_error)}
     __pyx_t_13 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_13 < 0) {
@@ -9296,24 +9608,24 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_13 >= __pyx_v_self->sgd_cache_U_momentum_1.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 589, __pyx_L1_error)
+      __PYX_ERR(0, 609, __pyx_L1_error)
     }
     __pyx_t_5 = (*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_1.data + __pyx_t_13 * __pyx_v_self->sgd_cache_U_momentum_1.strides[0]) )));
     __pyx_t_14 = (1.0 - __pyx_v_self->beta_1_power_t);
     if (unlikely(__pyx_t_14 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 589, __pyx_L1_error)
+      __PYX_ERR(0, 609, __pyx_L1_error)
     }
     __pyx_v_self->momentum_1 = (__pyx_t_5 / __pyx_t_14);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":590
+    /* "MatrixFactorization_Cython_Epoch.pyx":610
  * 
  *             self.momentum_1 = self.sgd_cache_U_momentum_1[user_id]/ (1 - self.beta_1_power_t)
  *             self.momentum_2 = self.sgd_cache_U_momentum_2[user_id]/ (1 - self.beta_2_power_t)             # <<<<<<<<<<<<<<
  * 
  *             gradient_update = self.momentum_1/ (sqrt(self.momentum_2) + 1e-8)
  */
-    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 590, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 610, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_user_id;
     __pyx_t_3 = -1;
     if (__pyx_t_15 < 0) {
@@ -9322,17 +9634,17 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     } else if (unlikely(__pyx_t_15 >= __pyx_v_self->sgd_cache_U_momentum_2.shape[0])) __pyx_t_3 = 0;
     if (unlikely(__pyx_t_3 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_3);
-      __PYX_ERR(0, 590, __pyx_L1_error)
+      __PYX_ERR(0, 610, __pyx_L1_error)
     }
     __pyx_t_14 = (*((double *) ( /* dim=0 */ (__pyx_v_self->sgd_cache_U_momentum_2.data + __pyx_t_15 * __pyx_v_self->sgd_cache_U_momentum_2.strides[0]) )));
     __pyx_t_5 = (1.0 - __pyx_v_self->beta_2_power_t);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 590, __pyx_L1_error)
+      __PYX_ERR(0, 610, __pyx_L1_error)
     }
     __pyx_v_self->momentum_2 = (__pyx_t_14 / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":592
+    /* "MatrixFactorization_Cython_Epoch.pyx":612
  *             self.momentum_2 = self.sgd_cache_U_momentum_2[user_id]/ (1 - self.beta_2_power_t)
  * 
  *             gradient_update = self.momentum_1/ (sqrt(self.momentum_2) + 1e-8)             # <<<<<<<<<<<<<<
@@ -9342,11 +9654,11 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     __pyx_t_5 = (sqrt(__pyx_v_self->momentum_2) + 1e-8);
     if (unlikely(__pyx_t_5 == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 592, __pyx_L1_error)
+      __PYX_ERR(0, 612, __pyx_L1_error)
     }
     __pyx_v_gradient_update = (__pyx_v_self->momentum_1 / __pyx_t_5);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":580
+    /* "MatrixFactorization_Cython_Epoch.pyx":600
  * 
  * 
  *         elif self.useAdam:             # <<<<<<<<<<<<<<
@@ -9356,7 +9668,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
     goto __pyx_L3;
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":597
+  /* "MatrixFactorization_Cython_Epoch.pyx":617
  *         else:
  * 
  *             gradient_update = gradient             # <<<<<<<<<<<<<<
@@ -9368,7 +9680,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   }
   __pyx_L3:;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":600
+  /* "MatrixFactorization_Cython_Epoch.pyx":620
  * 
  * 
  *         return gradient_update             # <<<<<<<<<<<<<<
@@ -9378,7 +9690,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   __pyx_r = __pyx_v_gradient_update;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":563
+  /* "MatrixFactorization_Cython_Epoch.pyx":583
  * 
  * 
  *     cdef double adaptive_gradient_user(self, double gradient, long user_id):             # <<<<<<<<<<<<<<
@@ -9395,7 +9707,7 @@ static double __pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_C
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":607
+/* "MatrixFactorization_Cython_Epoch.pyx":627
  * 
  * 
  *     cdef MSE_sample sampleMSE_Cython(self):             # <<<<<<<<<<<<<<
@@ -9421,7 +9733,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   Py_ssize_t __pyx_t_8;
   __Pyx_RefNannySetupContext("sampleMSE_Cython", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":609
+  /* "MatrixFactorization_Cython_Epoch.pyx":629
  *     cdef MSE_sample sampleMSE_Cython(self):
  * 
  *         cdef MSE_sample sample = MSE_sample(-1,-1,-1.0)             # <<<<<<<<<<<<<<
@@ -9433,7 +9745,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   __pyx_t_1.rating = -1.0;
   __pyx_v_sample = __pyx_t_1;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":612
+  /* "MatrixFactorization_Cython_Epoch.pyx":632
  *         cdef long index, start_pos_seen_items, end_pos_seen_items
  * 
  *         cdef int numSeenItems = 0             # <<<<<<<<<<<<<<
@@ -9442,7 +9754,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
  */
   __pyx_v_numSeenItems = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":615
+  /* "MatrixFactorization_Cython_Epoch.pyx":635
  * 
  *         # Skip users with no interactions or with no negative items
  *         while numSeenItems == 0 or numSeenItems == self.n_items:             # <<<<<<<<<<<<<<
@@ -9461,7 +9773,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_2) break;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":617
+    /* "MatrixFactorization_Cython_Epoch.pyx":637
  *         while numSeenItems == 0 or numSeenItems == self.n_items:
  * 
  *             sample.user = rand() % self.n_users             # <<<<<<<<<<<<<<
@@ -9471,18 +9783,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
     __pyx_t_4 = rand();
     if (unlikely(__pyx_v_self->n_users == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 617, __pyx_L1_error)
+      __PYX_ERR(0, 637, __pyx_L1_error)
     }
     __pyx_v_sample.user = __Pyx_mod_int(__pyx_t_4, __pyx_v_self->n_users);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":619
+    /* "MatrixFactorization_Cython_Epoch.pyx":639
  *             sample.user = rand() % self.n_users
  * 
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]             # <<<<<<<<<<<<<<
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 619, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 639, __pyx_L1_error)}
     __pyx_t_5 = __pyx_v_sample.user;
     __pyx_t_4 = -1;
     if (__pyx_t_5 < 0) {
@@ -9491,18 +9803,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
     } else if (unlikely(__pyx_t_5 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_4 = 0;
     if (unlikely(__pyx_t_4 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_4);
-      __PYX_ERR(0, 619, __pyx_L1_error)
+      __PYX_ERR(0, 639, __pyx_L1_error)
     }
     __pyx_v_start_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_5 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":620
+    /* "MatrixFactorization_Cython_Epoch.pyx":640
  * 
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]             # <<<<<<<<<<<<<<
  * 
  *             numSeenItems = end_pos_seen_items - start_pos_seen_items
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 620, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 640, __pyx_L1_error)}
     __pyx_t_6 = (__pyx_v_sample.user + 1);
     __pyx_t_4 = -1;
     if (__pyx_t_6 < 0) {
@@ -9511,11 +9823,11 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
     } else if (unlikely(__pyx_t_6 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_4 = 0;
     if (unlikely(__pyx_t_4 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_4);
-      __PYX_ERR(0, 620, __pyx_L1_error)
+      __PYX_ERR(0, 640, __pyx_L1_error)
     }
     __pyx_v_end_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_6 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":622
+    /* "MatrixFactorization_Cython_Epoch.pyx":642
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  *             numSeenItems = end_pos_seen_items - start_pos_seen_items             # <<<<<<<<<<<<<<
@@ -9525,7 +9837,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
     __pyx_v_numSeenItems = (__pyx_v_end_pos_seen_items - __pyx_v_start_pos_seen_items);
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":625
+  /* "MatrixFactorization_Cython_Epoch.pyx":645
  * 
  * 
  *         index = rand() % numSeenItems             # <<<<<<<<<<<<<<
@@ -9535,18 +9847,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   __pyx_t_4 = rand();
   if (unlikely(__pyx_v_numSeenItems == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    __PYX_ERR(0, 625, __pyx_L1_error)
+    __PYX_ERR(0, 645, __pyx_L1_error)
   }
   __pyx_v_index = __Pyx_mod_int(__pyx_t_4, __pyx_v_numSeenItems);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":627
+  /* "MatrixFactorization_Cython_Epoch.pyx":647
  *         index = rand() % numSeenItems
  * 
  *         sample.item = self.URM_train_indices[start_pos_seen_items + index]             # <<<<<<<<<<<<<<
  *         sample.rating = self.URM_train_data[start_pos_seen_items + index]
  * 
  */
-  if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 627, __pyx_L1_error)}
+  if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 647, __pyx_L1_error)}
   __pyx_t_7 = (__pyx_v_start_pos_seen_items + __pyx_v_index);
   __pyx_t_4 = -1;
   if (__pyx_t_7 < 0) {
@@ -9555,18 +9867,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   } else if (unlikely(__pyx_t_7 >= __pyx_v_self->URM_train_indices.shape[0])) __pyx_t_4 = 0;
   if (unlikely(__pyx_t_4 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_4);
-    __PYX_ERR(0, 627, __pyx_L1_error)
+    __PYX_ERR(0, 647, __pyx_L1_error)
   }
   __pyx_v_sample.item = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indices.data + __pyx_t_7 * __pyx_v_self->URM_train_indices.strides[0]) )));
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":628
+  /* "MatrixFactorization_Cython_Epoch.pyx":648
  * 
  *         sample.item = self.URM_train_indices[start_pos_seen_items + index]
  *         sample.rating = self.URM_train_data[start_pos_seen_items + index]             # <<<<<<<<<<<<<<
  * 
  *         return sample
  */
-  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 628, __pyx_L1_error)}
+  if (unlikely(!__pyx_v_self->URM_train_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 648, __pyx_L1_error)}
   __pyx_t_8 = (__pyx_v_start_pos_seen_items + __pyx_v_index);
   __pyx_t_4 = -1;
   if (__pyx_t_8 < 0) {
@@ -9575,11 +9887,11 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   } else if (unlikely(__pyx_t_8 >= __pyx_v_self->URM_train_data.shape[0])) __pyx_t_4 = 0;
   if (unlikely(__pyx_t_4 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_4);
-    __PYX_ERR(0, 628, __pyx_L1_error)
+    __PYX_ERR(0, 648, __pyx_L1_error)
   }
   __pyx_v_sample.rating = (*((double *) ( /* dim=0 */ (__pyx_v_self->URM_train_data.data + __pyx_t_8 * __pyx_v_self->URM_train_data.strides[0]) )));
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":630
+  /* "MatrixFactorization_Cython_Epoch.pyx":650
  *         sample.rating = self.URM_train_data[start_pos_seen_items + index]
  * 
  *         return sample             # <<<<<<<<<<<<<<
@@ -9589,7 +9901,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   __pyx_r = __pyx_v_sample;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":607
+  /* "MatrixFactorization_Cython_Epoch.pyx":627
  * 
  * 
  *     cdef MSE_sample sampleMSE_Cython(self):             # <<<<<<<<<<<<<<
@@ -9606,7 +9918,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample __pyx_f_32Ma
   return __pyx_r;
 }
 
-/* "MatrixFactorization_Cython_Epoch.pyx":635
+/* "MatrixFactorization_Cython_Epoch.pyx":655
  * 
  * 
  *     cdef BPR_sample sampleBPR_Cython(self):             # <<<<<<<<<<<<<<
@@ -9633,7 +9945,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
   Py_ssize_t __pyx_t_8;
   __Pyx_RefNannySetupContext("sampleBPR_Cython", 0);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":637
+  /* "MatrixFactorization_Cython_Epoch.pyx":657
  *     cdef BPR_sample sampleBPR_Cython(self):
  * 
  *         cdef BPR_sample sample = BPR_sample(-1,-1,-1)             # <<<<<<<<<<<<<<
@@ -9645,7 +9957,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
   __pyx_t_1.neg_item = -1L;
   __pyx_v_sample = __pyx_t_1;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":640
+  /* "MatrixFactorization_Cython_Epoch.pyx":660
  *         cdef long index, start_pos_seen_items, end_pos_seen_items
  * 
  *         cdef int negItemSelected, numSeenItems = 0             # <<<<<<<<<<<<<<
@@ -9654,7 +9966,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
  */
   __pyx_v_numSeenItems = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":645
+  /* "MatrixFactorization_Cython_Epoch.pyx":665
  *         # Skip users with no interactions or with no negative items
  *         # Skip users with no interactions or with no negative items
  *         while numSeenItems == 0 or numSeenItems == self.n_items:             # <<<<<<<<<<<<<<
@@ -9673,7 +9985,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_2) break;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":647
+    /* "MatrixFactorization_Cython_Epoch.pyx":667
  *         while numSeenItems == 0 or numSeenItems == self.n_items:
  * 
  *             sample.user = rand() % self.n_users             # <<<<<<<<<<<<<<
@@ -9683,18 +9995,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_t_4 = rand();
     if (unlikely(__pyx_v_self->n_users == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 647, __pyx_L1_error)
+      __PYX_ERR(0, 667, __pyx_L1_error)
     }
     __pyx_v_sample.user = __Pyx_mod_int(__pyx_t_4, __pyx_v_self->n_users);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":649
+    /* "MatrixFactorization_Cython_Epoch.pyx":669
  *             sample.user = rand() % self.n_users
  * 
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]             # <<<<<<<<<<<<<<
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 649, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 669, __pyx_L1_error)}
     __pyx_t_5 = __pyx_v_sample.user;
     __pyx_t_4 = -1;
     if (__pyx_t_5 < 0) {
@@ -9703,18 +10015,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     } else if (unlikely(__pyx_t_5 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_4 = 0;
     if (unlikely(__pyx_t_4 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_4);
-      __PYX_ERR(0, 649, __pyx_L1_error)
+      __PYX_ERR(0, 669, __pyx_L1_error)
     }
     __pyx_v_start_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_5 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":650
+    /* "MatrixFactorization_Cython_Epoch.pyx":670
  * 
  *             start_pos_seen_items = self.URM_train_indptr[sample.user]
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]             # <<<<<<<<<<<<<<
  * 
  *             numSeenItems = end_pos_seen_items - start_pos_seen_items
  */
-    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 650, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->URM_train_indptr.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 670, __pyx_L1_error)}
     __pyx_t_6 = (__pyx_v_sample.user + 1);
     __pyx_t_4 = -1;
     if (__pyx_t_6 < 0) {
@@ -9723,11 +10035,11 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     } else if (unlikely(__pyx_t_6 >= __pyx_v_self->URM_train_indptr.shape[0])) __pyx_t_4 = 0;
     if (unlikely(__pyx_t_4 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_4);
-      __PYX_ERR(0, 650, __pyx_L1_error)
+      __PYX_ERR(0, 670, __pyx_L1_error)
     }
     __pyx_v_end_pos_seen_items = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indptr.data + __pyx_t_6 * __pyx_v_self->URM_train_indptr.strides[0]) )));
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":652
+    /* "MatrixFactorization_Cython_Epoch.pyx":672
  *             end_pos_seen_items = self.URM_train_indptr[sample.user+1]
  * 
  *             numSeenItems = end_pos_seen_items - start_pos_seen_items             # <<<<<<<<<<<<<<
@@ -9737,7 +10049,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_v_numSeenItems = (__pyx_v_end_pos_seen_items - __pyx_v_start_pos_seen_items);
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":655
+  /* "MatrixFactorization_Cython_Epoch.pyx":675
  * 
  * 
  *         index = rand() % numSeenItems             # <<<<<<<<<<<<<<
@@ -9747,18 +10059,18 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
   __pyx_t_4 = rand();
   if (unlikely(__pyx_v_numSeenItems == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    __PYX_ERR(0, 655, __pyx_L1_error)
+    __PYX_ERR(0, 675, __pyx_L1_error)
   }
   __pyx_v_index = __Pyx_mod_int(__pyx_t_4, __pyx_v_numSeenItems);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":657
+  /* "MatrixFactorization_Cython_Epoch.pyx":677
  *         index = rand() % numSeenItems
  * 
  *         sample.pos_item = self.URM_train_indices[start_pos_seen_items + index]             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 657, __pyx_L1_error)}
+  if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 677, __pyx_L1_error)}
   __pyx_t_7 = (__pyx_v_start_pos_seen_items + __pyx_v_index);
   __pyx_t_4 = -1;
   if (__pyx_t_7 < 0) {
@@ -9767,11 +10079,11 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
   } else if (unlikely(__pyx_t_7 >= __pyx_v_self->URM_train_indices.shape[0])) __pyx_t_4 = 0;
   if (unlikely(__pyx_t_4 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_4);
-    __PYX_ERR(0, 657, __pyx_L1_error)
+    __PYX_ERR(0, 677, __pyx_L1_error)
   }
   __pyx_v_sample.pos_item = (*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indices.data + __pyx_t_7 * __pyx_v_self->URM_train_indices.strides[0]) )));
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":661
+  /* "MatrixFactorization_Cython_Epoch.pyx":681
  * 
  * 
  *         negItemSelected = False             # <<<<<<<<<<<<<<
@@ -9780,7 +10092,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
  */
   __pyx_v_negItemSelected = 0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":665
+  /* "MatrixFactorization_Cython_Epoch.pyx":685
  *         # It's faster to just try again then to build a mapping of the non-seen items
  *         # for every user
  *         while (not negItemSelected):             # <<<<<<<<<<<<<<
@@ -9791,7 +10103,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_t_2 = ((!(__pyx_v_negItemSelected != 0)) != 0);
     if (!__pyx_t_2) break;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":667
+    /* "MatrixFactorization_Cython_Epoch.pyx":687
  *         while (not negItemSelected):
  * 
  *             sample.neg_item = rand() % self.n_items             # <<<<<<<<<<<<<<
@@ -9801,11 +10113,11 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_t_4 = rand();
     if (unlikely(__pyx_v_self->n_items == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 667, __pyx_L1_error)
+      __PYX_ERR(0, 687, __pyx_L1_error)
     }
     __pyx_v_sample.neg_item = __Pyx_mod_int(__pyx_t_4, __pyx_v_self->n_items);
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":669
+    /* "MatrixFactorization_Cython_Epoch.pyx":689
  *             sample.neg_item = rand() % self.n_items
  * 
  *             index = 0             # <<<<<<<<<<<<<<
@@ -9814,7 +10126,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
  */
     __pyx_v_index = 0;
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":670
+    /* "MatrixFactorization_Cython_Epoch.pyx":690
  * 
  *             index = 0
  *             while index < numSeenItems and self.URM_train_indices[start_pos_seen_items + index]!=sample.neg_item:             # <<<<<<<<<<<<<<
@@ -9828,7 +10140,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
         __pyx_t_2 = __pyx_t_3;
         goto __pyx_L11_bool_binop_done;
       }
-      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 670, __pyx_L1_error)}
+      if (unlikely(!__pyx_v_self->URM_train_indices.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 690, __pyx_L1_error)}
       __pyx_t_8 = (__pyx_v_start_pos_seen_items + __pyx_v_index);
       __pyx_t_4 = -1;
       if (__pyx_t_8 < 0) {
@@ -9837,14 +10149,14 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
       } else if (unlikely(__pyx_t_8 >= __pyx_v_self->URM_train_indices.shape[0])) __pyx_t_4 = 0;
       if (unlikely(__pyx_t_4 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_4);
-        __PYX_ERR(0, 670, __pyx_L1_error)
+        __PYX_ERR(0, 690, __pyx_L1_error)
       }
       __pyx_t_3 = (((*((int *) ( /* dim=0 */ (__pyx_v_self->URM_train_indices.data + __pyx_t_8 * __pyx_v_self->URM_train_indices.strides[0]) ))) != __pyx_v_sample.neg_item) != 0);
       __pyx_t_2 = __pyx_t_3;
       __pyx_L11_bool_binop_done:;
       if (!__pyx_t_2) break;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":671
+      /* "MatrixFactorization_Cython_Epoch.pyx":691
  *             index = 0
  *             while index < numSeenItems and self.URM_train_indices[start_pos_seen_items + index]!=sample.neg_item:
  *                 index+=1             # <<<<<<<<<<<<<<
@@ -9854,7 +10166,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
       __pyx_v_index = (__pyx_v_index + 1);
     }
 
-    /* "MatrixFactorization_Cython_Epoch.pyx":673
+    /* "MatrixFactorization_Cython_Epoch.pyx":693
  *                 index+=1
  * 
  *             if index == numSeenItems:             # <<<<<<<<<<<<<<
@@ -9864,7 +10176,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     __pyx_t_2 = ((__pyx_v_index == __pyx_v_numSeenItems) != 0);
     if (__pyx_t_2) {
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":674
+      /* "MatrixFactorization_Cython_Epoch.pyx":694
  * 
  *             if index == numSeenItems:
  *                 negItemSelected = True             # <<<<<<<<<<<<<<
@@ -9873,7 +10185,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
  */
       __pyx_v_negItemSelected = 1;
 
-      /* "MatrixFactorization_Cython_Epoch.pyx":673
+      /* "MatrixFactorization_Cython_Epoch.pyx":693
  *                 index+=1
  * 
  *             if index == numSeenItems:             # <<<<<<<<<<<<<<
@@ -9883,7 +10195,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
     }
   }
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":677
+  /* "MatrixFactorization_Cython_Epoch.pyx":697
  * 
  * 
  *         return sample             # <<<<<<<<<<<<<<
@@ -9891,7 +10203,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
   __pyx_r = __pyx_v_sample;
   goto __pyx_L0;
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":635
+  /* "MatrixFactorization_Cython_Epoch.pyx":655
  * 
  * 
  *     cdef BPR_sample sampleBPR_Cython(self):             # <<<<<<<<<<<<<<
@@ -9911,7 +10223,7 @@ static struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample __pyx_f_32Ma
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
  */
 
 /* Python wrapper */
@@ -9967,14 +10279,15 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   PyObject *__pyx_t_32 = NULL;
   PyObject *__pyx_t_33 = NULL;
   PyObject *__pyx_t_34 = NULL;
-  int __pyx_t_35;
+  PyObject *__pyx_t_35 = NULL;
   int __pyx_t_36;
+  int __pyx_t_37;
   __Pyx_RefNannySetupContext("__reduce_cython__", 0);
 
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
  *     cdef bint use_setstate
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)             # <<<<<<<<<<<<<<
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -10025,104 +10338,108 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __Pyx_GOTREF(__pyx_t_20);
   __pyx_t_21 = PyFloat_FromDouble(__pyx_v_self->negative_reg); if (unlikely(!__pyx_t_21)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_21);
-  __pyx_t_22 = __Pyx_PyInt_From_int(__pyx_v_self->numPositiveIteractions); if (unlikely(!__pyx_t_22)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_22 = __Pyx_PyBool_FromLong(__pyx_v_self->normalized_algorithm); if (unlikely(!__pyx_t_22)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_22);
-  __pyx_t_23 = PyFloat_FromDouble(__pyx_v_self->positive_reg); if (unlikely(!__pyx_t_23)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_23 = __Pyx_PyInt_From_int(__pyx_v_self->numPositiveIteractions); if (unlikely(!__pyx_t_23)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_23);
-  if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_24 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_24)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_24 = PyFloat_FromDouble(__pyx_v_self->positive_reg); if (unlikely(!__pyx_t_24)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_24);
-  if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_25 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I_momentum_1, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_25)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_I.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_25 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_25)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_25);
-  if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_26 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I_momentum_2, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_26)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_26 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I_momentum_1, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_26)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_26);
-  if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_27 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_27)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_I_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_27 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_I_momentum_2, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_27)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_27);
-  if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_28 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U_momentum_1, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_28)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_U.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_28 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_28)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_28);
-  if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
-  __pyx_t_29 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U_momentum_2, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_29)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_1.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_29 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U_momentum_1, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_29)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_29);
-  __pyx_t_30 = __Pyx_PyInt_From_int(__pyx_v_self->useAdaGrad); if (unlikely(!__pyx_t_30)) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->sgd_cache_U_momentum_2.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(1, 3, __pyx_L1_error)}
+  __pyx_t_30 = __pyx_memoryview_fromslice(__pyx_v_self->sgd_cache_U_momentum_2, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_30)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_30);
-  __pyx_t_31 = __Pyx_PyInt_From_int(__pyx_v_self->useAdam); if (unlikely(!__pyx_t_31)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_31 = __Pyx_PyInt_From_int(__pyx_v_self->useAdaGrad); if (unlikely(!__pyx_t_31)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_31);
-  __pyx_t_32 = __Pyx_PyInt_From_int(__pyx_v_self->useRmsprop); if (unlikely(!__pyx_t_32)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_32 = __Pyx_PyInt_From_int(__pyx_v_self->useAdam); if (unlikely(!__pyx_t_32)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_32);
-  __pyx_t_33 = PyFloat_FromDouble(__pyx_v_self->user_reg); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_33 = __Pyx_PyInt_From_int(__pyx_v_self->useRmsprop); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_33);
-  __pyx_t_34 = PyTuple_New(33); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_34 = PyFloat_FromDouble(__pyx_v_self->user_reg); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_34);
+  __pyx_t_35 = PyTuple_New(34); if (unlikely(!__pyx_t_35)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_35);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_34, 0, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_35, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_34, 1, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_35, 1, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_34, 2, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_35, 2, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_34, 3, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_35, 3, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_34, 4, __pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_35, 4, __pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_34, 5, __pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_35, 5, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_7);
-  PyTuple_SET_ITEM(__pyx_t_34, 6, __pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_35, 6, __pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_8);
-  PyTuple_SET_ITEM(__pyx_t_34, 7, __pyx_t_8);
+  PyTuple_SET_ITEM(__pyx_t_35, 7, __pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_9);
-  PyTuple_SET_ITEM(__pyx_t_34, 8, __pyx_t_9);
+  PyTuple_SET_ITEM(__pyx_t_35, 8, __pyx_t_9);
   __Pyx_GIVEREF(__pyx_t_10);
-  PyTuple_SET_ITEM(__pyx_t_34, 9, __pyx_t_10);
+  PyTuple_SET_ITEM(__pyx_t_35, 9, __pyx_t_10);
   __Pyx_GIVEREF(__pyx_t_11);
-  PyTuple_SET_ITEM(__pyx_t_34, 10, __pyx_t_11);
+  PyTuple_SET_ITEM(__pyx_t_35, 10, __pyx_t_11);
   __Pyx_GIVEREF(__pyx_t_12);
-  PyTuple_SET_ITEM(__pyx_t_34, 11, __pyx_t_12);
+  PyTuple_SET_ITEM(__pyx_t_35, 11, __pyx_t_12);
   __Pyx_GIVEREF(__pyx_t_13);
-  PyTuple_SET_ITEM(__pyx_t_34, 12, __pyx_t_13);
+  PyTuple_SET_ITEM(__pyx_t_35, 12, __pyx_t_13);
   __Pyx_GIVEREF(__pyx_t_14);
-  PyTuple_SET_ITEM(__pyx_t_34, 13, __pyx_t_14);
+  PyTuple_SET_ITEM(__pyx_t_35, 13, __pyx_t_14);
   __Pyx_GIVEREF(__pyx_t_15);
-  PyTuple_SET_ITEM(__pyx_t_34, 14, __pyx_t_15);
+  PyTuple_SET_ITEM(__pyx_t_35, 14, __pyx_t_15);
   __Pyx_GIVEREF(__pyx_t_16);
-  PyTuple_SET_ITEM(__pyx_t_34, 15, __pyx_t_16);
+  PyTuple_SET_ITEM(__pyx_t_35, 15, __pyx_t_16);
   __Pyx_GIVEREF(__pyx_t_17);
-  PyTuple_SET_ITEM(__pyx_t_34, 16, __pyx_t_17);
+  PyTuple_SET_ITEM(__pyx_t_35, 16, __pyx_t_17);
   __Pyx_GIVEREF(__pyx_t_18);
-  PyTuple_SET_ITEM(__pyx_t_34, 17, __pyx_t_18);
+  PyTuple_SET_ITEM(__pyx_t_35, 17, __pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_19);
-  PyTuple_SET_ITEM(__pyx_t_34, 18, __pyx_t_19);
+  PyTuple_SET_ITEM(__pyx_t_35, 18, __pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_20);
-  PyTuple_SET_ITEM(__pyx_t_34, 19, __pyx_t_20);
+  PyTuple_SET_ITEM(__pyx_t_35, 19, __pyx_t_20);
   __Pyx_GIVEREF(__pyx_t_21);
-  PyTuple_SET_ITEM(__pyx_t_34, 20, __pyx_t_21);
+  PyTuple_SET_ITEM(__pyx_t_35, 20, __pyx_t_21);
   __Pyx_GIVEREF(__pyx_t_22);
-  PyTuple_SET_ITEM(__pyx_t_34, 21, __pyx_t_22);
+  PyTuple_SET_ITEM(__pyx_t_35, 21, __pyx_t_22);
   __Pyx_GIVEREF(__pyx_t_23);
-  PyTuple_SET_ITEM(__pyx_t_34, 22, __pyx_t_23);
+  PyTuple_SET_ITEM(__pyx_t_35, 22, __pyx_t_23);
   __Pyx_GIVEREF(__pyx_t_24);
-  PyTuple_SET_ITEM(__pyx_t_34, 23, __pyx_t_24);
+  PyTuple_SET_ITEM(__pyx_t_35, 23, __pyx_t_24);
   __Pyx_GIVEREF(__pyx_t_25);
-  PyTuple_SET_ITEM(__pyx_t_34, 24, __pyx_t_25);
+  PyTuple_SET_ITEM(__pyx_t_35, 24, __pyx_t_25);
   __Pyx_GIVEREF(__pyx_t_26);
-  PyTuple_SET_ITEM(__pyx_t_34, 25, __pyx_t_26);
+  PyTuple_SET_ITEM(__pyx_t_35, 25, __pyx_t_26);
   __Pyx_GIVEREF(__pyx_t_27);
-  PyTuple_SET_ITEM(__pyx_t_34, 26, __pyx_t_27);
+  PyTuple_SET_ITEM(__pyx_t_35, 26, __pyx_t_27);
   __Pyx_GIVEREF(__pyx_t_28);
-  PyTuple_SET_ITEM(__pyx_t_34, 27, __pyx_t_28);
+  PyTuple_SET_ITEM(__pyx_t_35, 27, __pyx_t_28);
   __Pyx_GIVEREF(__pyx_t_29);
-  PyTuple_SET_ITEM(__pyx_t_34, 28, __pyx_t_29);
+  PyTuple_SET_ITEM(__pyx_t_35, 28, __pyx_t_29);
   __Pyx_GIVEREF(__pyx_t_30);
-  PyTuple_SET_ITEM(__pyx_t_34, 29, __pyx_t_30);
+  PyTuple_SET_ITEM(__pyx_t_35, 29, __pyx_t_30);
   __Pyx_GIVEREF(__pyx_t_31);
-  PyTuple_SET_ITEM(__pyx_t_34, 30, __pyx_t_31);
+  PyTuple_SET_ITEM(__pyx_t_35, 30, __pyx_t_31);
   __Pyx_GIVEREF(__pyx_t_32);
-  PyTuple_SET_ITEM(__pyx_t_34, 31, __pyx_t_32);
+  PyTuple_SET_ITEM(__pyx_t_35, 31, __pyx_t_32);
   __Pyx_GIVEREF(__pyx_t_33);
-  PyTuple_SET_ITEM(__pyx_t_34, 32, __pyx_t_33);
+  PyTuple_SET_ITEM(__pyx_t_35, 32, __pyx_t_33);
+  __Pyx_GIVEREF(__pyx_t_34);
+  PyTuple_SET_ITEM(__pyx_t_35, 33, __pyx_t_34);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -10156,31 +10473,32 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __pyx_t_31 = 0;
   __pyx_t_32 = 0;
   __pyx_t_33 = 0;
-  __pyx_v_state = __pyx_t_34;
   __pyx_t_34 = 0;
+  __pyx_v_state = __pyx_t_35;
+  __pyx_t_35 = 0;
 
   /* "(tree fragment)":4
  *     cdef bint use_setstate
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
  */
-  __pyx_t_34 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_34);
-  __pyx_v__dict = __pyx_t_34;
-  __pyx_t_34 = 0;
+  __pyx_t_35 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_35)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_35);
+  __pyx_v__dict = __pyx_t_35;
+  __pyx_t_35 = 0;
 
   /* "(tree fragment)":5
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
  *         use_setstate = True
  */
-  __pyx_t_35 = (__pyx_v__dict != Py_None);
-  __pyx_t_36 = (__pyx_t_35 != 0);
-  if (__pyx_t_36) {
+  __pyx_t_36 = (__pyx_v__dict != Py_None);
+  __pyx_t_37 = (__pyx_t_36 != 0);
+  if (__pyx_t_37) {
 
     /* "(tree fragment)":6
  *     _dict = getattr(self, '__dict__', None)
@@ -10189,16 +10507,16 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  *         use_setstate = True
  *     else:
  */
-    __pyx_t_34 = PyTuple_New(1); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 6, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_34);
+    __pyx_t_35 = PyTuple_New(1); if (unlikely(!__pyx_t_35)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_35);
     __Pyx_INCREF(__pyx_v__dict);
     __Pyx_GIVEREF(__pyx_v__dict);
-    PyTuple_SET_ITEM(__pyx_t_34, 0, __pyx_v__dict);
-    __pyx_t_33 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_34); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 6, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_33);
-    __Pyx_DECREF(__pyx_t_34); __pyx_t_34 = 0;
-    __Pyx_DECREF_SET(__pyx_v_state, __pyx_t_33);
-    __pyx_t_33 = 0;
+    PyTuple_SET_ITEM(__pyx_t_35, 0, __pyx_v__dict);
+    __pyx_t_34 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_35); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_34);
+    __Pyx_DECREF(__pyx_t_35); __pyx_t_35 = 0;
+    __Pyx_DECREF_SET(__pyx_v_state, __pyx_t_34);
+    __pyx_t_34 = 0;
 
     /* "(tree fragment)":7
  *     if _dict is not None:
@@ -10210,7 +10528,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":5
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -10224,7 +10542,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  *     else:
  *         use_setstate = False             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, None), state
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, None), state
  */
   /*else*/ {
     __pyx_v_use_setstate = 0;
@@ -10235,96 +10553,96 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
  *     else:
  *         use_setstate = False
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, None), state
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, None), state
  *     else:
  */
-  __pyx_t_36 = (__pyx_v_use_setstate != 0);
-  if (__pyx_t_36) {
+  __pyx_t_37 = (__pyx_v_use_setstate != 0);
+  if (__pyx_t_37) {
 
     /* "(tree fragment)":11
  *         use_setstate = False
  *     if use_setstate:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, state)
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, state)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_33 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_MatrixFactorizati); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 11, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_33);
-    __pyx_t_34 = PyTuple_New(3); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __pyx_t_34 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_MatrixFactorizati); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 11, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_34);
+    __pyx_t_35 = PyTuple_New(3); if (unlikely(!__pyx_t_35)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_35);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_34, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_217817936);
-    __Pyx_GIVEREF(__pyx_int_217817936);
-    PyTuple_SET_ITEM(__pyx_t_34, 1, __pyx_int_217817936);
+    PyTuple_SET_ITEM(__pyx_t_35, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_9950469);
+    __Pyx_GIVEREF(__pyx_int_9950469);
+    PyTuple_SET_ITEM(__pyx_t_35, 1, __pyx_int_9950469);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
-    PyTuple_SET_ITEM(__pyx_t_34, 2, Py_None);
-    __pyx_t_32 = PyTuple_New(3); if (unlikely(!__pyx_t_32)) __PYX_ERR(1, 11, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_32);
-    __Pyx_GIVEREF(__pyx_t_33);
-    PyTuple_SET_ITEM(__pyx_t_32, 0, __pyx_t_33);
+    PyTuple_SET_ITEM(__pyx_t_35, 2, Py_None);
+    __pyx_t_33 = PyTuple_New(3); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 11, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_33);
     __Pyx_GIVEREF(__pyx_t_34);
-    PyTuple_SET_ITEM(__pyx_t_32, 1, __pyx_t_34);
+    PyTuple_SET_ITEM(__pyx_t_33, 0, __pyx_t_34);
+    __Pyx_GIVEREF(__pyx_t_35);
+    PyTuple_SET_ITEM(__pyx_t_33, 1, __pyx_t_35);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_32, 2, __pyx_v_state);
-    __pyx_t_33 = 0;
+    PyTuple_SET_ITEM(__pyx_t_33, 2, __pyx_v_state);
     __pyx_t_34 = 0;
-    __pyx_r = __pyx_t_32;
-    __pyx_t_32 = 0;
+    __pyx_t_35 = 0;
+    __pyx_r = __pyx_t_33;
+    __pyx_t_33 = 0;
     goto __pyx_L0;
 
     /* "(tree fragment)":10
  *     else:
  *         use_setstate = False
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, None), state
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":13
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, None), state
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, None), state
  *     else:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(self, __pyx_state)
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_32 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_MatrixFactorizati); if (unlikely(!__pyx_t_32)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_32);
-    __pyx_t_34 = PyTuple_New(3); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_34);
+    __pyx_t_33 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_MatrixFactorizati); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_33);
+    __pyx_t_35 = PyTuple_New(3); if (unlikely(!__pyx_t_35)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_35);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_34, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_217817936);
-    __Pyx_GIVEREF(__pyx_int_217817936);
-    PyTuple_SET_ITEM(__pyx_t_34, 1, __pyx_int_217817936);
+    PyTuple_SET_ITEM(__pyx_t_35, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_9950469);
+    __Pyx_GIVEREF(__pyx_int_9950469);
+    PyTuple_SET_ITEM(__pyx_t_35, 1, __pyx_int_9950469);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_34, 2, __pyx_v_state);
-    __pyx_t_33 = PyTuple_New(2); if (unlikely(!__pyx_t_33)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_33);
-    __Pyx_GIVEREF(__pyx_t_32);
-    PyTuple_SET_ITEM(__pyx_t_33, 0, __pyx_t_32);
-    __Pyx_GIVEREF(__pyx_t_34);
-    PyTuple_SET_ITEM(__pyx_t_33, 1, __pyx_t_34);
-    __pyx_t_32 = 0;
-    __pyx_t_34 = 0;
-    __pyx_r = __pyx_t_33;
+    PyTuple_SET_ITEM(__pyx_t_35, 2, __pyx_v_state);
+    __pyx_t_34 = PyTuple_New(2); if (unlikely(!__pyx_t_34)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_34);
+    __Pyx_GIVEREF(__pyx_t_33);
+    PyTuple_SET_ITEM(__pyx_t_34, 0, __pyx_t_33);
+    __Pyx_GIVEREF(__pyx_t_35);
+    PyTuple_SET_ITEM(__pyx_t_34, 1, __pyx_t_35);
     __pyx_t_33 = 0;
+    __pyx_t_35 = 0;
+    __pyx_r = __pyx_t_34;
+    __pyx_t_34 = 0;
     goto __pyx_L0;
   }
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
+ *     state = (self.ITEM_factors, self.URM_train_data, self.URM_train_indices, self.URM_train_indptr, self.USER_factors, self.algorithm_is_BPR, self.algorithm_is_asy_svd, self.algorithm_is_funk_svd, self.batch_size, self.beta_1, self.beta_1_power_t, self.beta_2, self.beta_2_power_t, self.gamma, self.learning_rate, self.momentum_1, self.momentum_2, self.n_factors, self.n_items, self.n_users, self.negative_reg, self.normalized_algorithm, self.numPositiveIteractions, self.positive_reg, self.sgd_cache_I, self.sgd_cache_I_momentum_1, self.sgd_cache_I_momentum_2, self.sgd_cache_U, self.sgd_cache_U_momentum_1, self.sgd_cache_U_momentum_2, self.useAdaGrad, self.useAdam, self.useRmsprop, self.user_reg)
  */
 
   /* function exit code */
@@ -10363,6 +10681,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __Pyx_XDECREF(__pyx_t_32);
   __Pyx_XDECREF(__pyx_t_33);
   __Pyx_XDECREF(__pyx_t_34);
+  __Pyx_XDECREF(__pyx_t_35);
   __Pyx_AddTraceback("MatrixFactorization_Cython_Epoch.MatrixFactorization_Cython_Epoch.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -10375,7 +10694,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
 
 /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, state)
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(self, __pyx_state)
  */
@@ -10400,7 +10719,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, state)
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -10411,7 +10730,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
 
   /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0xcfba350, state)
+ *         return __pyx_unpickle_MatrixFactorization_Cython_Epoch, (type(self), 0x097d505, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(self, __pyx_state)
  */
@@ -10431,7 +10750,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch_32MatrixFactorizati
 
 /* "(tree fragment)":1
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -10524,18 +10843,18 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
 
   /* "(tree fragment)":2
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0xcfba350:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x097d505:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xcfba350) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x097d505) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":3
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  *     __pyx_result = MatrixFactorization_Cython_Epoch.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 3, __pyx_L1_error)
@@ -10554,15 +10873,15 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":4
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = MatrixFactorization_Cython_Epoch.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xcf, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x09, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -10618,15 +10937,15 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
 
     /* "(tree fragment)":2
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0xcfba350:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x097d505:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":5
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  *     __pyx_result = MatrixFactorization_Cython_Epoch.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
@@ -10680,7 +10999,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  *     __pyx_result = MatrixFactorization_Cython_Epoch.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
@@ -10703,7 +11022,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xcfba350 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x097d505 = (ITEM_factors, URM_train_data, URM_train_indices, URM_train_indptr, USER_factors, algorithm_is_BPR, algorithm_is_asy_svd, algorithm_is_funk_svd, batch_size, beta_1, beta_1_power_t, beta_2, beta_2_power_t, gamma, learning_rate, momentum_1, momentum_2, n_factors, n_items, n_users, negative_reg, normalized_algorithm, numPositiveIteractions, positive_reg, sgd_cache_I, sgd_cache_I_momentum_1, sgd_cache_I_momentum_2, sgd_cache_U, sgd_cache_U_momentum_1, sgd_cache_U_momentum_2, useAdaGrad, useAdam, useRmsprop, user_reg))" % __pyx_checksum)
  *     __pyx_result = MatrixFactorization_Cython_Epoch.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
@@ -10716,7 +11035,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -10725,7 +11044,7 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -10750,8 +11069,8 @@ static PyObject *__pyx_pf_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matr
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -10777,9 +11096,9 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
   /* "(tree fragment)":10
  *     return __pyx_result
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[33])
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[34])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -10996,6 +11315,15 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 21, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->normalized_algorithm = __pyx_t_8;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 10, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 22, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v___pyx_result->numPositiveIteractions = __pyx_t_5;
@@ -11003,7 +11331,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 22, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 23, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11012,7 +11340,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 23, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11025,7 +11353,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11038,7 +11366,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11051,7 +11379,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 27, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11064,7 +11392,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 27, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 28, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11077,7 +11405,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 28, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 29, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1);
   if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(1, 10, __pyx_L1_error)
@@ -11090,7 +11418,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 29, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 30, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11099,7 +11427,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 30, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 31, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11108,7 +11436,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 31, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 32, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11117,7 +11445,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 32, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 33, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11125,16 +11453,16 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
 
   /* "(tree fragment)":11
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[33])
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[34])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_t_9 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 11, __pyx_L1_error)
-  __pyx_t_10 = ((__pyx_t_9 > 33) != 0);
+  __pyx_t_10 = ((__pyx_t_9 > 34) != 0);
   if (__pyx_t_10) {
   } else {
     __pyx_t_8 = __pyx_t_10;
@@ -11147,9 +11475,9 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
   if (__pyx_t_8) {
 
     /* "(tree fragment)":12
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[33])             # <<<<<<<<<<<<<<
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[34])             # <<<<<<<<<<<<<<
  */
     __pyx_t_12 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
@@ -11160,7 +11488,7 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 12, __pyx_L1_error)
     }
-    __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 33, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 12, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 34, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __pyx_t_14 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_13))) {
@@ -11212,9 +11540,9 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
 
     /* "(tree fragment)":11
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[33])
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[34])
  */
   }
 
@@ -11222,8 +11550,8 @@ static PyObject *__pyx_f_32MatrixFactorization_Cython_Epoch___pyx_unpickle_Matri
  *         __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(<MatrixFactorization_Cython_Epoch> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_MatrixFactorization_Cython_Epoch__set_state(MatrixFactorization_Cython_Epoch __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.numPositiveIteractions = __pyx_state[21]; __pyx_result.positive_reg = __pyx_state[22]; __pyx_result.sgd_cache_I = __pyx_state[23]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[25]; __pyx_result.sgd_cache_U = __pyx_state[26]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[28]; __pyx_result.useAdaGrad = __pyx_state[29]; __pyx_result.useAdam = __pyx_state[30]; __pyx_result.useRmsprop = __pyx_state[31]; __pyx_result.user_reg = __pyx_state[32]
- *     if len(__pyx_state) > 33 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ITEM_factors = __pyx_state[0]; __pyx_result.URM_train_data = __pyx_state[1]; __pyx_result.URM_train_indices = __pyx_state[2]; __pyx_result.URM_train_indptr = __pyx_state[3]; __pyx_result.USER_factors = __pyx_state[4]; __pyx_result.algorithm_is_BPR = __pyx_state[5]; __pyx_result.algorithm_is_asy_svd = __pyx_state[6]; __pyx_result.algorithm_is_funk_svd = __pyx_state[7]; __pyx_result.batch_size = __pyx_state[8]; __pyx_result.beta_1 = __pyx_state[9]; __pyx_result.beta_1_power_t = __pyx_state[10]; __pyx_result.beta_2 = __pyx_state[11]; __pyx_result.beta_2_power_t = __pyx_state[12]; __pyx_result.gamma = __pyx_state[13]; __pyx_result.learning_rate = __pyx_state[14]; __pyx_result.momentum_1 = __pyx_state[15]; __pyx_result.momentum_2 = __pyx_state[16]; __pyx_result.n_factors = __pyx_state[17]; __pyx_result.n_items = __pyx_state[18]; __pyx_result.n_users = __pyx_state[19]; __pyx_result.negative_reg = __pyx_state[20]; __pyx_result.normalized_algorithm = __pyx_state[21]; __pyx_result.numPositiveIteractions = __pyx_state[22]; __pyx_result.positive_reg = __pyx_state[23]; __pyx_result.sgd_cache_I = __pyx_state[24]; __pyx_result.sgd_cache_I_momentum_1 = __pyx_state[25]; __pyx_result.sgd_cache_I_momentum_2 = __pyx_state[26]; __pyx_result.sgd_cache_U = __pyx_state[27]; __pyx_result.sgd_cache_U_momentum_1 = __pyx_state[28]; __pyx_result.sgd_cache_U_momentum_2 = __pyx_state[29]; __pyx_result.useAdaGrad = __pyx_state[30]; __pyx_result.useAdam = __pyx_state[31]; __pyx_result.useRmsprop = __pyx_state[32]; __pyx_result.user_reg = __pyx_state[33]
+ *     if len(__pyx_state) > 34 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -27405,8 +27733,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_H_i, __pyx_k_H_i, sizeof(__pyx_k_H_i), 0, 0, 1, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x09, __pyx_k_Incompatible_checksums_s_vs_0x09, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x09), 0, 0, 1, 0},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0xb0, __pyx_k_Incompatible_checksums_s_vs_0xb0, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xb0), 0, 0, 1, 0},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xcf, __pyx_k_Incompatible_checksums_s_vs_0xcf, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xcf), 0, 0, 1, 0},
   {&__pyx_n_s_IndexError, __pyx_k_IndexError, sizeof(__pyx_k_IndexError), 0, 0, 1, 1},
   {&__pyx_kp_s_Indirect_dimensions_not_supporte, __pyx_k_Indirect_dimensions_not_supporte, sizeof(__pyx_k_Indirect_dimensions_not_supporte), 0, 0, 1, 0},
   {&__pyx_kp_s_Invalid_mode_expected_c_or_fortr, __pyx_k_Invalid_mode_expected_c_or_fortr, sizeof(__pyx_k_Invalid_mode_expected_c_or_fortr), 0, 0, 1, 0},
@@ -27558,9 +27886,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 42, __pyx_L1_error)
-  __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_n_s_super); if (!__pyx_builtin_super) __PYX_ERR(0, 84, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 128, __pyx_L1_error)
-  __pyx_builtin_input = __Pyx_GetBuiltinName(__pyx_n_s_input); if (!__pyx_builtin_input) __PYX_ERR(0, 352, __pyx_L1_error)
+  __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_n_s_super); if (!__pyx_builtin_super) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 132, __pyx_L1_error)
+  __pyx_builtin_input = __Pyx_GetBuiltinName(__pyx_n_s_input); if (!__pyx_builtin_input) __PYX_ERR(0, 372, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(2, 799, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(2, 989, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 146, __pyx_L1_error)
@@ -27589,14 +27917,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice_);
   __Pyx_GIVEREF(__pyx_slice_);
 
-  /* "MatrixFactorization_Cython_Epoch.pyx":128
+  /* "MatrixFactorization_Cython_Epoch.pyx":132
  * 
  *         else:
  *             raise ValueError("Loss value not recognized")             # <<<<<<<<<<<<<<
  * 
  *         self.useAdaGrad = False
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_Loss_value_not_recognized); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_Loss_value_not_recognized); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 132, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
@@ -27902,7 +28230,7 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError
  */
   __pyx_tuple__31 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 1, __pyx_L1_error)
@@ -27992,8 +28320,8 @@ static int __Pyx_InitGlobals(void) {
   __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_10 = PyInt_FromLong(10); if (unlikely(!__pyx_int_10)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_30 = PyInt_FromLong(30); if (unlikely(!__pyx_int_30)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_9950469 = PyInt_FromLong(9950469L); if (unlikely(!__pyx_int_9950469)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_184977713 = PyInt_FromLong(184977713L); if (unlikely(!__pyx_int_184977713)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_217817936 = PyInt_FromLong(217817936L); if (unlikely(!__pyx_int_217817936)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -28094,15 +28422,16 @@ PyMODINIT_FUNC PyInit_MatrixFactorization_Cython_Epoch(void)
   /*--- Type init code ---*/
   __pyx_vtabptr_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch = &__pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch;
   __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.getSeenItems = (__Pyx_memviewslice (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, long))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_getSeenItems;
+  __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.compute_projected_gradient = (double (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double *, int, int))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_compute_projected_gradient;
   __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.adaptive_gradient_item = (double (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double, long))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_adaptive_gradient_item;
   __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.adaptive_gradient_user = (double (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *, double, long))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_adaptive_gradient_user;
   __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.sampleMSE_Cython = (struct __pyx_t_32MatrixFactorization_Cython_Epoch_MSE_sample (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_sampleMSE_Cython;
   __pyx_vtable_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.sampleBPR_Cython = (struct __pyx_t_32MatrixFactorization_Cython_Epoch_BPR_sample (*)(struct __pyx_obj_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch *))__pyx_f_32MatrixFactorization_Cython_Epoch_32MatrixFactorization_Cython_Epoch_sampleBPR_Cython;
-  if (PyType_Ready(&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
   __pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.tp_dict, __pyx_vtabptr_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "MatrixFactorization_Cython_Epoch", (PyObject *)&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch.tp_dict, __pyx_vtabptr_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "MatrixFactorization_Cython_Epoch", (PyObject *)&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
   __pyx_ptype_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch = &__pyx_type_32MatrixFactorization_Cython_Epoch_MatrixFactorization_Cython_Epoch;
   __pyx_vtabptr_array = &__pyx_vtable_array;
   __pyx_vtable_array.get_memview = (PyObject *(*)(struct __pyx_array_obj *))__pyx_array_get_memview;
@@ -28217,7 +28546,7 @@ PyMODINIT_FUNC PyInit_MatrixFactorization_Cython_Epoch(void)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_MatrixFactorization_Cython_Epoch(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0xcfba350:
+ *     if __pyx_checksum != 0x097d505:
  *         from pickle import PickleError as __pyx_PickleError
  */
   __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_32MatrixFactorization_Cython_Epoch_1__pyx_unpickle_MatrixFactorization_Cython_Epoch, NULL, __pyx_n_s_MatrixFactorization_Cython_Epoch); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 1, __pyx_L1_error)
@@ -29965,6 +30294,48 @@ bad:
      "Out of bounds on buffer access (axis %d)", axis);
 }
 
+/* WriteUnraisableException */
+        static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
+}
+
 /* PyIntBinop */
         #if !CYTHON_COMPILING_IN_PYPY
 static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, CYTHON_UNUSED int inplace) {
@@ -30095,48 +30466,6 @@ static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED
     int r = a - q*b;
     q -= ((r != 0) & ((r ^ b) < 0));
     return q;
-}
-
-/* WriteUnraisableException */
-        static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
-    }
-    #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
-    #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
-    }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
-#endif
 }
 
 /* None */
