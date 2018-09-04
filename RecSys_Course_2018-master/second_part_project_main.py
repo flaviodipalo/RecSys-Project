@@ -17,6 +17,6 @@ def run_recommender():
 
     print('Data Loaded !')
     recommender = MatrixFactorization_Cython(URM_train=URM_train,URM_validation=URM_test,algorithm = "FUNK_SVD")
-    recommender.fit(epochs= 15)
+    recommender.fit(epochs= 15,stop_on_validation=True,validation_every_n=1,normalized_algorithm= True)
 
 run_recommender()

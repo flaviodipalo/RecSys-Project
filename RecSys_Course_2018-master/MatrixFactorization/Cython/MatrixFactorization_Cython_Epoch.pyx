@@ -14,7 +14,8 @@ Created on 07/09/17
 #cython: overflowcheck=False
 
 #defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-
+#import PyMem_Malloc
+from libc.stdlib cimport malloc, free
 from Base.Recommender_utils import check_matrix
 import numpy as np
 cimport numpy as np
@@ -45,8 +46,6 @@ cdef double[:,:] matrix_sum_row_to_1(matrix):
                     matrix[i,j] /= row_sum
             return matrix
 
-
-
 cdef class MatrixFactorization_Cython_Epoch:
 
     cdef int n_users, n_items, n_factors
@@ -75,18 +74,17 @@ cdef class MatrixFactorization_Cython_Epoch:
     cdef double beta_1, beta_2, beta_1_power_t, beta_2_power_t
     cdef double momentum_1, momentum_2
 
+
     cdef bint normalized_algorithm
-
-
 
     def __init__(self, URM_train, n_factors = 10, algorithm = "FUNK_SVD",
                  learning_rate = 0.01, user_reg = 0.0, positive_reg = 0.0, negative_reg = 0.0,
-                 batch_size = 1, sgd_mode='sgd', gamma=0.995, beta_1=0.9, beta_2=0.999):
+                 batch_size = 1, sgd_mode='sgd', gamma=0.995, beta_1=0.9, beta_2=0.999,normalized_algorithm=False):
 
         super(MatrixFactorization_Cython_Epoch, self).__init__()
 
         ###TODO:ADDED FOR NORMALIZATION (FLAVIO)
-        self.normalized_algorithm = True
+        self.normalized_algorithm = normalized_algorithm
 
         URM_train = check_matrix(URM_train, 'csr')
 
@@ -227,8 +225,10 @@ cdef class MatrixFactorization_Cython_Epoch:
         cdef long start_time_epoch = time.time()
         cdef long last_print_time = start_time_epoch
 
-        cdef double user_gradient_vector[10]
-        cdef double item_gradient_vector[10]
+        cdef double* user_gradient_vector
+        cdef double* item_gradient_vector
+
+
 
         for numCurrentBatch in range(totalNumberOfBatch):
 
@@ -250,12 +250,10 @@ cdef class MatrixFactorization_Cython_Epoch:
             if self.normalized_algorithm:
                 ##In case of the normalization for this algorithm we need to allocate two vectors that will
                 #store the gradients
-
-                #import PyMem_Malloc
-                #user_gradient_vector = <double *>PyMem_Malloc(n_factors * sizeof(double ))
-                #item_gradient_vector = <double *>PyMem_Malloc(n_factors * sizeof(double ))
-
+                user_gradient_vector = <double *>malloc(self.n_factors * sizeof(double))
+                item_gradient_vector = <double *>malloc(self.n_factors * sizeof(double))
                 for index in range(self.n_factors):
+
                     H_i = self.ITEM_factors[sample.item, index]
                     W_u = self.USER_factors[sample.user, index]
 
@@ -264,7 +262,8 @@ cdef class MatrixFactorization_Cython_Epoch:
 
                 for index in range(self.n_factors):
                     self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)
-                    self.ITEM_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+                    self.ITEM_factors[sample.item,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
+
             else :
                 for index in range(self.n_factors):
                     # Copy original value to avoid messing up the updates
@@ -432,8 +431,6 @@ cdef class MatrixFactorization_Cython_Epoch:
                     sys.stderr.flush()
 
 
-
-
     def epochIteration_Cython_BPR_SGD(self):
 
         # Get number of available interactions
@@ -520,13 +517,6 @@ cdef class MatrixFactorization_Cython_Epoch:
 
                     sys.stdout.flush()
                     sys.stderr.flush()
-
-
-
-
-
-
-
 
 
     def get_W(self):
