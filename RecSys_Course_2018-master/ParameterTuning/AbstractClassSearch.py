@@ -26,10 +26,6 @@ class EvaluatorWrapper(object):
         return self.evaluator_object.evaluateRecommender(recommender_object)
 
 
-
-
-
-
 class DictionaryKeys(Enum):
     # Fields to be filled by caller
     # Dictionary of paramethers needed by the constructor

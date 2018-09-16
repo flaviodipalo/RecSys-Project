@@ -73,7 +73,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     hyperparamethers_range_dictionary["l2_penalty"] = [1e-1, 1e-2]
 
     hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
-
+    ##TODO: ci sta che sia un problema dei parametri passati in ingresso al recommender costruito con cattiveria
     recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),

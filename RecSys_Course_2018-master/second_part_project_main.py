@@ -7,7 +7,7 @@ from MatrixFactorization.Cython import MatrixFactorization_Cython
 
 from data.movielens_1m.Movielens1MReader import Movielens1MReader
 from MatrixFactorization.Cython.MatrixFactorization_Cython import MatrixFactorization_Cython as mfc
-from ParameterTuning import BayesianSearch
+from ParameterTuning.BayesianSearch import BayesianSearch as bs
 from ParameterTuning.AbstractClassSearch import DictionaryKeys
 
 def run_recommender():
@@ -45,17 +45,18 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     file_path = 'Norm_='+str(normalized)+'_delete_popular='+str(popular)
 
-    recommender_class = MatrixFactorization_Cython
-    parameterSearch = BayesianSearch.BayesianSearch(recommender_class, URM_validation)
+    recommender_class = mfc
+    parameterSearch = bs(recommender_class, URM_validation)
 
     hyperparamethers_range_dictionary = {}
-    hyperparamethers_range_dictionary["topK"] = [100]
-    hyperparamethers_range_dictionary["l1_penalty"] = [1e-1, 1e-2]
-    hyperparamethers_range_dictionary["l2_penalty"] = [1e-1, 1e-2]
+    hyperparamethers_range_dictionary["learning_rate"] = [0.01]
 
-    hyperparamethers_range_dictionary["similarity_matrix_normalized"] = [normalized]
+    print("In main I see: ")
+    print(repr(DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS))
+    print(repr(DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS))
+# {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
 
-    recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_validation],
+    recommenderDictionary = {DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [URM_train,URM_test],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
                               DictionaryKeys.FIT_KEYWORD_ARGS: dict(),
@@ -63,6 +64,5 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
     parameterSearch.evaluate_on_test(URM_test)
-
 
 run_recommender_optimization()
