@@ -143,10 +143,6 @@ class Evaluator(object):
 
         self.usersToEvaluate = list(self.usersToEvaluate)
 
-
-
-
-
     def evaluateRecommender(self, recommender_object):
         """
         :param recommender_object: the trained recommender object, a Recommender subclass
@@ -387,9 +383,6 @@ class SequentialEvaluator(Evaluator):
 
                     if EvaluatorMetrics.DIVERSITY_SIMILARITY.value in results_current_cutoff:
                         results_current_cutoff[EvaluatorMetrics.DIVERSITY_SIMILARITY.value].add_recommendations(recommended_items_current_cutoff)
-
-
-
 
 
                 if time.time() - start_time_print > 30 or n_users_evaluated==len(self.usersToEvaluate):

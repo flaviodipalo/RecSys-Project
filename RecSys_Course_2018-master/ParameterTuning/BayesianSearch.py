@@ -235,9 +235,13 @@ class BayesianSearch(AbstractClassSearch):
                             **paramether_dictionary)
 
             #return recommender.evaluateRecommendations(self.URM_validation, at=5, mode="sequential")
-            result_dict, _  = self.evaluator_validation.evaluateRecommender(recommender, paramether_dictionary)
-            result_dict = result_dict[list(result_dict.keys())[0]]
 
+            #  codice nella versione precedente
+            # result_dict = self.evaluation_function(recommender, URM_test, self.best_solution_parameters)
+
+            result_dict, _  = self.evaluator_validation.evaluateRecommender(recommender, paramether_dictionary)
+
+            result_dict = result_dict[list(result_dict.keys())[0]]
 
             paramether_dictionary_to_save = self.from_fit_params_to_saved_params_function(recommender, paramether_dictionary)
 
