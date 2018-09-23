@@ -26,8 +26,7 @@ def run_recommender():
 
     print('Data Loaded !')
     recommender = mfc(URM_train=URM_train,URM_validation=URM_test,algorithm = "FUNK_SVD")
-    recommender.fit(epochs= 15,stop_on_validation=True,validation_every_n=1,normalized_algorithm= True)
-
+    recommender.fit(epochs= 15,stop_on_validation=True,validation_every_n=1,normalized_algorithm= True,sgd_mode = "adam")
 
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
@@ -38,6 +37,7 @@ def run_recommender_optimization(normalized=False, popular=False):
     URM_test = data_reader.URM_test
     URM_validation = data_reader.URM_test
     print('Data Loaded !')
+    ##in this part we reshape all the matrices in order to set all to the maxiumum dimention one.
 
     print(URM_train.nnz)
     print(URM_test.nnz)
@@ -55,30 +55,38 @@ def run_recommender_optimization(normalized=False, popular=False):
     recommender_class = mfc
     parameterSearch = bs(recommender_class = recommender_class, evaluator_validation= evaluator_validation)
 
-    # hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
-    # TODO: problema con learning rate pari a 0.01 si rompe tutto.
 
     hyperparamethers_range_dictionary = {}
 
-    hyperparamethers_range_dictionary["learning_rate"] = [1e-3,1e-4,1e-5]
-    #hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
+    hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
+    hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
     hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
     hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
     #TODO: the thing is we have positive_reg = 0.0, negative_reg = 0.0,
     print("In main I see: ")
     print(repr(DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS))
     print(repr(DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS))
+
+    '''
     recommenderDictionary = {
                               DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {'URM_train':URM_train,'URM_validation':URM_test,'algorithm':'FUNK_SVD'},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
                               DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":True,"validation_every_n":1,"normalized_algorithm":normalized},
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
+    '''
+
+    recommenderDictionary = {
+                              DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],
+                              DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {'URM_train':URM_train,'algorithm':'FUNK_SVD'},
+                              DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
+                              DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":True,"validation_every_n":1,"normalized_algorithm":normalized,    "evaluator_object": evaluator_validation_earlystopping,
+                              "lower_validatons_allowed": 10},
+                              DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
     #parameterSearch.evaluate_on_test(URM_validation)
 
-#TODO: the run_recommender function works perfectly without any modification the problem is the evaluation for the optimizer
 #run_recommender()
-run_recommender_optimization(normalized= False)
+run_recommender_optimization(normalized= True)
 

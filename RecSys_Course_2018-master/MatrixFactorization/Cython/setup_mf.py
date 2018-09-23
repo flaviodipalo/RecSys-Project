@@ -1,6 +1,7 @@
 from distutils.core import setup
 import numpy
 from Cython.Build import cythonize
+#TODO: fallo entrare nella stessa cartella dove dovrebbe essere.
 # python setup_mf.py build_ext --inplace
 
 setup(

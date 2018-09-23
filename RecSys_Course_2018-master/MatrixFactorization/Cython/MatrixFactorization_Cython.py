@@ -80,7 +80,6 @@ class MatrixFactorization_Cython(Recommender, Incremental_Training_Early_Stoppin
 
         if self.algorithm == "FUNK_SVD":
 
-
             self.cythonEpoch = MatrixFactorization_Cython_Epoch(self.URM_train,
                                                      algorithm = self.algorithm,
                                                      n_factors = self.num_factors,

@@ -114,6 +114,7 @@ cdef class MatrixFactorization_Cython_Epoch:
                 self.USER_factors = matrix_sum_row_to_1(self.USER_factors)
                 self.ITEM_factors = matrix_sum_row_to_1(self.ITEM_factors)
 
+
         elif algorithm == "ASY_SVD":
             self.algorithm_is_asy_svd = True
             # W and H cannot be initialized as zero, otherwise the gradient will always be zero
@@ -197,7 +198,6 @@ cdef class MatrixFactorization_Cython_Epoch:
         return result
 
     def epochIteration_Cython(self):
-
         if self.algorithm_is_funk_svd:
             self.epochIteration_Cython_FUNK_SVD_SGD()
 
@@ -264,6 +264,8 @@ cdef class MatrixFactorization_Cython_Epoch:
                     self.USER_factors[sample.user,index] +=self.learning_rate* self.compute_projected_gradient(user_gradient_vector,self.n_factors,index)
                     self.ITEM_factors[sample.item,index] +=self.learning_rate* self.compute_projected_gradient(item_gradient_vector,self.n_factors,index)
 
+                free(user_gradient_vector)
+                free(item_gradient_vector)
             else :
                 for index in range(self.n_factors):
                     # Copy original value to avoid messing up the updates
