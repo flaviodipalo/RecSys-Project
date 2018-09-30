@@ -268,7 +268,7 @@ class BayesianSearch(AbstractClassSearch):
 
                 if self.save_model != "no":
                     print("BayesianSearch: Saving model in {}\n".format(self.output_root_path))
-                    recommender.saveModel(self.output_root_path, file_name = "_best_model")
+                    recommender.saveModel(self.output_root_path, file_name = self.recommender_class.RECOMMENDER_NAME+"_best_model")
 
                 if self.evaluator_test is not None:
                     self.evaluate_on_test()

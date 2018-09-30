@@ -47,15 +47,20 @@ def run_recommender_optimization(normalized=False, popular=False):
     evaluator_test = EvaluatorWrapper(evaluator_test)
 
     recommender_class = mfc
-    parameterSearch = bs(recommender_class = recommender_class, evaluator_validation= evaluator_validation)
+    parameterSearch = bs(recommender_class = recommender_class, evaluator_validation= evaluator_validation,evaluator_test = evaluator_test)
 
 
     hyperparamethers_range_dictionary = {}
 
-    hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
-    hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
-    hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
-    hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
+    #hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
+    #hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
+    #hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
+    #hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
+
+    hyperparamethers_range_dictionary["learning_rate"] = [1e-2]
+    hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad"]
+    hyperparamethers_range_dictionary["num_factors"] = [1]
+    hyperparamethers_range_dictionary["user_reg"] = [0.0]
 
 
     recommenderDictionary = {
@@ -67,7 +72,7 @@ def run_recommender_optimization(normalized=False, popular=False):
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
-    parameterSearch.evaluate_on_test(URM_validation)
+    parameterSearch.evaluate_on_test()
 
 #run_recommender()
 run_recommender_optimization(normalized= False)

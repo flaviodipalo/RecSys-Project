@@ -76,6 +76,9 @@ class MatrixFactorization_Cython(Recommender, Incremental_Training_Early_Stoppin
             evaluator_object = SequentialEvaluator(self.URM_validation, [5])
 
         # Import compiled module
+        import os 
+        cwd = os.getcwd()
+        print(cwd)
         from MatrixFactorization.Cython.MatrixFactorization_Cython_Epoch import MatrixFactorization_Cython_Epoch
 
         if self.algorithm == "FUNK_SVD":
