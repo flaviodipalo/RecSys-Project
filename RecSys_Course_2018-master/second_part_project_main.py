@@ -52,16 +52,10 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
 
-    #hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
-    #hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
-    #hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
-    #hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
-
-    hyperparamethers_range_dictionary["learning_rate"] = [1e-2]
-    hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad"]
-    hyperparamethers_range_dictionary["num_factors"] = [1]
-    hyperparamethers_range_dictionary["user_reg"] = [0.0]
-
+    hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
+    hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
+    hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
+    hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
 
     recommenderDictionary = {
                               DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],
