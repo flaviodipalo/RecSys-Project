@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c87853e1-893c-45e6-895b-31df1ddbec0c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BX-Book-Ratings.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BX-Book-Ratings.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader_old.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2017-master/data/URM_train.npz" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BX-Users.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2017-master/data/movielens_10m.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BX-Books.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/Evaluator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/Evaluator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/KFoldResultRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/KFoldResultRepository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/KFoldResultRepository_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/KFoldResultRepository_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/k_fold_significance_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/k_fold_significance_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/metrics_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/metrics_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Evaluation/ttest.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/ttest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/IR_feature_weighting.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/IR_feature_weighting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Incremental_Training_Early_Stopping.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Incremental_Training_Early_Stopping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/NonPersonalizedRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/NonPersonalizedRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Recommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Recommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Recommender_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Recommender_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Recommender_utils_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Recommender_utils_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Compute_Similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Compute_Similarity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Compute_Similarity_Euclidean.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Compute_Similarity_Euclidean.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Compute_Similarity_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Compute_Similarity_Python.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Compute_Similarity_Cython.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Compute_Similarity_Cython.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Compute_Similarity_Cython.cpython-36m-ppc64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Compute_Similarity_Cython.cpython-36m-ppc64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Compute_Similarity_Cython.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Compute_Similarity_Cython.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Compute_Similarity_Cython.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Compute_Similarity_Cython.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Compute_Similarity_Cython.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Compute_Similarity_Cython.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Similarity_Matrix_Evaluator.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Similarity_Matrix_Evaluator.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Similarity_Matrix_Evaluator.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Similarity_Matrix_Evaluator.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Similarity_Matrix_Evaluator.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Similarity_Matrix_Evaluator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/Similarity_Matrix_Evaluator.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/Similarity_Matrix_Evaluator.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/compileCython.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/compileCython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/cosine_similarity_prune.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/cosine_similarity_prune.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/cosine_similarity_prune.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/cosine_similarity_prune.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/cosine_similarity_prune.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/cosine_similarity_prune.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/metrics.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/metrics.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/metrics.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/metrics.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/metrics.pxd" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/metrics.pxd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/Cython/metrics.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/Cython/metrics.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/Similarity/cosine_similarity_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Similarity/cosine_similarity_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Base/SimilarityMatrixRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/SimilarityMatrixRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/GraphBased/P3alphaRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/GraphBased/P3alphaRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/GraphBased/RP3betaRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/GraphBased/RP3betaRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/KNN/ItemKNNCBFRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/KNN/ItemKNNCBFRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/KNN/ItemKNNCFRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/KNN/ItemKNNCFRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/KNN/ItemKNNCustomSimilarityRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/KNN/ItemKNNCustomSimilarityRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/KNN/ItemKNNSimilarityHybridRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/KNN/ItemKNNSimilarityHybridRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/KNN/UserKNNCFRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/KNN/UserKNNCFRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.cpython-36m-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.cpython-36m-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/compileCython.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/compileCython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/Cython/setup_mf.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/MatrixFactorization_BPR_Theano.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/MatrixFactorization_BPR_Theano.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/MatrixFactorization_RMSE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/MatrixFactorization_RMSE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/MatrixFactorization/PureSVD.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/PureSVD.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/AbstractClassSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/AbstractClassSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/.coveragerc" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/.coveragerc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/bayes_opt/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/bayes_opt/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/bayes_opt/bayesian_optimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/bayes_opt/bayesian_optimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/bayes_opt/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/bayes_opt/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/bayes_opt/target_space.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/bayes_opt/target_space.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/bayesian_optimization.gif" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/bayesian_optimization.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/bo_example.png" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/bo_example.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/exploitation vs exploration.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/exploitation vs exploration.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/sklearn_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/sklearn_example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/usage.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/usage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/visualization.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/visualization.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/examples/xgboost_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/examples/xgboost_example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/pytest.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/pytest.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/setup.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/setup.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/tests/test_bayesian_optimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/tests/test_bayesian_optimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/tests/test_helper_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/tests/test_helper_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianOptimization_master/tests/test_target_space.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianOptimization_master/tests/test_target_space.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/BayesianSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/BayesianSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/GridSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/GridSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/ParameterTuning/RandomSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/ParameterTuning/RandomSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/BPR_sampling.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/BPR_sampling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/SLIM_BPR_Cython.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/SLIM_BPR_Cython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/SLIM_BPR_Cython_Epoch.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Sparse_Matrix_Tree_CSR_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Triangular_Matrix.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Triangular_Matrix.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Triangular_Matrix.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Triangular_Matrix.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Triangular_Matrix.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Triangular_Matrix.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Triangular_Matrix.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Triangular_Matrix.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/Triangular_Matrix_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/Triangular_Matrix_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/Cython/compileCython.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/Cython/compileCython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/SLIM_BPR.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/SLIM_BPR.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/SLIM_BPR_Mono.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/SLIM_BPR_Mono.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/SLIM_BPR_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/SLIM_BPR_Python.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_BPR/SLIM_BPR_Theano.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_BPR/SLIM_BPR_Theano.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/SLIM_ElasticNet/SLIMElasticNetRecommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/SLIM_ElasticNet/SLIMElasticNetRecommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Utils/PoolWithSubprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Utils/PoolWithSubprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Utils/estimate_sparse_size.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Utils/estimate_sparse_size.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/Utils/test_DataReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Utils/test_DataReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/all_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/all_algorithms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/movielens_1m/Movielens1MReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/Movielens1MReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/movielens_1m/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/movielens_1m/movies.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/movies.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/movielens_1m/ratings.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/ratings.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/data/movielens_1m/users.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/users.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/newNorm_=False_delete_popular=FalseMatrixFactorization_Cython_Recommender_best_model" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=FalseMatrixFactorization_Cython_Recommender_best_model" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/newNorm_=False_delete_popular=False_BayesianSearch.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/newNorm_=False_delete_popular=False_best_model" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_best_model" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/newNorm_=False_delete_popular=False_best_parameters" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_best_parameters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/run_SLIM_BPR.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/run_SLIM_BPR.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/run_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/run_script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/run_script_k_fold.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/run_script_k_fold.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/second_part_project_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/20161219_BPR.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/20161219_BPR.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/2017_MF.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/2017_MF.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/2017_MF.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/2017_MF.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/Amazon AWS.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/Amazon AWS.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/FM.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/FM.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/FunkSVD - 2006.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/FunkSVD - 2006.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/hu_koren_volinsky.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/hu_koren_volinsky.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/koren_sdv++.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/koren_sdv++.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RecSys_Course_2018-master/slides/rendle_bpr.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/slides/rendle_bpr.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Cython/compileCython.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Cython/compileCython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Cython/cosine_similarity.c" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Cython/cosine_similarity.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Cython/cosine_similarity.cpython-36m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Cython/cosine_similarity.cpython-36m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Cython/cosine_similarity.html" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Cython/cosine_similarity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Cython/cosine_similarity.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Cython/cosine_similarity.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Recommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Recommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Recommender_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Recommender_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Recommender_utils_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Recommender_utils_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/Similarity_Matrix_Recommender.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/Similarity_Matrix_Recommender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/URM_Dense_K_Cores.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/URM_Dense_K_Cores.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/cosine_similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/cosine_similarity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/cosine_similarity_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/cosine_similarity_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/Base/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/Base/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/MatrixFactorization/Cython/setup_mf.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/MatrixFactorization/Cython/setup_mf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/ParameterTuning/AbstractClassSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/ParameterTuning/AbstractClassSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/ParameterTuning/BayesianSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/ParameterTuning/BayesianSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/ParameterTuning/GridSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/ParameterTuning/GridSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/ParameterTuning/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/ParameterTuning/run_ParameterSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/ParameterTuning/run_ParameterSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/SLIM_Cython_Epoch_Backup.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/SLIM_Cython_Epoch_Backup.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/SLIM_RMSE/SLIM_RMSE.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/SLIM_RMSE/SLIM_RMSE.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/SLIM_RMSE_Cython.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/SLIM_RMSE_Cython.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/SLIM_RMSE_Cython_Epoch_Normal.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/SLIM_RMSE_Cython_Epoch_Normal.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/SLIM_RMSE_Cython_Epoch_Normalized.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/SLIM_RMSE_Cython_Epoch_Normalized.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/BX-Book-Ratings.csv" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/BX-Book-Ratings.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/BX-Book-Ratings.dat" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/BX-Book-Ratings.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/BX-Books.csv" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/BX-Books.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/BX-Users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/BX-Users.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/BookCrossingReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/BookCrossingReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/book_crossing/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_10m/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_10m/Movielens10MReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_10m/Movielens10MReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_10m/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/book_crossing/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/Movielens1MReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/Movielens1MReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/README" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/README" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/ParameterTuning/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/movies.dat" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/movies.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/ratings.dat" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/ratings.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/data/movielens_1m/users.dat" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/data/movielens_1m/users.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/our_code/telegram_bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/telegram_bot.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/RecSys_Project$second_part_project_main.coverage" NAME="second_part_project_main Coverage Results" MODIFIED="1538971148544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018" />
+    <SUITE FILE_PATH="coverage/RecSys_Project$BookCrossingReader.coverage" NAME="BookCrossingReader Coverage Results" MODIFIED="1538970885351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-977460929">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="9" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="9" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="dummy" value="4" />
+          <entry key="py" value="112" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="PLAIN_TEXT" value="4" />
+          <entry key="Python" value="112" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="356">
+              <caret line="75" lean-forward="true" selection-start-line="75" selection-end-line="75" />
+              <folding>
+                <element signature="e#84#93#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader_old.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="512">
+              <caret line="97" column="32" selection-start-line="97" selection-start-column="32" selection-end-line="97" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="93">
+              <caret line="90" column="13" lean-forward="true" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/Movielens1MReader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="356">
+              <caret line="130" lean-forward="true" selection-start-line="113" selection-end-line="130" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1009" />
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/RecSys_Course_2018-master/second_part_project_main.py" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="382" />
+    <option name="y" value="240" />
+    <option name="width" value="1280" />
+    <option name="height" value="777" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="First_Part_from_RecSys_Course_2017" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="First_Part_from_RecSys_Course_2017" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="book_crossing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="movielens_1m" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
+      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data" />
+      <recent name="$PROJECT_DIR$/RecSys_Course_2018-master/data/book_crossing" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.second_part_project_main">
+    <configuration name="BookCrossingReader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="RecSys-Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader_old.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="second_part_project_main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="RecSys-Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.second_part_project_main" />
+      <item itemvalue="Python.BookCrossingReader" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.second_part_project_main" />
+        <item itemvalue="Python.BookCrossingReader" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c87853e1-893c-45e6-895b-31df1ddbec0c" name="Default Changelist" comment="" />
+      <created>1538970196705</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1538970196705</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1280" height="777" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32959327" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32959327" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="SciView" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/First_Part_from_RecSys_Course_2017/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1009" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader_old.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="97" column="32" selection-start-line="97" selection-start-column="32" selection-end-line="97" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/Movielens1MReader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="130" lean-forward="true" selection-start-line="113" selection-end-line="130" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="90" column="13" lean-forward="true" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="75" lean-forward="true" selection-start-line="75" selection-end-line="75" />
+          <folding>
+            <element signature="e#84#93#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
