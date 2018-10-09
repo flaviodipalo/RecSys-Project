@@ -33,7 +33,7 @@ class EpinionsReader(object):
         # These arrays are sorted by user
         self.users = np.array(fileHandle['user_id']).astype(int)
         self.movies = np.array(fileHandle['item_id']).astype(int)
-        self.ratings = np.array(fileHandle['rating_value']).astype(float)
+        self.ratings = np.array(fileHandle['rating_value']).astype(int)
 
         if delete_popular:
             unique, counts = np.unique(self.movies, return_counts=True)
