@@ -70,8 +70,8 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test()
 
 #run_recommender()
-#run_recommender_optimization(normalized= False)
-#run_recommender_optimization(normalized= True)
+run_recommender_optimization(normalized= False)
+run_recommender_optimization(normalized= True)
 from MatrixFactorization.PureSVD import PureSVDRecommender
 def run_recommender_python():
     #cython epoch only version
@@ -88,4 +88,4 @@ def run_recommender_python():
     recommender.fit()
 
 
-run_recommender_python()
+#run_recommender_python()

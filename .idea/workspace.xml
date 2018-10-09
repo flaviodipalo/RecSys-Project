@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c87853e1-893c-45e6-895b-31df1ddbec0c" name="Default Changelist" comment="" />
+    <list default="true" id="c87853e1-893c-45e6-895b-31df1ddbec0c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.c" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.html" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/MatrixFactorization_Cython_Epoch.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +39,19 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="4" />
-          <entry key="py" value="221" />
+          <entry key="py" value="246" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Python" value="221" />
+          <entry key="Python" value="246" />
         </counts>
       </usages-collector>
     </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="RecSys-Project" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -60,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1395">
-              <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+            <state relative-caret-position="306">
+              <caret line="84" column="34" selection-start-line="84" selection-start-column="34" selection-end-line="84" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -85,7 +92,7 @@
         <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/PureSVD.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1080">
-              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+              <caret line="72" selection-start-line="72" selection-end-line="72" />
               <folding>
                 <element signature="e#111#151#0" expanded="true" />
               </folding>
@@ -100,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="225">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -123,6 +130,7 @@
         <option value="$PROJECT_DIR$/RecSys_Course_2018-master/second_part_project_main.py" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py" />
       </list>
     </option>
   </component>
@@ -133,8 +141,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="114" />
-    <option name="y" value="23" />
+    <option name="x" value="-29" />
+    <option name="y" value="197" />
     <option name="width" value="1280" />
     <option name="height" value="777" />
   </component>
@@ -198,6 +206,13 @@
               <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
               <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
               <item name="MatrixFactorization" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="MatrixFactorization" type="462c0819:PsiDirectoryNode" />
+              <item name="Cython" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -301,10 +316,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="777" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2536349" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49790794" visible="true" weight="0.2536349" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Favorites" order="2" sideWeight="0.50209206" side_tool="true" weight="0.2536349" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32959327" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32959327" />
@@ -354,16 +370,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/MatrixFactorization_RMSE.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="631">
@@ -377,7 +383,7 @@
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/PureSVD.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1080">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+          <caret line="72" selection-start-line="72" selection-end-line="72" />
           <folding>
             <element signature="e#111#151#0" expanded="true" />
           </folding>
@@ -401,8 +407,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1395">
-          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+        <state relative-caret-position="306">
+          <caret line="84" column="34" selection-start-line="84" selection-start-column="34" selection-end-line="84" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
