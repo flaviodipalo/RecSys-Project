@@ -70,6 +70,22 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.evaluate_on_test()
 
 #run_recommender()
-run_recommender_optimization(normalized= False)
-run_recommender_optimization(normalized= True)
+#run_recommender_optimization(normalized= False)
+#run_recommender_optimization(normalized= True)
+from MatrixFactorization.PureSVD import PureSVDRecommender
+def run_recommender_python():
+    #cython epoch only version
+    print('Loading Data...')
 
+    #data_reader = Movielens1MReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False)
+    data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False)
+    URM_train = data_reader.URM_train
+    URM_test = data_reader.URM_test
+    URM_validation = data_reader.URM_test
+
+    print('Data Loaded !')
+    recommender = PureSVDRecommender(URM_train=URM_train)
+    recommender.fit()
+
+
+run_recommender_python()
