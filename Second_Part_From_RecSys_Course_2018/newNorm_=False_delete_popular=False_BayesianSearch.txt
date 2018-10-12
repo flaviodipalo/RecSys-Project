@@ -1,0 +1,1 @@
+BayesianSearch: Testing config: {'learning_rate': 0.01, 'sgd_mode': 'adam', 'num_factors': 5, 'user_reg': 1e-09} - Exception index 105282 is out of bounds for axis 0 with size 105281

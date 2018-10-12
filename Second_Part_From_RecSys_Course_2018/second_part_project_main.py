@@ -30,8 +30,8 @@ def run_recommender():
 
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
-    data_reader = Movielens1MReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = popular)
-    #data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False)
+    #data_reader = Movielens1MReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = popular)
+    data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False)
     #data_reader = EpinionsReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=False)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
@@ -51,7 +51,6 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     recommender_class = mfc
     parameterSearch = bs(recommender_class = recommender_class, evaluator_validation= evaluator_validation,evaluator_test = evaluator_test)
-
 
     hyperparamethers_range_dictionary = {}
 
