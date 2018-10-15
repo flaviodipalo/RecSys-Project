@@ -31,8 +31,8 @@ def run_recommender():
 def run_recommender_optimization(normalized=False, popular=False):
     print('Loading Data...')
     #data_reader = Movielens1MReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = popular)
-    data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False)
-    #data_reader = EpinionsReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=False)
+    #data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False,delete_interactions=0.5)
+    data_reader = EpinionsReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=False)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     URM_validation = data_reader.URM_test
@@ -54,10 +54,10 @@ def run_recommender_optimization(normalized=False, popular=False):
 
     hyperparamethers_range_dictionary = {}
 
-    hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4, 1e-5]
+    hyperparamethers_range_dictionary["learning_rate"] = [1e-2, 1e-3, 1e-4]
     hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
-    hyperparamethers_range_dictionary["num_factors"] = [1, 5, 10, 20, 30, 50, 70, 90, 110]
-    hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6, 1e-9]
+    hyperparamethers_range_dictionary["num_factors"] = [5, 10, 20, 30, 50, 70, 90, 110]
+    hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6]
 
     recommenderDictionary = {
                               DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],

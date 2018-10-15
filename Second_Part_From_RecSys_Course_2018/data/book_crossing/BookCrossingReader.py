@@ -8,7 +8,7 @@ import pandas as pd
 
 class BookCrossingReader(object):
     #TODO: aggiungere validation option.
-    def __init__(self, train_test_split=None, train_validation_split=None, delete_popular=None,delete_interactions=None,k_cores=None,  top_popular_threshold=0.33):
+    def __init__(self, train_test_split=None,train_validation_split=None, delete_popular=None,delete_interactions=None,k_cores=None,  top_popular_threshold=0.33):
         '''
         :param train_test_split: is the percentage of the training set
         '''
@@ -16,19 +16,13 @@ class BookCrossingReader(object):
 
         dir = os.path.dirname(__file__)
         filename = dir+"/BX-Book-Ratings.csv"
-        from numpy import genfromtxt
         fileHandle = pd.read_csv(filename, sep=";", encoding="ISO-8859-1")
-        #fileHandle = open(filename, "r")
 
-        rows, cols, vals = [], [], []
-        numCells = 0
+
         fileHandle['ISBN'], levels = pd.factorize(fileHandle['ISBN'])
         fileHandle['User-ID'], levels = pd.factorize(fileHandle['User-ID'])
         print(fileHandle.iloc[0:100])
 
-        #fileHandle['User'], levels = pd.factorize(fileHandle['ISBN'] )
-
-        #print(fileHandle)
 
         #These arrays are sorted by user
         self.users = np.array(fileHandle['User-ID']).astype(int)
@@ -38,6 +32,7 @@ class BookCrossingReader(object):
 
         self.users, unique_users = pd.factorize(self.users)
         self.movies, unique_movies = pd.factorize(self.movies)
+
 
         if delete_popular:
 
@@ -80,7 +75,7 @@ class BookCrossingReader(object):
             print("LEN OF USERS", len(self.users))
             random_interactions_mask = np.random.choice([True, False], len(self.users),
                                                         p=[delete_interactions, 1 - delete_interactions])
-
+            print(random_interactions_mask)
             self.users = self.users[random_interactions_mask]
             self.movies = self.movies[random_interactions_mask]
             self.ratings = self.ratings[random_interactions_mask]
