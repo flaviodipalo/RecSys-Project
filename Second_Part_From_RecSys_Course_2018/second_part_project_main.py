@@ -67,8 +67,8 @@ def run_recommender_optimization(normalized=False, popular=False):
                               DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {'URM_train':URM_train,'algorithm':'FUNK_SVD'},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
-                              DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":False,"validation_every_n":5,"normalized_algorithm":normalized,    "evaluator_object": evaluator_validation_earlystopping,
-                              "lower_validatons_allowed": 10},
+                              DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":False,"validation_every_n":301,"normalized_algorithm":normalized,    "evaluator_object": evaluator_validation_earlystopping,
+                              "lower_validatons_allowed": 500},
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
