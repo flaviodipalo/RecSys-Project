@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c87853e1-893c-45e6-895b-31df1ddbec0c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/old_version_book_crossing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +16,9 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/RecSys_Project$setup_mf.coverage" NAME="setup_mf Coverage Results" MODIFIED="1539060133818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython" />
+    <SUITE FILE_PATH="coverage/RecSys_Project$telegram_bot.coverage" NAME="telegram_bot Coverage Results" MODIFIED="1539742344282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_messenger_bot" />
     <SUITE FILE_PATH="coverage/RecSys_Project$epinions_reader.coverage" NAME="epinions_reader Coverage Results" MODIFIED="1539061635140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset" />
-    <SUITE FILE_PATH="coverage/RecSys_Project$second_part_project_main.coverage" NAME="second_part_project_main Coverage Results" MODIFIED="1539634878510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018" />
+    <SUITE FILE_PATH="coverage/RecSys_Project$second_part_project_main.coverage" NAME="second_part_project_main Coverage Results" MODIFIED="1539661553087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018" />
     <SUITE FILE_PATH="coverage/RecSys_Project$BookCrossingReader.coverage" NAME="BookCrossingReader Coverage Results" MODIFIED="1538970885351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
     <SUITE FILE_PATH="coverage/RecSys_Project$BookCrossingReader__1_.coverage" NAME="BookCrossingReader (1) Coverage Results" MODIFIED="1539633851274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
   </component>
@@ -38,28 +39,29 @@
         <counts>
           <entry key="csv" value="1" />
           <entry key="md" value="1" />
-          <entry key="py" value="19" />
-          <entry key="txt" value="8" />
+          <entry key="py" value="21" />
+          <entry key="txt" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Markdown" value="1" />
-          <entry key="PLAIN_TEXT" value="9" />
-          <entry key="Python" value="19" />
+          <entry key="PLAIN_TEXT" value="24" />
+          <entry key="Python" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="3" />
           <entry key="dummy" value="52" />
-          <entry key="py" value="594" />
+          <entry key="py" value="774" />
+          <entry key="txt" value="31" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="55" />
-          <entry key="Python" value="594" />
+          <entry key="PLAIN_TEXT" value="86" />
+          <entry key="Python" value="774" />
         </counts>
       </usages-collector>
     </session>
@@ -72,8 +74,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="61" column="29" lean-forward="true" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
+            <state relative-caret-position="386">
+              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
               <folding>
                 <element signature="e#84#93#0" expanded="true" />
               </folding>
@@ -82,19 +84,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/Evaluator.py">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6660">
-              <caret line="451" selection-start-line="451" selection-end-line="451" />
+            <state relative-caret-position="210">
+              <caret line="14" selection-start-line="14" selection-end-line="14" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/movielens_1m/Movielens1MReader.py">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="45">
+              <caret line="3" column="45" selection-start-line="3" selection-end-line="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=True_delete_popular=False_BayesianSearch.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/Evaluator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="401">
+              <caret line="451" selection-start-line="451" selection-end-line="451" />
             </state>
           </provider>
         </entry>
@@ -102,32 +122,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="401">
+              <caret line="136" selection-start-line="10" selection-start-column="4" selection-end-line="136" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="10" column="113" selection-start-line="10" selection-start-column="94" selection-end-line="10" selection-end-column="113" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/MatrixFactorization_RMSE.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="43" column="47" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="47" />
-              <folding>
-                <element signature="e#103#117#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/PureSVD.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
-              <caret line="72" selection-start-line="72" selection-end-line="72" />
-              <folding>
-                <element signature="e#111#151#0" expanded="true" />
-              </folding>
+              <caret line="10" column="87" selection-start-line="10" selection-start-column="87" selection-end-line="10" selection-end-column="87" />
             </state>
           </provider>
         </entry>
@@ -161,6 +166,13 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -171,8 +183,10 @@
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython/setup_mf.py" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/ratings.csv" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/epinions_reader.py" />
-        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt" />
+        <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_messenger_bot/telegram_bot.py" />
         <option value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py" />
       </list>
     </option>
@@ -184,6 +198,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="76" />
     <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="777" />
@@ -209,20 +224,7 @@
               <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
               <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
-              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="book_crossing" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RecSys-Project" type="462c0819:PsiDirectoryNode" />
-              <item name="Second_Part_From_RecSys_Course_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="KNN" type="462c0819:PsiDirectoryNode" />
+              <item name="telegram_messenger_bot" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RecSys-Project" type="b2602c69:ProjectViewProjectNode" />
@@ -264,15 +266,17 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset" />
-      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset" />
       <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data" />
       <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
       <recent name="$PROJECT_DIR$/RecSys_Course_2018-master/data/book_crossing" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset" />
+      <recent name="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/MatrixFactorization/Cython" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -287,7 +291,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.second_part_project_main">
+  <component name="RunManager" selected="Python.telegram_bot">
     <configuration name="BookCrossingReader (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="RecSys-Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -302,28 +306,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="BookCrossingReader" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="RecSys-Project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/old_version_book_crossing.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -398,20 +380,42 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="telegram_bot" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="RecSys-Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_messenger_bot" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.second_part_project_main" />
-      <item itemvalue="Python.BookCrossingReader" />
       <item itemvalue="Python.setup_mf" />
       <item itemvalue="Python.epinions_reader" />
       <item itemvalue="Python.BookCrossingReader (1)" />
+      <item itemvalue="Python.telegram_bot" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.telegram_bot" />
         <item itemvalue="Python.second_part_project_main" />
         <item itemvalue="Python.BookCrossingReader (1)" />
         <item itemvalue="Python.epinions_reader" />
         <item itemvalue="Python.setup_mf" />
-        <item itemvalue="Python.BookCrossingReader" />
       </list>
     </recent_temporary>
   </component>
@@ -429,14 +433,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="777" extended-state="6" />
+    <frame x="76" y="23" width="1280" height="777" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49790794" visible="true" weight="0.25201938" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49790794" visible="true" weight="0.25201938" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50209206" side_tool="true" weight="0.2536349" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32959327" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32959327" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32959327" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -480,25 +485,10 @@
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=True_delete_popular=False_BayesianSearch.txt" />
-    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="35" column="70" selection-start-line="35" selection-start-column="70" selection-end-line="35" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/ratings.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="28" selection-start-column="16" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/Evaluator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6660">
-          <caret line="451" selection-start-line="451" selection-end-line="451" />
         </state>
       </provider>
     </entry>
@@ -552,18 +542,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/book_crossing/BookCrossingReader.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="136" selection-start-line="10" selection-start-column="4" selection-end-line="136" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/data/epinions_dataset/EpinionsReader.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="10" column="113" selection-start-line="10" selection-start-column="94" selection-end-line="10" selection-end-column="113" />
+          <caret line="10" column="87" selection-start-line="10" selection-start-column="87" selection-end-line="10" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/Base/Evaluation/Evaluator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="451" selection-start-line="451" selection-end-line="451" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=False_delete_popular=False_BayesianSearch.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="45" selection-start-line="3" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/newNorm_=True_delete_popular=False_BayesianSearch.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/telegram_bot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Second_Part_From_RecSys_Course_2018/second_part_project_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="61" column="29" lean-forward="true" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
+        <state relative-caret-position="386">
+          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
           <folding>
             <element signature="e#84#93#0" expanded="true" />
           </folding>

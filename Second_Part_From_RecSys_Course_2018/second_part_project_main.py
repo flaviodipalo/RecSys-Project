@@ -14,6 +14,8 @@ from ParameterTuning.AbstractClassSearch import DictionaryKeys,EvaluatorWrapper
 
 from Base.Evaluation.Evaluator import SequentialEvaluator
 
+from telegram_bot import TelegramBot
+
 def run_recommender():
     #cython epoch only version
     print('Loading Data...')
@@ -29,10 +31,11 @@ def run_recommender():
     recommender.fit(epochs= 15,stop_on_validation=True,validation_every_n=1,normalized_algorithm= True,sgd_mode = "adam")
 
 def run_recommender_optimization(normalized=False, popular=False):
+
     print('Loading Data...')
     #data_reader = Movielens1MReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = popular)
-    #data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False,delete_interactions=0.5)
-    data_reader = EpinionsReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=False)
+    data_reader = BookCrossingReader(train_validation_split = [0.6, 0.2, 0.2],delete_popular = False,delete_interactions=0.5)
+    #data_reader = EpinionsReader(train_validation_split=[0.6, 0.2, 0.2], delete_popular=False)
     URM_train = data_reader.URM_train
     URM_test = data_reader.URM_test
     URM_validation = data_reader.URM_test
@@ -58,20 +61,24 @@ def run_recommender_optimization(normalized=False, popular=False):
     hyperparamethers_range_dictionary["sgd_mode"] = ["adagrad", "adam"]
     hyperparamethers_range_dictionary["num_factors"] = [5, 10, 20, 30, 50, 70, 90, 110]
     hyperparamethers_range_dictionary["user_reg"] = [0.0, 1e-3, 1e-6]
+    hyperparamethers_range_dictionary["epochs"] = [10,20,50,100,150,300]
 
     recommenderDictionary = {
                               DictionaryKeys.CONSTRUCTOR_POSITIONAL_ARGS: [],
                               DictionaryKeys.CONSTRUCTOR_KEYWORD_ARGS: {'URM_train':URM_train,'algorithm':'FUNK_SVD'},
                               DictionaryKeys.FIT_POSITIONAL_ARGS: dict(),
-                              DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":True,"validation_every_n":5,"normalized_algorithm":normalized,    "evaluator_object": evaluator_validation_earlystopping,
+                              DictionaryKeys.FIT_KEYWORD_ARGS: {"stop_on_validation":False,"validation_every_n":5,"normalized_algorithm":normalized,    "evaluator_object": evaluator_validation_earlystopping,
                               "lower_validatons_allowed": 10},
                               DictionaryKeys.FIT_RANGE_KEYWORD_ARGS: hyperparamethers_range_dictionary}
 
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
     parameterSearch.evaluate_on_test()
 
-#run_recommender()
+bot = TelegramBot('65065237')
 run_recommender_optimization(normalized= False)
+bot.send_message("Flavio porcodio ha finito con il false")
 run_recommender_optimization(normalized= True)
+bot.send_message("Flavio porcodio ha finito con il false")
+
 
 
