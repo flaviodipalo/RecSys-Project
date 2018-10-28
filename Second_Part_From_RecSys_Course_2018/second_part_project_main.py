@@ -74,11 +74,8 @@ def run_recommender_optimization(normalized=False, popular=False):
     parameterSearch.search(recommenderDictionary, output_root_path='new'+file_path)
     parameterSearch.evaluate_on_test()
 
-bot = TelegramBot('65065237')
 run_recommender_optimization(normalized= False)
-bot.send_message("Flavio porcodio ha finito con il false")
 run_recommender_optimization(normalized= True)
-bot.send_message("Flavio porcodio ha finito con il false")
 
 
 
