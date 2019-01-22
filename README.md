@@ -7,5 +7,3 @@ Our contribution has been to extend the Cython code available in order to introd
 We tested the constrained optimization algorithms on three classical Recommender Systems Dataset: BookCrossing, Epinions and Movielens 1M/10M considering various possibile data selection techniques.
 
 Interesting conclusions we derived from our work is that our version of the SLIM RMSE algorithm is able to outperform the classical SLIM RMSE implementation if we consider a dense dataset, in particular we obtained +30% in Mean Average Precision. 
-
-SEE PAPER.PDF FOR MORE DETAILS
